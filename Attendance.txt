@@ -3,3 +3,22 @@ Xinyan - Here
 Zhaoxi - Here
 Lauren - Here
 Test
+
+
+
+git hub cheat sheet:
+
+NEVER ADD OR COMMIT TO MASTER
+------------------------------
+
+
+instead, do the following:
+git branch *insert branch name*
+git checkout *branch name*
+git add *file name*
+git commit -m "*insert a short message*"
+git push origin *branch name*
+
+
+
+also, git status will tell you what branch you are on
