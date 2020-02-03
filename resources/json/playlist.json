@@ -1,0 +1,14 @@
+[
+    {
+        "TrackName":"Skylike",
+        "AlbumName":"Dawn",
+        "cover":"https://raw.githubusercontent.com/himalayasingh/music-player-1/master/img/_1.jpg",
+        "url":"https://raw.githubusercontent.com/himalayasingh/music-player-1/master/music/2.mp3"
+    },
+    {
+        "TrackName":"Alex Skrindo",
+        "AlbumName":"Me & You",
+        "cover":"https://raw.githubusercontent.com/himalayasingh/music-player-1/master/img/_2.jpg",
+        "url":"https://raw.githubusercontent.com/himalayasingh/music-player-1/master/music/3.mp3"
+    }
+]
