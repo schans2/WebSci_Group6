@@ -9,6 +9,12 @@
         "TrackName":"Alex Skrindo",
         "AlbumName":"Me & You",
         "cover":"https://raw.githubusercontent.com/himalayasingh/music-player-1/master/img/_2.jpg",
+        "url":"https://raw.githubusercontent.com/himalayasingh/music-player-1/master/music/1.mp3"
+    },
+    {
+        "TrackName":"Kaaze",
+        "AlbumName":"Electro Boy",
+        "cover":"https://raw.githubusercontent.com/himalayasingh/music-player-1/master/img/_2.jpg",
         "url":"https://raw.githubusercontent.com/himalayasingh/music-player-1/master/music/3.mp3"
     }
 ]
