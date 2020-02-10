@@ -4,12 +4,21 @@ $(document).ready(function() {
 
 function musicListeners() {
   $("#audioslave").click(function() {
-    $("audio").attr("src", "resources/music/08 I Am the Highway.m4a");
+    $("#direct").attr("src", "resources/music/08 I Am the Highway.m4a");
+    $("#direct")[0].play();
   })
   $("#metallica").click(function() {
-    $("audio").attr("src", "resources/music/01 Enter Sandman.m4a");
+    $("#direct").attr("src", "resources/music/01 Enter Sandman.m4a");
+    $("#direct")[0].play();
   });
   $("#weezer").click(function() {
-    $("audio").attr("src", "resources/music/03 Hash Pipe.m4a");
+    $("#direct").attr("src", "resources/music/03 Hash Pipe.m4a");
+    $("#direct")[0].play();
+  });
+  $("#choice>li").click(function() {
+    $("#queue").append($(this).clone());
+    $("#queue>li").click(function() {
+      $(this).remove();
+    });
   });
 }
