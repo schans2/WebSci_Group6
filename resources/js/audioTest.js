@@ -24,9 +24,8 @@ function musicListeners() {
       $(this).remove();
     });
   });
-  // $("audio").bind('ended', function() {
-  //   alert("Song ended");
-  // });
+  // Help from:
+  // https://stackoverflow.com/questions/9346579/how-can-i-tell-when-an-html5-audio-element-has-finished-playing
   $("#qPlay").bind('ended', function() {
     $("#queue>li:nth-child(1)").remove();
     decisionizer();
