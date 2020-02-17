@@ -1,5 +1,7 @@
 $(document).ready(function() {
   musicListeners();
+  // Code: frc374051d5f53ed5d931e7f8eec38db
+  // Secret code: 8eba79ca0db48e59c14fb0e3746272bb
 });
 
 function musicListeners() {
@@ -30,6 +32,9 @@ function musicListeners() {
     $("#queue>li:nth-child(1)").remove();
     decisionizer();
   });
+  $("button").click(function() {
+    songCall($("input").val());
+  });
 }
 
 function decisionizer() {
@@ -50,4 +55,23 @@ function decisionizer() {
     $("#qPlay").attr("src", "#");
     alert("End of queue");
   }
+}
+
+function songCall(track) {
+  // Powered by Deezer
+  alert("You searched for: " + track);
+  fetch("https://cors-anywhere.herokuapp.com/https://api.deezer.com/search?q=" + track
+  + "&access_token=fr9xP5RJvOuxmFb1cWMXhIqUwMpzjtj2vkFwsNpwgAnIRpHdTZd").then(
+    function(response) {
+      if(response.status === 200) {
+        response.json().then(function(data) {
+          console.log(data);
+        });
+      }
+      else {
+        alert("Error calling Deezer API. Status code: " + response.status);
+        return;
+      }
+    }
+  )
 }
