@@ -9,21 +9,6 @@ $(function(){
     var audios;
     var resource = "./resources/json/playlist.json";
 
-    function PlayPause(audioo){
-        setTimeout(function(){
-            if(audioo.paused){
-                $("#player-track").addClass("active");
-                $("#album-art").addClass("active");
-                i.attr("class","fa fa-pause");
-                audioo.play();
-            }else{
-                $("#player-track").removeClass("active");
-                $("#album-art").removeClass("active");
-                i.attr("class","fa fa-play");
-                audioo.pause();
-            }
-        },300)
-    }
 
     function showHover(event){
         var barP = $("#s-area").offset();
@@ -54,7 +39,7 @@ $(function(){
         hideHover();
     }
 
-    function updateCurrentTime(){
+   function updateCurrentTime(){
         nTime = new Date();
         nTime = nTime.getTime();
         if(!flag){
@@ -90,16 +75,13 @@ $(function(){
         }else{
             --currentIndex;
         }
-        console.log(audi);
         $.getJSON(resource,function(data){
-            console.log(audi);
             if((currentIndex>-1)&&(currentIndex<data.length)){
                 if(ff == 0){
                     i.attr('class','fa fa-play');
                 }else{
                     i.attr('class','fa fa-pause');
                 }
-                console.log(audi);
                 seekBar.width(0);
                 $("#track-time").removeClass('active');
                 $("#current-time").text('00:00');
@@ -111,8 +93,8 @@ $(function(){
                 var currentAlbum = data[currentIndex].AlbumName;
                 var currentCover = data[currentIndex].cover;
                 var currentUrl = data[currentIndex].url;
-                console.log(currentUrl);
                 audi.src = currentUrl;
+                $("#playAudio").src = currentUrl;
                 if (ff != 0){
                     audi.play();
                     $("#player-track").addClass("active");
@@ -136,7 +118,19 @@ $(function(){
         audios = new Audio();
         selectTrack(0,audios);
         audios.loop = false;
-        $("#play-puase-button").on("click",PlayPause(audios));
+        $("#play-pause-button").on("click",function(){
+            if(audios.paused){
+                $("#player-track").addClass("active");
+                $("#album-art").addClass("active");
+                i.attr("class","fa fa-pause");
+                audios.play();
+            }else{
+                $("#player-track").removeClass("active");
+                $("#album-art").removeClass("active");
+                i.attr("class","fa fa-play");
+                audios.pause();
+            }  
+        });
         $("#s-area").mousemove(function(event){
             showHover(event);
         })
