@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="../WebSci_Group6/resources/css/userPage.css">
+        <link href="https://fonts.googleapis.com/css?family=Raleway&display=swap" rel="stylesheet">
+    </head>
+    <body>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" href="#"><img id="piclogo" src="../WebSci_Group6/resources/playtwist.GIF" width="130" height="90" class="d-inline-block align-top"
+                draggable="false" alt="PlayTwist logo" /></a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+              <div class="navbar-nav">
+                <a class="nav-item nav-link active" href="#">Home <span class="sr-only">(current)</span></a>
+                <a class="nav-item nav-link" href="#">Join a Playlist</a>
+                <a class="nav-item nav-link" href="#">Login</a>
+                <a class="nav-item nav-link" href="#">Sign Up</a>
+              </div>
+            </div>
+          </nav>
+        <div class="container">
+            <div class="row">
+                <div id="second" class="col-lg-8">
+                    <p>friends</p>
+                </div>
+                <div id="first" class="col-lg-8">
+                    <div id="main"class="row">
+                        <!-- <p>here goes user photo and buttons</p> -->
+                        <div id="user" class="col">
+                            <img id="prof_image" src="resources/profileImage.png" alt="Profile Image">
+                            <button class="create" onclick="window.location.href = 'homePage.html'"></button>
+                        </div>
+                        <div id="user" class="col">
+                            <button onclick="window.location.href = 'homePage.html'" class="create" type="button">+ Create Private Playlist</button><br/>
+                            <button onclick="window.location.href = 'homePage.html'" class="create" type="button">+ Create New Group</button>
+                        </div>
+                    </div>
+                    <div id="private" class="row">
+                        <p>here goes private playlists</p>
+                    </div>
+                    <div id="collaborative" class="row">
+                        <p>here goes public/collaborative playlists</p>
+                    </div>
+                </div>
+                
+            </div>
+            
+           
+        </div>
+        <!-- <footer>
+            <ul>
+                <a href="#">About Us</a>
+            </ul>
+        </footer> -->
+    </body>
+</html>
