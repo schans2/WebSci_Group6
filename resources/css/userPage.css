@@ -19,7 +19,7 @@ footer{
 }
 #main{
     width: 100%;
-    height: 300px;
+    height: 150px;
     /* background-color: #d1b3ff; */
     border-radius: 10px;
 }
@@ -51,14 +51,48 @@ footer{
     width: 23%;
     display: inline-block;
     border: 1px solid black;
-    height: 700px;
+    height: 870px;
     border-radius: 15px;
     padding: 10px;
     text-align: center;
     background-color: lightgray;
     float: right;
 }
+#edit_bar{
+    width: 100%;
+    height: 100px;
+    /* background-color: lightgrey; */
+    border-radius: 10px;
+}
+#username{
+    text-align: left;
+    /* padding: 10px; */
+    margin-left: 40px;
+}
+#active{
+    display: inline-block;
+    max-width: 20px;
+    max-height: 20px;
+    width: auto;
+    height: auto;
+    float: left;
+    margin-left: 10px;
+    margin-top: 30px;
 
+}
+#user_image{
+    display: inline-block;
+    max-width: 50px;
+    max-height: 50px;
+    width: auto;
+    height: auto;
+    float: left;
+    margin: 20px;
+}
+.friend_name{
+    margin-top: 30px;
+    display: inline-block;
+}
 #prof_image{
     display: inline-block;
     max-width: 100px;
@@ -68,6 +102,23 @@ footer{
     float: left;
     margin: 20px;
     /* padding: 20px; */
+}
+#playlist_image{
+    display: inline-block;
+    max-height: 150px;
+    max-width: 150px;
+    width: auto;
+    height: auto;
+    float: left;
+
+}
+.edit_button{
+    width: 200px;
+    padding: 10px;
+    margin: 10px;
+    border-radius: 25px;
+    /* display: inline-block; */
+    float: left;
 }
 .create{
     display: inline-block;
@@ -99,10 +150,10 @@ footer{
 }
 .col-sm{
     margin-left: 10px;
-    width: 23%;
+    width: 25%;
     display: inline-block;
-    border: 1px solid black;
-    height: 100%;
+    /* border: 1px solid black; */
+    /* height: 100%; */
     border-radius: 15px;
     padding: 10px;
     text-align: center;
