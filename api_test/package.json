@@ -1,0 +1,12 @@
+{
+    "name": "playtwist",
+    "version": "0.0.1",
+    "description": "Test music download app",
+    "dependencies": {
+      "express": "^4.10.2",
+      "alltomp3": "^0.12.2"
+    },
+    "license": "UNLICENSED",
+    "repository": "None"
+  }
+  
