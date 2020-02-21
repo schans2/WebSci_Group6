@@ -35,14 +35,18 @@
     <ul id="queue"></ul>
     <footer>Proof of concept 2</footer>
     <hr/>
-    <h2>Hello</h2>
+    <h2>Search and Queue Songs</h2>
     <form>
       <input type="text" placeholder="Search Song..."/>
       <button type="button">Search</button>
     </form>
-    <audio controls src="https://cdns-preview-d.dzcdn.net/stream/c-dd2e99b5339641a1ada9ed3f10fbc901-4.mp3">
-      File failed to load
+    <ol type="1" id="results"></ol>
+    <audio controls id="searchPlay" src="#">
+      No audio preview available
     </audio>
+    <p>Current queue (click song to remove):</p>
+    <ol type="1" id="queue2"></ol>
+    <footer>Proof of concept 3</footer>
   </body>
   <!-- More Bootstrap requirements -->
   <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
