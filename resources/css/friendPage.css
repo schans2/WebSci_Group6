@@ -4,6 +4,9 @@
     background-color: white;
     height: 110px;
 }
+/* .container{
+    height: auto;
+} */
 body{
     /* background-color: #333333; */
     background-color: #d1b3ff;
@@ -58,10 +61,15 @@ footer{
     background-color: lightgray;
     float: right;
 }
+/* @media only screen and (max-width: 600px){
+    #second{
+        display: block;
+    }
+} */
 #section{
-    display: inline-block;
+    display: block;
     width: 30%;
-    height: 100%;
+    height: auto;
     background-color: lightgray;
     margin: 10px;
 }
@@ -154,6 +162,13 @@ footer{
     color: white;
     font-size: 3em;
     margin-top: 60px;
+}
+.col-lg-4{
+    display: inline-block;
+    width: 33%;
+}
+li{
+    margin: 10px;
 }
 .col-sm{
     margin-left: 10px;
