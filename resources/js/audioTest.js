@@ -78,7 +78,7 @@ function decisionizer2() {
 
 function songCall(track) {
   // Powered by Deezer
-  alert("You searched for: " + track);
+  $("#results").html("");
   fetch("https://cors-anywhere.herokuapp.com/https://api.deezer.com/search?q=" + track).then(
     function(response) {
       if(response.status === 200) {
@@ -95,8 +95,6 @@ function songCall(track) {
             }
             $("#results").append(song);
             $("#"+data[i].id).click(function() {
-              // $("#searchPlay").attr("src", data[i].preview);
-              // $("#searchPlay")[0].play();
               $("#queue2").append($(this).clone());
               if($("#queue2>li").length === 1) {
                 decisionizer2();
