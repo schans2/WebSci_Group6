@@ -276,6 +276,9 @@ li{
     #feed{
         width: 80%;
     }
+    .container{
+        margin-bottom: 100px;
+    }
 }
 /* .navbar-toggler{
     padding: 20px;
