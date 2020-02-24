@@ -147,4 +147,66 @@ $(function(){
 
     initialPlayer();
 
-})
+    $("#searchPlay").bind('ended', function() {
+        $("#queue>li:nth-child(1)").remove();
+        decisionizer();
+    });
+    $("button").click(function() {
+        songCall($("input").val());
+    });
+
+    function songCall(track) {
+        // Powered by Deezer
+        $("#results").html("");
+        fetch("https://cors-anywhere.herokuapp.com/https://api.deezer.com/search?q=" + track).then(
+          function(response) {
+            if(response.status === 200) {
+              response.json().then(function(data) {
+                console.log(data);
+                data = data.data;
+                for (let i = 0; i < 10; i++) {
+                  var song = "<li id='" + data[i].id + "'>" + data[i].artist.name + " - " + data[i].title;
+                  if(data[i].preview) {
+                    song += "<span style='visibility:hidden;'>" + data[i].preview + "</span></li>";
+                  }
+                  else {
+                    song += " - <em>No audio preview available</em></li>";
+                  }
+                  $("#results").append(song);
+                  $("#"+data[i].id).click(function() {
+                    $("#queue").append($(this).clone());
+                    if($("#queue>li").length === 1) {
+                      decisionizer();
+                    }
+                    $("#queue>li").click(function() {
+                      $(this).remove();
+                    });
+                  });
+                }
+              });
+            }
+            else {
+              alert("Error calling Deezer API. Status code: " + response.status);
+              return;
+            }
+          }
+        );
+    }
+
+    function decisionizer() {
+        if($("#queue2>li").length) {
+          var selectedTrack = $("#queue2>li:nth-child(1)>span").text();
+          $("#searchPlay").attr("src", selectedTrack);
+          $("#searchPlay").promise().done(function() {
+          $("#searchPlay")[0].play();
+          });
+        }
+        else {
+            $("#player-track").removeClass("active");
+            $("#album-art").removeClass("active");
+            i.attr("class","fa fa-play");
+            audios.pause();
+          alert("End of queue");
+        }
+    }
+});
