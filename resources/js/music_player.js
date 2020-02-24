@@ -147,12 +147,13 @@ $(function(){
 
     initialPlayer();
 
-    $("#searchPlay").bind('ended', function() {
+    $(audios).bind('ended', function() {
+        // alert("Is this a thing?");
         $("#queue>li:nth-child(1)").remove();
         decisionizer();
     });
     $("button").click(function() {
-        songCall($("input").val());
+        songCall($("#search").val());
     });
 
     function songCall(track) {
@@ -194,11 +195,11 @@ $(function(){
     }
 
     function decisionizer() {
-        if($("#queue2>li").length) {
-          var selectedTrack = $("#queue2>li:nth-child(1)>span").text();
-          $("#searchPlay").attr("src", selectedTrack);
-          $("#searchPlay").promise().done(function() {
-          $("#searchPlay")[0].play();
+        if($("#queue>li").length) {
+          var selectedTrack = $("#queue>li:nth-child(1)>span").text();
+          $(audios).attr("src", selectedTrack);
+          $(audios).promise().done(function() {
+            $(audios)[0].play();
           });
         }
         else {
