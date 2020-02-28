@@ -247,12 +247,9 @@
     transition: 0.2s ease all;
 }
 
-.button:hover
-{
-    background-color: #d6d6de;
-}
 
 .button:hover i
 {
-    color: #fff;
+    color: #fd6d94;
 }
+
