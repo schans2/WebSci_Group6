@@ -184,6 +184,24 @@ footer{
 	background-color: white;
 	padding: 3px 7px 3px 7px;
 }
+#link{
+    margin-right: 150px;
+    font-size: 17px;
+}
+#nav_button{
+    padding: 20px;
+    float: right;
+    margin: 10px;
+}
+
+#navbarBtn:hover {
+	border-color: rgb(187, 186, 186);
+	color:white;
+	background-color: rgb(187, 186, 186);
+}
+#piclogo{
+    margin-right: 100px;
+}
 /*
 #navbarBtn:hover {
 	border-color: rgb(187, 186, 186);
