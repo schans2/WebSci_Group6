@@ -253,3 +253,10 @@
     color: #fd6d94;
 }
 
+#searchResult{
+    position:absolute;
+    min-width:200px;
+    top:70px;
+    right:100px;
+    z-index: 3;
+}

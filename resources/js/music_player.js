@@ -224,4 +224,17 @@ $(function(){
           alert("End of queue");
         }
     }
+	
+    $("#searchBtn").click(function(){
+        if ($("#searchInput").val() != "") {
+            var content = $("#searchInput").val();
+            $("#searchResult").append("<li class=\"list-group-item\">"+content+"</li>");
+            $("#searchResult").append("<li class=\"list-group-item list-group-item-dark\" id=\"clearList\">Clear Search Result</li>");
+            $("#clearList").click(function(){
+                $(("#searchResult")).empty();
+            })
+        }else{
+            console.log("need to input");
+        }
+    });
 });
