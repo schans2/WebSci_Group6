@@ -133,16 +133,16 @@ $(function(){
         });
         $("#s-area").mousemove(function(event){
             showHover(event);
-        })
+        });
         $("#s-area").mouseout(hideHover);
         $("#s-area").on("click",playFormClickPos);
         $(audios).on("timeupdate",updateCurrentTime);
         $("#play-previous").on("click",function(){
             selectTrack(-1,audios);
-        })
+        });
         $("#play-next").on("click",function(){
             selectTrack(1,audios);
-        })
+        });
     }
 
     initialPlayer();
@@ -196,18 +196,23 @@ $(function(){
 
     function decisionizer() {
         if($("#queue>li").length) {
-          var selectedTrack = $("#queue>li:nth-child(1)>span").text();
-          $(audios).attr("src", selectedTrack);
-          $(audios).promise().done(function() {
-            $(audios)[0].play();
-          });
+          	var selectedTrack = $("#queue>li:nth-child(1)>span").text();
+			$(audios).attr("src", selectedTrack);
+			selectedTrack = $("#queue>li:nth-child(1)").text();
+          	$("#album-name").text(selectedTrack.substring(0, '-'));
+        	$("#player-track").addClass("active");
+			$("#album-art").addClass("active");
+			i.attr("class", "fa fa-pause");
+          	$(audios).promise().done(function() {
+            	$(audios)[0].play();
+          	});
         }
         else {
             $("#player-track").removeClass("active");
             $("#album-art").removeClass("active");
-            i.attr("class","fa fa-play");
+            i.attr("class", "fa fa-play");
             audios.pause();
-          alert("End of queue");
+            alert("End of queue");
         }
     }
 });
