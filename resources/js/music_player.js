@@ -166,14 +166,13 @@ $(function(){
                 console.log(data);
                 data = data.data;
                 for (let i = 0; i < 10; i++) {
-                  var song = "<li id='" + data[i].id + "'>" + data[i].artist.name + " - " + data[i].title + "<div class='metadata' style='visibility:hidden;'>";
+                  var song = "<li id='" + data[i].id + "'>" + data[i].artist.name + " - " + data[i].title;
                   if(data[i].preview) {
-                    song += "<span>" + data[i].preview + "</span>";
+                    song += "<span style='visibility:hidden;'>" + data[i].preview + "</span></li>";
                   }
                   else {
-                    song += "<span>No audio preview available</span>";
+                    song += " - <em>No audio preview available</em></li>";
                   }
-                  song += "</div></li>";
                   $("#results").append(song);
                   $("#"+data[i].id).click(function() {
                     $("#queue").append($(this).clone());
@@ -197,12 +196,8 @@ $(function(){
 
     function decisionizer() {
         if($("#queue>li").length) {
-          var selectedTrack = $("#queue.metadata>span:nth-child(1)").text();
+          var selectedTrack = $("#queue>li:nth-child(1)>span").text();
           $(audios).attr("src", selectedTrack);
-          selectedTrack = $("#queue>li:nth-child(1)").text();
-        //   alert(selectedTrack);
-          $("#album-name").text(selectedTrack.substr((selectedTrack.indexOf('-') + 2), selectedTrack.indexOf("http")));
-          $("#track-name").text(selectedTrack.substr(0, (selectedTrack.indexOf('-') - 1)));
           $(audios).promise().done(function() {
             $(audios)[0].play();
           });
@@ -212,7 +207,7 @@ $(function(){
             $("#album-art").removeClass("active");
             i.attr("class","fa fa-play");
             audios.pause();
-            alert("End of queue");
+          alert("End of queue");
         }
     }
 });
