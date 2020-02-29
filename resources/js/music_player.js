@@ -158,7 +158,7 @@ $(function(){
 
     function songCall(track) {
 			// Powered by Deezer
-			$("#results").html("");
+			$("#searchResult").html("");
 			fetch("https://cors-anywhere.herokuapp.com/https://api.deezer.com/search?q=" + track).then(
 				function(response) {
 					if(response.status === 200) {
@@ -179,7 +179,7 @@ $(function(){
 								else {
 									song += "<span class='coverArt' style='visibility:hidden;'>resources/thumb.png</span></li>";
 								}
-								$("#results").append(song);
+								$("#searchResult").append(song);
 								$("#"+data[i].id).click(function() {
 									$("#queue").append($(this).clone());
 									if($("#queue>li").length === 1) {
@@ -227,9 +227,9 @@ $(function(){
 	
     $("#searchBtn").click(function(){
         if ($("#searchInput").val() != "") {
-            var content = $("#searchInput").val();
-            $("#searchResult").append("<li class=\"list-group-item\">"+content+"</li>");
-            $("#searchResult").append("<li class=\"list-group-item list-group-item-dark\" id=\"clearList\">Clear Search Result</li>");
+            songCall($("#searchInput").val());
+            //$("#searchResult").append("<li class=\"list-group-item\">"+content+"</li>");
+            //$("#searchResult").append("<li class=\"list-group-item list-group-item-dark\" id=\"clearList\">Clear Search Result</li>");
             $("#clearList").click(function(){
                 $(("#searchResult")).empty();
             })
