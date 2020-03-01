@@ -1,0 +1,9 @@
+{
+  "author": "PlayTwist",
+  "name": "playtwist-server",
+  "description": "Simple Playtwist Server",
+  "version": "0.0.2",
+  "dependencies": {
+    "express": "~4.16.0"
+  }
+}
