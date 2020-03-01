@@ -5,9 +5,12 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <link rel="stylesheet" type="text/css" href="./resources/css/music_player.css">
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
         <script src="./resources/js/jquery.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
         <script src="./resources/js/music_player.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.0/angular.js"></script>
+        <script src="./resources/js/vote.js"></script>
     </head>
 
     <body>
@@ -21,26 +24,18 @@
               </div>
             </div>
             <form class="form-inline">
-                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                <input class="form-control mr-sm-2" type="search" placeholder="Search" id="searchInput" aria-label="Search">
+                <button class="btn btn-outline-success my-2 my-sm-0" id="searchBtn" type="button">Search</button>
             </form>
 	    <ul id="searchResult" class="list-group">
             </ul>
         </nav>
-        <div id="playlist-content" class="float-left">
-            <ul class="list-group">
-                <li class="list-group-item d-flex justify-content-between align-items-center">
-                    music 1000000
-                    <span class="badge badge-primary badge-pill">100 &#128150;</span>
-                   
-                </li>
-                <li class="list-group-item d-flex justify-content-between align-items-center">
-                    music 2
-                    <span class="badge badge-primary badge-pill">2 &#128150;</span>   
-                </li>
-                <li class="list-group-item d-flex justify-content-between align-items-center">
-                    music 20
-                    <span class="badge badge-primary badge-pill">0 &#128150;</span>   
+        <div id="playlist-content" class="float-left" ng-app="voteApp">
+            <ul class="list-group" ng-controller="voteController">
+                <li class="list-group-item d-flex justify-content-between align-items-center" ng-repeat="track in music_data | orderBy: 'downvotes-upvotes'">
+                    {{$index+1}}. {{track.name}}
+                    <span class="badge badge-primary badge-pill" ng-click="track.upvotes = track.upvotes+1">{{track.upvotes}} &#128150;</span>
+                    <span class="badge badge-primary badge-pill" ng-click="track.downvotes = track.downvotes+1">{{track.downvotes}} &#128148;</span>
                 </li>
             </ul>
             <li class="list-group-item list-group-item-action list-group-item-info">Save this Play List</li>
@@ -64,6 +59,10 @@
                 <div id="player-track">
                     <div id="album-name"></div>
                     <div id="track-name"></div>
+                    <div id="track-time">
+                        <div id="current-time"></div>
+                        <div id="track-length"></div>
+                    </div>
                     <div id="s-area">
                         <div id="ins-time"></div>
                         <div id="s-hover"></div>

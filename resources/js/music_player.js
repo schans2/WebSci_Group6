@@ -1,19 +1,30 @@
 $(function(){
-    var currentIndex = -1;
-    var i = $("#play-pause-button").find("i");
-    var seekTime, seekLocation;
-    var seekBar = $("#seek-bar");
-    var nTime = 0;
-    var bTime;
-    var flag = false;
-    var audios;
-    var resource = "./resources/json/playlist.json";
 
+    var i = $("#play-pause-button").find("i");
+    var seekTime, seekLocation,seekBar;
+    var nTime = 0;
+    var flag = false;
+
+    function PlayPause(){
+        setTimeout(function(){
+            if(audio.paused){
+                $("#player-track").addClass("active");
+                $("#album-art").addClass("active");
+                i.attr("class","fa fa-pause");
+                audio.play();
+            }else{
+                $("#player-track").removeClass("active");
+                $("#album-art").removeClass("active");
+                i.attr("class","fa fa-play");
+                audio.pause();
+            }
+        },300)
+    }
 
     function showHover(event){
         var barP = $("#s-area").offset();
         seekTime = event.clientX - barP.left;
-        seekLocation = audios.duration*(seekTime/$("#s-area").outerWidth());
+        seekLocation = audio.duration*(seekTime/$("#s-area").outerWidth());
         $("#s-hover").width(seekTime);
         var cM = seekLocation/60;
         var min = Math.floor(cM);
@@ -23,7 +34,7 @@ $(function(){
         if(sec<10){sec = "0"+sec;}
         if(isNaN(min)||isNaN(sec)){$("#ins-time").text("--:--");}
         else{$("#ins-time").text(min+":"+sec);}
-		$("#ins-time").css({'left':seekTime,'margin-left':'-21px'}).fadeIn(0);
+		$("#ins-time").css({'left':seekT,'margin-left':'-21px'}).fadeIn(0);
     }
 
     function hideHover(){
@@ -34,23 +45,23 @@ $(function(){
     }
 
     function playFormClickPos(){
-        audios.currentTime = seekLocation;
+        audio.currentTime = seekLocation;
         seekBar.width(seekTime);
         hideHover();
     }
 
-   function updateCurrentTime(){
+    function updateCurrentTime(){
         nTime = new Date();
         nTime = nTime.getTime();
         if(!flag){
             flag = true;
             $("#track-time").addClass("active");
         }
-        var cmin = Math.floor(audios.currentTime / 60);
-        var csec = Math.floor(audios.currentTime - cmin * 60);
-        var dmin = Math.floor(audios.duration / 60);
-        var dsec = Math.floor(audios.duration - dmin * 60);
-        var playProgress = (audios.currentTime / audios.duration) * 100;
+        var cmin = Math.floor(audio.currentTime / 60);
+        var csec = Math.floor(audio.currentTime - curMinutes * 60);
+        var dmin = Math.floor(audio.duration / 60);
+        var dsec = Math.floor(audio.duration - durMinutes * 60);
+        var playProgress = (audio.currentTime / audio.duration) * 100;
         if(cmin<10){cmin = "0"+cmin;}
         if(csec<10){csec = "0"+csec;}
         if(dmin<10){dmin = "0"+dmin;}
@@ -158,7 +169,7 @@ $(function(){
 
     function songCall(track) {
 			// Powered by Deezer
-			$("#results").html("");
+			$("#searchResult").html("");
 			fetch("https://cors-anywhere.herokuapp.com/https://api.deezer.com/search?q=" + track).then(
 				function(response) {
 					if(response.status === 200) {
@@ -179,7 +190,7 @@ $(function(){
 								else {
 									song += "<span class='coverArt' style='visibility:hidden;'>resources/thumb.png</span></li>";
 								}
-								$("#results").append(song);
+								$("#searchResult").append(song);
 								$("#"+data[i].id).click(function() {
 									$("#queue").append($(this).clone());
 									if($("#queue>li").length === 1) {
@@ -227,9 +238,9 @@ $(function(){
 	
     $("#searchBtn").click(function(){
         if ($("#searchInput").val() != "") {
-            var content = $("#searchInput").val();
-            $("#searchResult").append("<li class=\"list-group-item\">"+content+"</li>");
-            $("#searchResult").append("<li class=\"list-group-item list-group-item-dark\" id=\"clearList\">Clear Search Result</li>");
+            songCall($("#searchInput").val());
+            //$("#searchResult").append("<li class=\"list-group-item\">"+content+"</li>");
+            //$("#searchResult").append("<li class=\"list-group-item list-group-item-dark\" id=\"clearList\">Clear Search Result</li>");
             $("#clearList").click(function(){
                 $(("#searchResult")).empty();
             })
