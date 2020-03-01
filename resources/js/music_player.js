@@ -1,22 +1,22 @@
 $(function(){
 
     var i = $("#play-pause-button").find("i");
-    var seekTime, seekLocation,seekBar;
+    var seekTime, seekLocation, seekBar, audios;
     var nTime = 0;
     var flag = false;
 
     function PlayPause(){
         setTimeout(function(){
-            if(audio.paused){
+            if(audios.paused){
                 $("#player-track").addClass("active");
                 $("#album-art").addClass("active");
                 i.attr("class","fa fa-pause");
-                audio.play();
+                audios.play();
             }else{
                 $("#player-track").removeClass("active");
                 $("#album-art").removeClass("active");
                 i.attr("class","fa fa-play");
-                audio.pause();
+                audios.pause();
             }
         },300)
     }
@@ -24,7 +24,7 @@ $(function(){
     function showHover(event){
         var barP = $("#s-area").offset();
         seekTime = event.clientX - barP.left;
-        seekLocation = audio.duration*(seekTime/$("#s-area").outerWidth());
+        seekLocation = audios.duration*(seekTime/$("#s-area").outerWidth());
         $("#s-hover").width(seekTime);
         var cM = seekLocation/60;
         var min = Math.floor(cM);
@@ -45,8 +45,8 @@ $(function(){
     }
 
     function playFormClickPos(){
-        audio.currentTime = seekLocation;
-        seekBar.width(seekTime);
+        audios.currentTime = seekLocation;
+        //seekBar.width(seekTime);
         hideHover();
     }
 
@@ -57,11 +57,11 @@ $(function(){
             flag = true;
             $("#track-time").addClass("active");
         }
-        var cmin = Math.floor(audio.currentTime / 60);
-        var csec = Math.floor(audio.currentTime - curMinutes * 60);
-        var dmin = Math.floor(audio.duration / 60);
-        var dsec = Math.floor(audio.duration - durMinutes * 60);
-        var playProgress = (audio.currentTime / audio.duration) * 100;
+        var cmin = Math.floor(audios.currentTime / 60);
+        var csec = Math.floor(audios.currentTime - audios.curMinutes * 60);
+        var dmin = Math.floor(audios.duration / 60);
+        var dsec = Math.floor(audios.duration - audios.durMinutes * 60);
+        var playProgress = (audios.currentTime / audios.duration) * 100;
         if(cmin<10){cmin = "0"+cmin;}
         if(csec<10){csec = "0"+csec;}
         if(dmin<10){dmin = "0"+dmin;}
@@ -72,62 +72,63 @@ $(function(){
         else{$("#track-length").text(dmin+":"+dsec);}
         if(isNaN(cmin)||isNaN(csec)||isNaN(dmin)||isNaN(dsec)){$("#track-time").removeClass("active");}
         else{$("track-time").addClass("active");}
-        seekBar.width(playProgress+"%");
+       // seekBar.width(playProgress+"%");
         if(playProgress == 100){
             i.attr('class','fa fa-play');
-			seekBar.width(0);
+			//seekBar.width(0);
             $("#current-time").text('00:00');
         }
     }
 
     function selectTrack(ff,audi){
-        if(ff==0||ff==1){
-            ++currentIndex;
-        }else{
-            --currentIndex;
-        }
-        $.getJSON(resource,function(data){
-            if((currentIndex>-1)&&(currentIndex<data.length)){
-                if(ff == 0){
-                    i.attr('class','fa fa-play');
-                }else{
-                    i.attr('class','fa fa-pause');
-                }
-                seekBar.width(0);
-                $("#track-time").removeClass('active');
-                $("#current-time").text('00:00');
-                $("#track-length").text('00:00');
-                nTime = 0;
-                bTime = new Date();
-                bTime = bTime.getTime();
-                var currentTrack = data[currentIndex].TrackName;
-                var currentAlbum = data[currentIndex].AlbumName;
-                var currentCover = data[currentIndex].cover;
-                var currentUrl = data[currentIndex].url;
-                audi.src = currentUrl;
-                $("#playAudio").src = currentUrl;
-                if (ff != 0){
-                    audi.play();
-                    $("#player-track").addClass("active");
-                    $("#album-art").addClass("active");
-                }
-                $("#album-name").text(currentAlbum);
-                $("#track-name").text(currentTrack);
-                //var temp = "<img src=\""+currentCover+"\" class=\"active\">";
-                //$("#album-art").append(temp);
-            }else{
-                if(ff == 0 || ff == 1){
-                    ++currentIndex;
-                }else{
-                    --currentIndex;
-                }
-            }
-        })
+        console.log("Deprecated");
+        // if(ff==0||ff==1){
+        //     ++currentIndex;
+        // }else{
+        //     --currentIndex;
+        // }
+        // $.getJSON(resource,function(data){
+        //     if((currentIndex>-1)&&(currentIndex<data.length)){
+        //         if(ff == 0){
+        //             i.attr('class','fa fa-play');
+        //         }else{
+        //             i.attr('class','fa fa-pause');
+        //         }
+        //         seekBar.width(0);
+        //         $("#track-time").removeClass('active');
+        //         $("#current-time").text('00:00');
+        //         $("#track-length").text('00:00');
+        //         nTime = 0;
+        //         bTime = new Date();
+        //         bTime = bTime.getTime();
+        //         var currentTrack = data[currentIndex].TrackName;
+        //         var currentAlbum = data[currentIndex].AlbumName;
+        //         var currentCover = data[currentIndex].cover;
+        //         var currentUrl = data[currentIndex].url;
+        //         audi.src = currentUrl;
+        //         $("#playAudio").src = currentUrl;
+        //         if (ff != 0){
+        //             audi.play();
+        //             $("#player-track").addClass("active");
+        //             $("#album-art").addClass("active");
+        //         }
+        //         $("#album-name").text(currentAlbum);
+        //         $("#track-name").text(currentTrack);
+        //         //var temp = "<img src=\""+currentCover+"\" class=\"active\">";
+        //         //$("#album-art").append(temp);
+        //     }else{
+        //         if(ff == 0 || ff == 1){
+        //             ++currentIndex;
+        //         }else{
+        //             --currentIndex;
+        //         }
+        //     }
+        // })
     }
 
     function initialPlayer(){
         audios = new Audio();
-        selectTrack(0,audios);
+        // selectTrack(0,audios);
         audios.loop = false;
         $("#play-pause-button").on("click",function(){
             if(audios.paused){
@@ -162,9 +163,6 @@ $(function(){
         // alert("Is this a thing?");
         $("#queue>li:nth-child(1)").remove();
         decisionizer();
-    });
-    $("button").click(function() {
-        songCall($("#search").val());
     });
 
     function songCall(track) {
@@ -213,18 +211,18 @@ $(function(){
 
     function decisionizer() {
         if($("#queue>li").length) {
-          var selectedTrack = $("#queue>li:nth-child(1)>span.audioPreview").text();
-					$(audios).attr("src", selectedTrack);
-					selectedTrack = $("#queue>li:nth-child(1)>span.coverArt").text();
-					$("#album-art").append("<img src='" + selectedTrack + "' class='active' alt='Album Art'/>");
-					selectedTrack = $("#queue>li:nth-child(1)").text();
-					$("#album-name").text(selectedTrack.substring(0, selectedTrack.indexOf('-') - 1));
-					$("#track-name").text(selectedTrack.substring(selectedTrack.indexOf('-') + 2, selectedTrack.indexOf("http")));  
-					$("#player-track").addClass("active");
-					$("#album-art").addClass("active");
-					i.attr("class", "fa fa-pause");
-          $(audios).promise().done(function() {
-            $(audios)[0].play();
+            var selectedTrack = $("#queue>li:nth-child(1)>span.audioPreview").text();
+            $(audios).attr("src", selectedTrack);
+            selectedTrack = $("#queue>li:nth-child(1)>span.coverArt").text();
+            $("#album-art").append("<img src='" + selectedTrack + "' class='active' alt='Album Art'/>");
+            selectedTrack = $("#queue>li:nth-child(1)").text();
+            $("#album-name").text(selectedTrack.substring(0, selectedTrack.indexOf('-') - 1));
+            $("#track-name").text(selectedTrack.substring(selectedTrack.indexOf('-') + 2, selectedTrack.indexOf("http")));  
+            $("#player-track").addClass("active");
+            $("#album-art").addClass("active");
+            i.attr("class", "fa fa-pause");
+            $(audios).promise().done(function() {
+                $(audios)[0].play();
           });
         }
         else {
@@ -243,8 +241,8 @@ $(function(){
             //$("#searchResult").append("<li class=\"list-group-item list-group-item-dark\" id=\"clearList\">Clear Search Result</li>");
             $("#clearList").click(function(){
                 $(("#searchResult")).empty();
-            })
-        }else{
+            });
+        } else {
             console.log("need to input");
         }
     });
