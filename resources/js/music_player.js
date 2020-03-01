@@ -79,4 +79,173 @@ $(function(){
             $("#current-time").text('00:00');
         }
     }
-})
+
+    function selectTrack(ff,audi){
+        if(ff==0||ff==1){
+            ++currentIndex;
+        }else{
+            --currentIndex;
+        }
+        $.getJSON(resource,function(data){
+            if((currentIndex>-1)&&(currentIndex<data.length)){
+                if(ff == 0){
+                    i.attr('class','fa fa-play');
+                }else{
+                    i.attr('class','fa fa-pause');
+                }
+                seekBar.width(0);
+                $("#track-time").removeClass('active');
+                $("#current-time").text('00:00');
+                $("#track-length").text('00:00');
+                nTime = 0;
+                bTime = new Date();
+                bTime = bTime.getTime();
+                var currentTrack = data[currentIndex].TrackName;
+                var currentAlbum = data[currentIndex].AlbumName;
+                var currentCover = data[currentIndex].cover;
+                var currentUrl = data[currentIndex].url;
+                audi.src = currentUrl;
+                $("#playAudio").src = currentUrl;
+                if (ff != 0){
+                    audi.play();
+                    $("#player-track").addClass("active");
+                    $("#album-art").addClass("active");
+                }
+                $("#album-name").text(currentAlbum);
+                $("#track-name").text(currentTrack);
+                //var temp = "<img src=\""+currentCover+"\" class=\"active\">";
+                //$("#album-art").append(temp);
+            }else{
+                if(ff == 0 || ff == 1){
+                    ++currentIndex;
+                }else{
+                    --currentIndex;
+                }
+            }
+        })
+    }
+
+    function initialPlayer(){
+        audios = new Audio();
+        selectTrack(0,audios);
+        audios.loop = false;
+        $("#play-pause-button").on("click",function(){
+            if(audios.paused){
+                $("#player-track").addClass("active");
+                $("#album-art").addClass("active");
+                i.attr("class","fa fa-pause");
+                audios.play();
+            }else{
+                $("#player-track").removeClass("active");
+                $("#album-art").removeClass("active");
+                i.attr("class","fa fa-play");
+                audios.pause();
+            }  
+        });
+        $("#s-area").mousemove(function(event){
+            showHover(event);
+        });
+        $("#s-area").mouseout(hideHover);
+        $("#s-area").on("click",playFormClickPos);
+        $(audios).on("timeupdate",updateCurrentTime);
+        $("#play-previous").on("click",function(){
+            selectTrack(-1,audios);
+        });
+        $("#play-next").on("click",function(){
+            selectTrack(1,audios);
+        });
+    }
+
+    initialPlayer();
+
+    $(audios).bind('ended', function() {
+        // alert("Is this a thing?");
+        $("#queue>li:nth-child(1)").remove();
+        decisionizer();
+    });
+    $("button").click(function() {
+        songCall($("#search").val());
+    });
+
+    function songCall(track) {
+			// Powered by Deezer
+			$("#searchResult").html("");
+			fetch("https://cors-anywhere.herokuapp.com/https://api.deezer.com/search?q=" + track).then(
+				function(response) {
+					if(response.status === 200) {
+						response.json().then(function(data) {
+							console.log(data);
+							data = data.data;
+							for (let i = 0; i < 10; i++) {
+								var song = "<li id='" + data[i].id + "'>" + data[i].artist.name + " - " + data[i].title;
+								if(data[i].preview) {
+									song += "<span class='audioPreview' style='visibility:hidden;'>" + data[i].preview + "</span>";
+								}
+								else {
+									song += "<em class='audioPreview'> - No audio preview available</em>";
+								}
+								if(data[i].album.cover) {
+									song += "<span class='coverArt' style='visibility:hidden;'>" + data[i].album.cover + "</span></li>";
+								}
+								else {
+									song += "<span class='coverArt' style='visibility:hidden;'>resources/thumb.png</span></li>";
+								}
+								$("#searchResult").append(song);
+								$("#"+data[i].id).click(function() {
+									$("#queue").append($(this).clone());
+									if($("#queue>li").length === 1) {
+										decisionizer();
+									}
+									$("#queue>li").click(function() {
+										$(this).remove();
+									});
+								});
+							}
+						});
+					}
+					else {
+						alert("Error calling Deezer API. Status code: " + response.status);
+						return;
+					}
+				}
+			);
+    }
+
+    function decisionizer() {
+        if($("#queue>li").length) {
+          var selectedTrack = $("#queue>li:nth-child(1)>span.audioPreview").text();
+					$(audios).attr("src", selectedTrack);
+					selectedTrack = $("#queue>li:nth-child(1)>span.coverArt").text();
+					$("#album-art").append("<img src='" + selectedTrack + "' class='active' alt='Album Art'/>");
+					selectedTrack = $("#queue>li:nth-child(1)").text();
+					$("#album-name").text(selectedTrack.substring(0, selectedTrack.indexOf('-') - 1));
+					$("#track-name").text(selectedTrack.substring(selectedTrack.indexOf('-') + 2, selectedTrack.indexOf("http")));  
+					$("#player-track").addClass("active");
+					$("#album-art").addClass("active");
+					i.attr("class", "fa fa-pause");
+          $(audios).promise().done(function() {
+            $(audios)[0].play();
+          });
+        }
+        else {
+          $("#player-track").removeClass("active");
+          $("#album-art").removeClass("active");
+          i.attr("class", "fa fa-play");
+          audios.pause();
+          alert("End of queue");
+        }
+    }
+	
+    $("#searchBtn").click(function(){
+        if ($("#searchInput").val() != "") {
+            songCall($("#searchInput").val());
+            //$("#searchResult").append("<li class=\"list-group-item\">"+content+"</li>");
+            //$("#searchResult").append("<li class=\"list-group-item list-group-item-dark\" id=\"clearList\">Clear Search Result</li>");
+            $("#clearList").click(function(){
+                $(("#searchResult")).empty();
+            })
+        }else{
+            console.log("need to input");
+        }
+    });
+});
