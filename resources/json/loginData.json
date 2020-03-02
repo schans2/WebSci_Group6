@@ -1,0 +1,9 @@
+{
+	"info": [{
+		"fname": "Joe",
+		"lname": "Smith",
+		"email": "jsmith@mail.com",
+		"uname": "jsmith42",
+		"pass": "password"
+	}]
+}
