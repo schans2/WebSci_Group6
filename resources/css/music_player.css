@@ -303,3 +303,24 @@
     /* background-color: orangered; */
     margin-top: 500px;
 }
+
+.join{
+    margin-top: 50px;
+    text-align: center;
+}
+
+#searchInput{
+    padding: 5px;
+    border-radius: 25px;
+    width: 40%;
+}
+#searchBtn{
+    padding: 5px;
+    border-radius: 25px;
+}
+
+#myNavBar{
+    position: absolute;
+    right:30px;
+    top:25px;
+}
