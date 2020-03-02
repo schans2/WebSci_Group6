@@ -324,3 +324,10 @@
     right:30px;
     top:25px;
 }
+
+body{
+    background-color: #d1b3ff;
+}
+#searchResult{
+    text-align: center;
+}
