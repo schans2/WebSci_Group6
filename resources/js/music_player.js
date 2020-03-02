@@ -136,7 +136,7 @@ $(function(){
                 $("#album-art").addClass("active");
                 i.attr("class","fa fa-pause");
                 audios.play();
-            }else{
+            } else {
                 $("#player-track").removeClass("active");
                 $("#album-art").removeClass("active");
                 i.attr("class","fa fa-play");
@@ -150,10 +150,13 @@ $(function(){
         $("#s-area").on("click",playFormClickPos);
         $(audios).on("timeupdate",updateCurrentTime);
         $("#play-previous").on("click",function(){
-            selectTrack(-1,audios);
+            //selectTrack(-1,audios);
+            console.log("Skip back");
         });
         $("#play-next").on("click",function(){
-            selectTrack(1,audios);
+            //selectTrack(1,audios);
+            $("#queue>li:nth-child(1)").remove();
+            decisionizer();
         });
     }
 
