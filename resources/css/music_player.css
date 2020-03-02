@@ -292,3 +292,7 @@
     right:100px;
     z-index: 3;
 }
+
+.upvote:hover, .downvote:hover{
+    cursor: pointer;
+}
