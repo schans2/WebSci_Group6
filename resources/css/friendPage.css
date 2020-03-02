@@ -284,7 +284,8 @@ li{
     padding: 20px;
 } */
 .navbar-nav{
-    margin: 25px;
+    float: right;
+    margin-top: 40px;
 
 }
 .navbar-nav .nav-item .nav-link {
@@ -303,7 +304,8 @@ li{
 	border-color: rgb(137, 137, 137);
 	border-radius: 5px;
 	background-color: white;
-	padding: 3px 7px 3px 7px;
+    padding: 3px 7px 3px 7px;
+    display: none;
 }
 #link{
     margin-right: 150px;
@@ -313,6 +315,7 @@ li{
     padding: 20px;
     float: right;
     margin: 10px;
+    display: none;
 }
 
 #navbarBtn:hover {
@@ -322,6 +325,11 @@ li{
 }
 #piclogo{
     margin-right: 100px;
+}
+@media only screen and (max-width: 770px){
+    #nav_button.navbar-toggler{
+        display: block;
+    }
 }
 /*
 #navbarBtn:hover {
