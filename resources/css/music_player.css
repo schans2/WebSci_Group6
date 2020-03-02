@@ -9,7 +9,7 @@
     margin: -4px auto;
 }
 
-#bg-layer
+/* #bg-layer
 {
     position: fixed;
     top: 0;
@@ -19,7 +19,7 @@
     background-color: #fff;
     opacity: 0.51;
     z-index: 2;
-}
+} */
 
 #player
 {
@@ -295,4 +295,11 @@
 
 .upvote:hover, .downvote:hover{
     cursor: pointer;
+}
+
+#bottomBox {
+    text-align: center;
+    clear: both;
+    /* background-color: orangered; */
+    margin-top: 500px;
 }
