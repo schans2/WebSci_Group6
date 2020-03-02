@@ -14,21 +14,20 @@
     </head>
 
     <body>
-        <nav class="navbar navbar-expand-lg navbar-light bg-light justify-content-between">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <a class="navbar-brand" href="homePage.html"><img id="piclogo" src="./resources/playtwist.GIF" width="130" height="90" class="d-inline-block align-top"
                 draggable="false" alt="PlayTwist logo" /></a>
-            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-              <div class="navbar-nav">
-                <a class="nav-item nav-link" href="login.html">Login</a>
-                <a class="nav-item nav-link" href="login.html">Sign Up</a>
-              </div>
-            </div>
-            <form class="form-inline">
-                <input class="form-control mr-sm-2" type="search" placeholder="Search" id="searchInput" aria-label="Search">
-                <button class="btn btn-outline-success my-2 my-sm-0" id="searchBtn" type="button">Search</button>
-            </form>
-	    <ul id="searchResult" class="list-group">
-            </ul>
+                <ul class="nav justify-content-end" id="myNavBar">
+                    <li class="nav-item">
+                      <a class="nav-link" href="login.html">Login</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" href="login.html">Sign Up</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" href="#">Account</a>
+                    </li>
+                </ul>
         </nav>
         <div id="playlist-content" class="float-left" ng-app="voteApp">
             <ul class="list-group" ng-controller="voteController">
@@ -45,6 +44,12 @@
                 <li class="list-group-item list-group-item-success">friend1</li>
                 <li class="list-group-item list-group-item-secondary">friend2</li>
             </ul>
+        </div>
+	<div>
+            <form class="join">
+                <input type="text" placeholder="Search..." name="search" id="searchInput">
+                <button id="searchBtn" type="button"><i class="fa fa-search"></i> Search</button>
+            </form>
         </div>
         <div id="app-cover">
             <div id="player">
