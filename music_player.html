@@ -10,10 +10,10 @@
         <script src="./resources/js/music_player.js"></script>
 		<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.0/angular.js"></script>
-        <script src="./resources/js/vote.js"></script>
+        <script src="./resources/js/playlist.js"></script>
     </head>
 
-    <body>
+    <body ng-app="playlistApp">
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <a class="navbar-brand" href="homePage.html"><img id="piclogo" src="./resources/playtwist.GIF" width="130" height="90" class="d-inline-block align-top"
                 draggable="false" alt="PlayTwist logo" /></a>
@@ -29,8 +29,10 @@
                     </li>
                 </ul>
         </nav>
-        <div id="playlist-content" class="float-left" ng-app="voteApp">
-            <ul class="list-group" ng-controller="voteController">
+        <div id="playlist-content" class="float-left">
+            <ul class="list-group" ng-controller="playlistController">
+                <input ng-model="track"></input>
+                <button class="btn" ng-click="getSong()">Search</button>
                 <li class="list-group-item d-flex justify-content-between align-items-center" ng-repeat="track in music_data | orderBy: 'downvotes-upvotes'">
                     {{$index+1}}. {{track.name}}
                     <span class="badge badge-primary badge-pill upvote" ng-click="track.upvotes = track.upvotes+1">{{track.upvotes}} &#128150;</span>

@@ -1,6 +1,8 @@
-var voteAngularApp = angular.module('voteApp', []);
+var just_data =  {};
 
-voteAngularApp.controller('voteController', ['$scope', function($scope){
+var voteAngularApp = angular.module('playlistApp', []);
+
+voteAngularApp.controller('playlistController', ['$scope', function($scope){
     // Music data from a collaborative playlist, later to be dynamically fetched from the database
     $scope.music_data = [
         {
@@ -24,4 +26,5 @@ voteAngularApp.controller('voteController', ['$scope', function($scope){
             "downvotes": 180
         }
     ];
+
 }]);
