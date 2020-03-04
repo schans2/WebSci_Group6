@@ -177,7 +177,7 @@ $(function(){
                     response.json().then(function(data) {
                         console.log(data);
                         data = data.data;
-                        just_data = data;
+
                         for (let i = 0; i < 10; i++) {
                             var song = "<li id='" + data[i].id + "'>" + data[i].artist.name + " - " + data[i].title;
                             if(data[i].preview) {
