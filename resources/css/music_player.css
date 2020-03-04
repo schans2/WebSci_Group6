@@ -285,14 +285,6 @@
     color: #fd6d94;
 }
 
-#searchResult{
-    position:absolute;
-    min-width:200px;
-    top:70px;
-    right:100px;
-    z-index: 3;
-}
-
 .upvote:hover, .downvote:hover{
     cursor: pointer;
 }
@@ -328,6 +320,9 @@
 body{
     background-color: #d1b3ff;
 }
-#searchResult{
-    text-align: center;
+
+#searchResult>li {
+    margin: 0 0 0 0;
+    height: 50px;
+    /* text-align: center; */
 }
