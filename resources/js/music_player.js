@@ -168,6 +168,7 @@ $(function(){
         decisionizer();
     });
 
+    /* Temporarily disabled for playlist.js testing
     function songCall(track) {
         // Powered by Deezer
         $("#searchResult").html("");
@@ -177,7 +178,7 @@ $(function(){
                     response.json().then(function(data) {
                         console.log(data);
                         data = data.data;
-                        just_data = data;
+
                         for (let i = 0; i < 10; i++) {
                             var song = "<li class='list-group-item' id='" + data[i].id + "'>" + data[i].artist.name + " - " + data[i].title;
                             if(data[i].preview) {
@@ -211,7 +212,7 @@ $(function(){
                 }
             }
         );
-    }
+    }*/
 
     function decisionizer() {
         if($("#queue>li").length) {
@@ -240,7 +241,9 @@ $(function(){
 	
     $("#searchBtn").click(function(){
         if ($("#searchInput").val() != "") {
-            songCall($("#searchInput").val());
+            /* temporarily disabled this call to test playlist.js
+            songCall($("#searchInput").val());*/
+
             //$("#searchResult").append("<li class=\"list-group-item\">"+content+"</li>");
             //$("#searchResult").append("<li class=\"list-group-item list-group-item-dark\" id=\"clearList\">Clear Search Result</li>");
             $("#clearList").click(function(){
