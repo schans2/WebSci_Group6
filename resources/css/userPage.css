@@ -93,6 +93,9 @@ footer{
     margin-top: 30px;
     display: inline-block;
 }
+.friend_name:hover{
+    color: blue;
+}
 #prof_image{
     display: inline-block;
     max-width: 100px;

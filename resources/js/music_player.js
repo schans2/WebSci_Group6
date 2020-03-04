@@ -180,7 +180,7 @@ $(function(){
                         data = data.data;
 
                         for (let i = 0; i < 10; i++) {
-                            var song = "<li id='" + data[i].id + "'>" + data[i].artist.name + " - " + data[i].title;
+                            var song = "<li class='list-group-item' id='" + data[i].id + "'>" + data[i].artist.name + " - " + data[i].title;
                             if(data[i].preview) {
                                 song += "<span class='audioPreview' style='visibility:hidden;'>" + data[i].preview + "</span>";
                             }
