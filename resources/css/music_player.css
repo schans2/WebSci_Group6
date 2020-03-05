@@ -321,8 +321,16 @@ body{
     background-color: #d1b3ff;
 }
 
+#searchResult {
+    height: 180px;
+    overflow-x: hidden;
+    overflow-y: scroll;
+}
+
 #searchResult>li {
     margin: 0 0 0 0;
-    height: 50px;
+    padding: 0 0 0 0;
+    height: 30px;
+    /* width: 100%; */
     /* text-align: center; */
 }
