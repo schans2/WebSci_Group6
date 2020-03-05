@@ -4,34 +4,16 @@ var voteAngularApp = angular.module('playlistApp', []);
 
 voteAngularApp.controller('playlistController', ['$scope', function($scope){
     // Music data from a collaborative playlist, later to be dynamically fetched from the database
-    $scope.playlist_data = [
-        {
-            "title": "Song A",
-            "upvotes": 100,
-            "downvotes": 20
-        },
-        {
-            "title": "Song B",
-            "upvotes": 10,
-            "downvotes": 10
-        },
-        {
-            "title": "Song C",
-            "upvotes": 5,
-            "downvotes": 100
-        },
-        {
-            "title": "Song D",
-            "upvotes": 200,
-            "downvotes": 180
-        }
-    ];
+    $scope.playlist_data = [];
     $scope.search_data = [];
     $scope.addToQueue = function(i){
         let tmp_data = $scope.search_data[i]
         tmp_data.upvotes = 0;
         tmp_data.downvotes = 0;
         $scope.playlist_data.push(tmp_data);
+        if($scope.playlist_data.length == 1){ // Which means we have just pushed a song to the empty queue
+            decisionizer()
+        }
     }
 
     var i = $("#play-pause-button").find("i");
@@ -51,35 +33,8 @@ voteAngularApp.controller('playlistController', ['$scope', function($scope){
                         console.log(data);
                         data = data.data;
                         $scope.$apply(function(){
-                            $scope.search_data = data
+                            $scope.search_data = data;
                         });
-                        // Updating $scope.search_data
-
-                        for (let i = 0; i < 10; i++) {
-                            var song = "<li class='list-group-item' id='" + data[i].id + "'>" + data[i].artist.name + " - " + data[i].title;
-                            if(data[i].preview) {
-                                song += "<span class='audioPreview' style='visibility:hidden;'>" + data[i].preview + "</span>";
-                            }
-                            else {
-                                song += "<em class='audioPreview'> - No audio preview available</em>";
-                            }
-                            if(data[i].album.cover) {
-                                song += "<span class='coverArt' style='visibility:hidden;'>" + data[i].album.cover + "</span></li>";
-                            }
-                            else {
-                                song += "<span class='coverArt' style='visibility:hidden;'>resources/thumb.png</span></li>";
-                            }
-                            $("#searchResult").append(song);
-                            $("#"+data[i].id).click(function() {
-                                $("#queue").append($(this).clone());
-                                if($("#queue>li").length === 1) {
-                                    decisionizer();
-                                }
-                                $("#queue>li").click(function() {
-                                    $(this).remove();
-                                });
-                            });
-                        }
                     });
                 }
                 else {
@@ -89,8 +44,18 @@ voteAngularApp.controller('playlistController', ['$scope', function($scope){
             }
         );
     }
+    function trackCompare(a, b) {
+        // returns 1 when a is more popular than b
+        if (a.upvotes-a.downvotes > b.upvotes-a.downvotes) return 1;
+        if (b.upvotes-b.downvotes > a.upvotes-b.downvotes) return -1;
+      
+        return 0;
+    }
     function decisionizer() {
-        if($("#queue>li").length) {
+        if($scope.playlist_data.length) {
+            $scope.playlist_data.sort(trackCompare);
+            var selected = $scope.playlist_data[0];
+            $scope.playlist_data.splice(0, 1);
             var selectedTrack = $("#queue>li:nth-child(1)>span.audioPreview").text();
             $(audios).attr("src", selectedTrack);
             selectedTrack = $("#queue>li:nth-child(1)>span.coverArt").text();
