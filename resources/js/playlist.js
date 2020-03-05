@@ -35,7 +35,7 @@ voteAngularApp.controller('playlistController', ['$scope', function($scope){
     }
 
     var i = $("#play-pause-button").find("i");
-    var seekTime, seekLocation, audios;
+    var seekTime, seekLocation, seekBar, audios;
     var flag = false;
     initialPlayer();
 
@@ -164,7 +164,7 @@ voteAngularApp.controller('playlistController', ['$scope', function($scope){
 
     function playFormClickPos(){
         audios.currentTime = seekLocation;
-        seekBar.width(seekTime);
+        // seekBar.width(seekTime);
         hideHover();
     }
 
