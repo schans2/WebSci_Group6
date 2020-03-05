@@ -4,7 +4,7 @@ var voteAngularApp = angular.module('playlistApp', []);
 
 voteAngularApp.controller('playlistController', ['$scope', function($scope){
     // Music data from a collaborative playlist, later to be dynamically fetched from the database
-    $scope.music_data = [
+    $scope.playlist_data = [
         {
             "name": "Song A",
             "upvotes": 100,
@@ -43,11 +43,9 @@ voteAngularApp.controller('playlistController', ['$scope', function($scope){
                     response.json().then(function(data) {
                         console.log(data);
                         data = data.data;
-                        console.log($scope.music_data[0].name)
                         $scope.$apply(function(){
-                            $scope.music_data[0].name = data[0].title;
+                            $scope.data = data
                         })
-                        console.log($scope.music_data[0].name)
 
                         for (let i = 0; i < 10; i++) {
                             var song = "<li class='list-group-item' id='" + data[i].id + "'>" + data[i].artist.name + " - " + data[i].title;
