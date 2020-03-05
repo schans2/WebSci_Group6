@@ -321,13 +321,13 @@ body{
     background-color: #d1b3ff;
 }
 
-#searchResult {
+#searchResult, #tmp-searchResult {
     height: 180px;
     overflow-x: hidden;
     overflow-y: scroll;
 }
 
-#searchResult>li {
+#searchResult>li, #tmp-searchResult>li {
     margin: 0 0 0 0;
     padding: 0 0 0 0;
     height: 30px;

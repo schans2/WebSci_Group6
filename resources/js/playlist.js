@@ -6,26 +6,33 @@ voteAngularApp.controller('playlistController', ['$scope', function($scope){
     // Music data from a collaborative playlist, later to be dynamically fetched from the database
     $scope.playlist_data = [
         {
-            "name": "Song A",
+            "title": "Song A",
             "upvotes": 100,
             "downvotes": 20
         },
         {
-            "name": "Song B",
+            "title": "Song B",
             "upvotes": 10,
             "downvotes": 10
         },
         {
-            "name": "Song C",
+            "title": "Song C",
             "upvotes": 5,
             "downvotes": 100
         },
         {
-            "name": "Song D",
+            "title": "Song D",
             "upvotes": 200,
             "downvotes": 180
         }
     ];
+    $scope.search_data = [];
+    $scope.addToQueue = function(i){
+        let tmp_data = $scope.search_data[i]
+        tmp_data.upvotes = 0;
+        tmp_data.downvotes = 0;
+        $scope.playlist_data.push(tmp_data);
+    }
 
     var i = $("#play-pause-button").find("i");
     initialPlayer();
@@ -44,8 +51,9 @@ voteAngularApp.controller('playlistController', ['$scope', function($scope){
                         console.log(data);
                         data = data.data;
                         $scope.$apply(function(){
-                            $scope.data = data
-                        })
+                            $scope.search_data = data
+                        });
+                        // Updating $scope.search_data
 
                         for (let i = 0; i < 10; i++) {
                             var song = "<li class='list-group-item' id='" + data[i].id + "'>" + data[i].artist.name + " - " + data[i].title;
