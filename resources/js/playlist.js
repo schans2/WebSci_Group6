@@ -17,6 +17,8 @@ voteAngularApp.controller('playlistController', ['$scope', function($scope){
     }
 
     var i = $("#play-pause-button").find("i");
+    var seekTime, seekLocation, seekBar, audios;
+    var flag = false;
     initialPlayer();
 
     $scope.songCall = function(track) {
@@ -127,7 +129,7 @@ voteAngularApp.controller('playlistController', ['$scope', function($scope){
 
     function playFormClickPos(){
         audios.currentTime = seekLocation;
-        //seekBar.width(seekTime);
+        // seekBar.width(seekTime);
         hideHover();
     }
 
@@ -159,6 +161,22 @@ voteAngularApp.controller('playlistController', ['$scope', function($scope){
 			//seekBar.width(0);
             $("#current-time").text('00:00');
         }
+    }
+
+    function showHover(event){
+        var barP = $("#s-area").offset();
+        seekTime = event.clientX - barP.left;
+        seekLocation = audios.duration*(seekTime/$("#s-area").outerWidth());
+        $("#s-hover").width(seekTime);
+        var cM = seekLocation/60;
+        var min = Math.floor(cM);
+        var sec = Math.floor(seekLocation-min*60);
+        if((min<0)||(sec<0)){return;}
+        if(min<10){min = "0"+min;}
+        if(sec<10){sec = "0"+sec;}
+        if(isNaN(min)||isNaN(sec)){$("#ins-time").text("--:--");}
+        else{$("#ins-time").text(min+":"+sec);}
+		$("#ins-time").css({'left':seekTime,'margin-left':'-21px'}).fadeIn(0);
     }
 
 }]);
