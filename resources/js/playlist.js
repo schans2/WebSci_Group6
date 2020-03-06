@@ -121,6 +121,19 @@ voteAngularApp.controller('playlistController', ['$scope', function($scope){
             $("#queue>li:nth-child(1)").remove();
             decisionizer();
         });
+        // Fades in and out search results on focus
+        $("#searchInput").focusin(function() {
+            $("#tmp-searchResult").fadeIn(500);
+        });
+        $("#searchBtn").focusin(function() {
+            $("#tmp-searchResult").fadeIn(500);
+        });
+        $("#searchInput").focusout(function() {
+            $("#tmp-searchResult").fadeOut(500);
+        });
+        $("#tmp-searchResult").mouseleave(function() {
+            $(this).fadeOut(500);
+        });
     }
 
     // When an audio ends, an event listener automatically calls the next decisionizer.

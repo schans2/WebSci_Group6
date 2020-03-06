@@ -289,13 +289,6 @@
     cursor: pointer;
 }
 
-#bottomBox {
-    text-align: center;
-    clear: both;
-    /* background-color: orangered; */
-    margin-top: 500px;
-}
-
 .join{
     margin-top: 50px;
     text-align: center;
@@ -331,6 +324,16 @@ body{
     margin: 0 0 0 0;
     padding: 0 0 0 0;
     height: 30px;
-    /* width: 100%; */
-    /* text-align: center; */
+}
+
+#tmp-searchResult:hover {
+    cursor: pointer;
+}
+
+#playlist-content>ul>li>div {
+    width: 200px;
+    display: inline-block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
