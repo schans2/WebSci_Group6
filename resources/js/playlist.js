@@ -10,8 +10,12 @@ voteAngularApp.controller('playlistController', ['$scope', function($scope){
         let tmp_data = $scope.search_data[i]
         tmp_data.upvotes = 0;
         tmp_data.downvotes = 0;
+        // If duplicates found, just terminate
+        if($scope.playlist_data.includes(tmp_data)){
+            return
+        }
         $scope.playlist_data.push(tmp_data);
-        if($scope.playlist_data.length == 1){ // Which means we have just pushed a song to the empty queue
+        if($scope.playlist_data.length == 1 && audios.paused){ // Which means we have just pushed a song to the empty queue
             decisionizer()
         }
     }
@@ -48,23 +52,28 @@ voteAngularApp.controller('playlistController', ['$scope', function($scope){
     }
     function trackCompare(a, b) {
         // returns 1 when a is more popular than b
-        if (a.upvotes-a.downvotes > b.upvotes-a.downvotes) return 1;
-        if (b.upvotes-b.downvotes > a.upvotes-b.downvotes) return -1;
+        if (a.upvotes-a.downvotes > b.upvotes-b.downvotes) return -1;
+        if (b.upvotes-b.downvotes > a.upvotes-a.downvotes) return 1;
       
         return 0;
     }
+
+    // descisionizer sorts the tracks, picks the best track, then pops the first track
     function decisionizer() {
         if($scope.playlist_data.length) {
+            console.log("Current Playlist: ", $scope.playlist_data)
             $scope.playlist_data.sort(trackCompare);
             var selected = $scope.playlist_data[0];
+            // Remove the song selected
+            // We need to use $apply here to force update
             $scope.playlist_data.splice(0, 1);
-            var selectedTrack = $("#queue>li:nth-child(1)>span.audioPreview").text();
-            $(audios).attr("src", selectedTrack);
-            selectedTrack = $("#queue>li:nth-child(1)>span.coverArt").text();
+            $scope.$evalAsync();
+            $(audios).attr("src", selected.preview);
+            selectedTrack = selected.album.cover;
             $("#album-art").append("<img src='" + selectedTrack + "' class='active' alt='Album Art'/>");
-            selectedTrack = $("#queue>li:nth-child(1)").text();
-            $("#album-name").text(selectedTrack.substring(0, selectedTrack.indexOf('-') - 1));
-            $("#track-name").text(selectedTrack.substring(selectedTrack.indexOf('-') + 2, selectedTrack.indexOf("http")));  
+            $("#album-name").text(selected.album.title);
+            console.log(selected.name)
+            $("#track-name").text(selected.title);  
             $("#player-track").addClass("active");
             $("#album-art").addClass("active");
             i.attr("class", "fa fa-pause");
@@ -114,9 +123,8 @@ voteAngularApp.controller('playlistController', ['$scope', function($scope){
         });
     }
 
+    // When an audio ends, an event listener automatically calls the next decisionizer.
     $(audios).bind('ended', function() {
-        // alert("Is this a thing?");
-        $("#queue>li:nth-child(1)").remove();
         decisionizer();
     });
 
