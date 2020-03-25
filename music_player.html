@@ -10,7 +10,8 @@
         <!-- <script src="./resources/js/music_player.js"></script> -->
 		<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.0/angular.js"></script>
-        <script src="./resources/js/playlist.js"></script>
+        <!-- <script src="./resources/js/playlist.js"></script> -->
+        <script src="./resources/js/musicSearchQueue.js"></script>
     </head>
 
     <body ng-app="playlistApp" ng-controller="playlistController">
@@ -46,9 +47,20 @@
             </ul>
         </div>
 	    <div>
-            <form class="join">
-                <input type="text" placeholder="Search..." name="search" id="searchInput" ng-model="track">
-                <button id="searchBtn" type="button" ng-click="songCall(track)"><i class="fa fa-search"></i> Search</button>
+            <h2>Showing the top {{amount}} result(s) for: {{query}}</h2>
+            <!-- Dynamically displays and updates Angular scope variables -->
+            <form ng-enter="loadItems()">
+            <label for="entries">Search for </label>
+            <select id="entries" ng-model="amount" ng-options="item for item in numbers"></select>
+            <!-- <input type="radio" name="searchType" id="album" value="Album" ng-click="type='album'"/>
+            <label for="album">Albums</label>
+            <input type="radio" name="searchType" id="artist" value="Artist" ng-click="type='artist'"/>
+            <label for="artist">Artists</label>
+            <input type="radio" name="searchType" id="track" value="Track" ng-click="type='track'"/>
+            <label for="track">Tracks</label> -->
+            <span> tracks named </span>
+            <input type="text" maxlength="99" placeholder="Song name..." ng-model="query"/>
+            <button type="button" ng-click=loadItems()>Go!</button>
             </form>
         </div>
         <div class="container-flex">
