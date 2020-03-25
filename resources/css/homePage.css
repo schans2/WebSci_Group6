@@ -1,26 +1,18 @@
 /* this will be the css for the home page */
 /*Navbar---------------------------------*/
 .navbar{
-    background-color: white;
+    background: black;
     height: 110px;
 }
 body{
     /* background-color: #333333; */
-    background-color: #d1b3ff;
+    background: #2c3e50;
     font-family: 'Raleway', sans-serif;
-}
-footer{
-    margin-top: 20px;
-    margin-bottom: 0px;
-    width: 100%;
-    height: 20px;
-    background-color: white;
-    text-align: center;
 }
 #main{
     width: 100%;
     height: 300px;
-    background-color: #d1b3ff;
+    background: #2c3e50;
     border-radius: 10px;
 }
 #below_main{
@@ -34,6 +26,12 @@ footer{
     margin-top: 50px;
     text-align: center;
 }
+.Nav{
+    color:#1abc9c;
+}
+.Nav:hover{
+    color:#1abc9c;
+}
 #search{
     padding: 10px;
     border-radius: 25px;
@@ -41,30 +39,36 @@ footer{
 }
 #search_button{
     padding: 10px;
-    border-radius: 25px;
-
+    border-radius: 15px;
+    border-color: #1abc9c;
+    background-color: #1abc9c;
+    color:white;
 }
 #slogan{
     text-align: center;
-    color: white;
+    color: #1abc9c;
     font-size: 3em;
     margin-top: 60px;
+    font-family: 'Caveat', cursive;
+    font-size: 70px;
 }
 .col-sm{
+    color:#1abc9c;
+    font-family: 'Caveat', cursive;
+    font-size:20px;
     margin-left: 10px;
     width: 23%;
     display: inline-block;
-    border: 1px solid black;
     height: 80%;
     border-radius: 15px;
     padding: 10px;
     text-align: center;
-    background-color: lightgray;
+    background-color: transparent;
 }
 #display_img{
     float: center;
-    max-width: 150px;
-    max-height: 100px;
+    max-width: 200px;
+    max-height: 200px;
     width: auto;
     height: auto;
 }
