@@ -1,12 +1,12 @@
 /* this will be the css for the home page */
 /*Navbar---------------------------------*/
 .navbar{
-    background-color: white;
+    background-color: black;
     height: 110px;
 }
 body{
     /* background-color: #333333; */
-    background-color: #d1b3ff;
+    background-color: black;
     font-family: 'Raleway', sans-serif;
 }
 footer{
@@ -44,7 +44,8 @@ footer{
     border-radius: 15px;
     padding: 10px;
     text-align: center;
-    background-color: lightgray;
+    /* background-color: lightgray; */
+    background-color: #2c3e50;
 }
 #second{
     margin-left: 10px;
@@ -55,7 +56,7 @@ footer{
     border-radius: 15px;
     padding: 10px;
     text-align: center;
-    background-color: lightgray;
+    background-color: #2c3e50;
     float: right;
 }
 #edit_bar{
@@ -68,6 +69,7 @@ footer{
     text-align: left;
     /* padding: 10px; */
     margin-left: 40px;
+    color: #1abc9c;
 }
 #active{
     display: inline-block;
@@ -79,6 +81,12 @@ footer{
     margin-left: 10px;
     margin-top: 30px;
 
+}
+h1{
+    color: #1abc9c;
+}
+h2{
+    color: #1abc9c;
 }
 #user_image{
     display: inline-block;
@@ -92,9 +100,10 @@ footer{
 .friend_name{
     margin-top: 30px;
     display: inline-block;
+    color: #1abc9c;
 }
 .friend_name:hover{
-    color: blue;
+    color: white;
 }
 #prof_image{
     display: inline-block;
@@ -122,6 +131,9 @@ footer{
     border-radius: 25px;
     /* display: inline-block; */
     float: left;
+    color: white;
+    background-color: #1abc9c;
+    border-color: #1abc9c;
 }
 .create{
     display: inline-block;
@@ -129,6 +141,9 @@ footer{
     padding: 10px;
     margin: 10px;
     border-radius: 25px;
+    color: white;
+    background-color: #1abc9c;
+    border-color: #1abc9c;
 
 }
 .join{
@@ -160,7 +175,10 @@ footer{
     border-radius: 15px;
     padding: 10px;
     text-align: center;
-    background-color: lightgray;
+    /* background-color: lightgray; */
+}
+figcaption{
+    color: white;
 }
 /* .navbar-toggler{
     padding: 20px;
@@ -197,7 +215,9 @@ footer{
 .navbar-nav .nav-item:hover .nav-link {
 	color:rgb(187, 186, 186);
 }
-
+.Nav{
+    color: #1abc9c;
+}
 #navbar-toggler {
 	font-size:1.1rem;
 	color:rgb(137, 137, 137);
