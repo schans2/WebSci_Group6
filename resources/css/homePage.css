@@ -9,18 +9,6 @@ body{
     background: #2c3e50;
     font-family: 'Raleway', sans-serif;
 }
-
-footer{
-    margin-top: 20px;
-    margin-bottom: 0px;
-    width: 100%;
-    height: 20px;
-    background-color: transparent;
-    text-align: center;
-}
-#footera{
-    color:#1abc9c;
-}
 #main{
     width: 100%;
     height: 300px;
