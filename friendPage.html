@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="./resources/css/friendPage.css">
+        <link href="https://fonts.googleapis.com/css?family=Raleway&display=swap" rel="stylesheet">
+    </head>
+    <body>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" href="./homePage.html"><img id="piclogo" src="./resources/playtwist.GIF" width="130" height="90" class="d-inline-block align-top"
+                draggable="false" alt="PlayTwist logo" /></a>
+            <button id="nav_button" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+              <div class="navbar-nav">
+                <!-- <a id="link" class="nav-item nav-link active" href="./homePage.html">Home <span class="sr-only">(current)</span></a> -->
+                <!-- <a id="link" class="nav-item nav-link" href="#">Join a Playlist</a> -->
+                <a id="link" class="nav-item nav-link" href="./login.html">Login</a>
+                <a id="link" class="nav-item nav-link" href="./login.html">Sign Up</a>
+              </div>
+            </div>
+          </nav>
+        <div class="container">
+            <div id="main" class="row">
+                <div id="section" class="col-lg-4">
+                    <img id="user_image" src="resources/profileImage.png" alt="Profile Image">
+                    <h4 class="friend_name">Username</h4>
+                    <button onclick="window.location.href = 'homePage.html'" class="create" type="button">+ Invite to Join Playlist</button><br/>
+                    <br>
+                    <hr>
+                    <h2 id="friend_title">Friends</h2>
+                    <img id="friend_image" src="resources/profileImage.png" alt="Profile Image">
+                    <img id="friend_image" src="resources/profileImage.png" alt="Profile Image">
+                    <img id="friend_image" src="resources/profileImage.png" alt="Profile Image">
+                    <!-- <br> -->
+                    <img id="friend_image" src="resources/profileImage.png" alt="Profile Image">
+                    <img id="friend_image" src="resources/profileImage.png" alt="Profile Image">
+                    <!-- <br> -->
+                    <img id="friend_image" src="resources/profileImage.png" alt="Profile Image">
+                    <!-- <br> -->
+                    <img id="friend_image" src="resources/profileImage.png" alt="Profile Image">
+                    <img id="friend_image" src="resources/profileImage.png" alt="Profile Image">
+                    <img id="friend_image" src="resources/profileImage.png" alt="Profile Image">
+                    <img id="friend_image" src="resources/profileImage.png" alt="Profile Image">
+                </div>
+                <div id="feed" class="col-lg-4">
+                    <h3 id="post_title">Posts</h3>
+                    <section id="post">
+                        <img id="user_image" src="resources/profileImage.png" alt="Profile Image">
+                        <h4 class="friend_name">Username</h4>
+                        <h5 class="date">Posted: February 23, 2020</h5>
+                        <p>Check out the new playlist I created!</p>
+                        <img id="post_image" src="resources/defaultPlaylistImage.jpg">
+                        <hr>
+                        <button id="like_button" type="button">Like</button>
+                        <img id="like_image" src="resources/thumb.png" alt="like">
+                        <hr>
+                        <h4>Comments:</h4>
+                        <form>
+                            <label for="comment">Comment:</label>
+                            <input type="text" id="comment" name="comment" placeholder="Write a comment..."></label><br>
+                            <input id="button" type="submit" value="Post">
+                        </form>
+                    </section>
+                    <br>
+                    <section id="post">
+                        <img id="user_image" src="resources/profileImage.png" alt="Profile Image">
+                        <h4 class="friend_name">Username</h4>
+                        <h5 class="date">Posted: February 19, 2020</h5>
+                        <p>This album is great! I'd reccomend giving it a listen</p>
+                        <img id="post_image" src="resources/defaultPlaylistImage.jpg">
+                        <hr>
+                        <button id="like_button" type="button">Like</button>
+                        <img id="like_image" src="resources/thumb.png" alt="like">
+                        <hr>
+                        <h4>Comments:</h4>
+                        <form>
+                            <label for="comment">Comment:</label>
+                            <input type="text" id="comment" name="comment" placeholder="Write a comment..."></label><br>
+                            <input id="button" type="submit" value="Post">
+                        </form>
+                    </section>
+                    <section id="post">
+                        <img id="user_image" src="resources/profileImage.png" alt="Profile Image">
+                        <h4 class="friend_name">Username</h4>
+                        <h5 class="date">Posted: February 12, 2020</h5>
+                        <p>Welcome to my page! Will be posting content soon...</p>
+                        <hr>
+                        <button id="like_button" type="button">Like</button>
+                        <img id="like_image" src="resources/thumb.png" alt="like">
+                        <hr>
+                        <h4>Comments:</h4>
+                        <form>
+                            <label for="comment">Comment:</label>
+                            <input type="text" id="comment" name="comment" placeholder="Write a comment..."></label><br>
+                            <input id="button" type="submit" value="Post">
+                        </form>
+                    </section>
+                    
+                </div>
+                <div id="section" class="col-lg-4">
+                    <h2>Username's Favorite Songs</h2>
+                    <ul>
+                        <li>1. Song 1<img id="play" src="resources/playbutton.png" alt="playbutton"></li>
+                        <li>2. Song 2<img id="play" src="resources/playbutton.png" alt="playbutton"></li>
+                        <li>3. Song 3<img id="play" src="resources/playbutton.png" alt="playbutton"></li>
+                        <li>4. Song 4<img id="play" src="resources/playbutton.png" alt="playbutton"></li>
+                        <li>5. Song 5<img id="play" src="resources/playbutton.png" alt="playbutton"></li>
+                    </ul>
+                    <br>
+                    <hr>
+                    <h2>Username's Favorite Albums</h2>
+                        <li>1. Album 1<img id="play" src="resources/playbutton.png" alt="playbutton"></li>
+                        <li>2. Album 2<img id="play" src="resources/playbutton.png" alt="playbutton"></li>
+                        <li>3. Album 3<img id="play" src="resources/playbutton.png" alt="playbutton"></li>
+                        <li>4. Album 4<img id="play" src="resources/playbutton.png" alt="playbutton"></li>
+                        <li>5. Album 5<img id="play" src="resources/playbutton.png" alt="playbutton"></li>
+                    <br>
+                </div>
+            </div>
+            <!-- <div class="row">
+                <div id="friends" class="col-lg-4">
+                    
+                </div>
+            </div> -->
+        </div>
+        <footer>
+            <ul>
+                <a href="#">About Us</a>
+            </ul>
+        </footer>
+    </body>
+</html>

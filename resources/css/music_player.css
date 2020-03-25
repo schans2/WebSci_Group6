@@ -9,22 +9,7 @@
     margin: -4px auto;
 }
 
-#bg-artwork
-{
-    position: fixed;
-    top: -30px;
-    right: -30px;
-    bottom: -30px;
-    left: -30px;
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: 50%;
-    filter: blur(40px);
-    -webkit-filter: blur(40px);
-    z-index: 1;
-}
-
-#bg-layer
+/* #bg-layer
 {
     position: fixed;
     top: 0;
@@ -34,7 +19,7 @@
     background-color: #fff;
     opacity: 0.51;
     z-index: 2;
-}
+} */
 
 #player
 {
@@ -294,12 +279,61 @@
     transition: 0.2s ease all;
 }
 
-.button:hover
-{
-    background-color: #d6d6de;
-}
 
 .button:hover i
 {
-    color: #fff;
+    color: #fd6d94;
+}
+
+.upvote:hover, .downvote:hover{
+    cursor: pointer;
+}
+
+.join{
+    margin-top: 50px;
+    text-align: center;
+}
+
+#searchInput{
+    padding: 5px;
+    border-radius: 25px;
+    width: 40%;
+}
+#searchBtn{
+    padding: 5px;
+    border-radius: 25px;
+}
+
+#myNavBar{
+    position: absolute;
+    right:30px;
+    top:25px;
+}
+
+body{
+    background-color: #d1b3ff;
+}
+
+#searchResult, #tmp-searchResult {
+    height: 180px;
+    overflow-x: hidden;
+    overflow-y: scroll;
+}
+
+#searchResult>li, #tmp-searchResult>li {
+    margin: 0 0 0 0;
+    padding: 0 0 0 0;
+    height: 30px;
+}
+
+#tmp-searchResult:hover {
+    cursor: pointer;
+}
+
+#playlist-content>ul>li>div {
+    width: 200px;
+    display: inline-block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
