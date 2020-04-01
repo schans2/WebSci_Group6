@@ -20,8 +20,15 @@ voteAngularApp.controller('playlistController', ['$scope', function($scope) {
 			function(result) {
 				console.log(result);
                 result = result.tracks.items;
-                $scope.$apply(function(){
-                    $scope.search_data = result;
+				console.log(result);
+                $scope.$apply(function() {
+                    for (let i = 0; i < result.length; i++) {
+                        // console.log(result[i]);
+                        if(result[i].preview_url) { 
+                            $scope.search_data.push(result[i]);
+                        }
+                    }
+                    // $scope.search_data = result;
                 });
 			});
 		}
@@ -36,7 +43,7 @@ voteAngularApp.controller('playlistController', ['$scope', function($scope) {
     $scope.playlist_data = [];
     $scope.search_data = [];
     $scope.addToQueue = function(i){
-        let tmp_data = $scope.search_data[i]
+        let tmp_data = $scope.search_data[i];
         tmp_data.upvotes = 0;
         tmp_data.downvotes = 0;
         // If duplicates found, just terminate
@@ -98,12 +105,12 @@ voteAngularApp.controller('playlistController', ['$scope', function($scope) {
             // We need to use $apply here to force update
             $scope.playlist_data.splice(0, 1);
             $scope.$evalAsync();
-            $(audios).attr("src", selected.preview);
-            selectedTrack = selected.album.cover;
+            $(audios).attr("src", selected.preview_url);
+            selectedTrack = selected.album.images[0].url;
             $("#album-art").append("<img src='" + selectedTrack + "' class='active' alt='Album Art'/>");
-            $("#album-name").text(selected.album.title);
+            $("#album-name").text(selected.album.name);
             console.log(selected.name)
-            $("#track-name").text(selected.title);  
+            $("#track-name").text(selected.name);  
             $("#player-track").addClass("active");
             $("#album-art").addClass("active");
             i.attr("class", "fa fa-pause");
@@ -151,7 +158,7 @@ voteAngularApp.controller('playlistController', ['$scope', function($scope) {
             $("#queue>li:nth-child(1)").remove();
             decisionizer();
         });
-        // Fades in and out search results on focus
+        /* Fades in and out search results on focus
         $("#searchInput").focusin(function() {
             $("#tmp-searchResult").fadeIn(500);
         });
@@ -164,6 +171,7 @@ voteAngularApp.controller('playlistController', ['$scope', function($scope) {
         $("#tmp-searchResult").mouseleave(function() {
             $(this).fadeOut(500);
         });
+        */
     }
 
     // When an audio ends, an event listener automatically calls the next decisionizer.
