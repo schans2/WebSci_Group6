@@ -38,8 +38,15 @@ app.get('/user', function(req, res){
     res.sendFile(__dirname + "/userPage.html");
 });
 
+// Spotify search and return
 app.get("/search", function(req, res) {
-    console.log("Amount = " + req.query.amount + "\nQuery = " + req.query.query);
+	console.log("Amount = " + req.query.amount + "\nQuery = " + req.query.query);
+	spot.search({ type : "track", query : req.query.query, limit : req.query.amount}).then(function(response) {
+		console.log(response);
+		res.send(response);
+	}).catch(function(err) {
+		console.log("\x1b[31m" + err + "\x1b[0m");
+	});
 });
 
 // Temporary space for crypto functions. Will be moved to an external module soon.
