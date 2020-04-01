@@ -19,19 +19,17 @@ voteAngularApp.controller('playlistController', ['$scope', function($scope) {
 			$.get(("http://localhost:3000/search?amount=" + $scope.amount + "&query=" + $scope.query), 
 			function(result) {
 				console.log(result);
-				// Determine which internal page population function to call based on the desired data type
-				// if($scope.type === "album") {
-                //     //displayAlbums();
-                //     console.log("albums");
-				// }
-				// else if($scope.type === "artist") {
-                //     //displayArtists();
-                //     console.log("artists");
-				// }
-				// else if($scope.type === "track") {
-                //     //displayTracks();
-                //     console.log("tracks");
-				// }
+                result = result.tracks.items;
+				console.log(result);
+                $scope.$apply(function() {
+                    for (let i = 0; i < result.length; i++) {
+                        // console.log(result[i]);
+                        if(result[i].preview_url) { 
+                            $scope.search_data.push(result[i]);
+                        }
+                    }
+                    // $scope.search_data = result;
+                });
 			});
 		}
 		// Error case
@@ -45,7 +43,7 @@ voteAngularApp.controller('playlistController', ['$scope', function($scope) {
     $scope.playlist_data = [];
     $scope.search_data = [];
     $scope.addToQueue = function(i){
-        let tmp_data = $scope.search_data[i]
+        let tmp_data = $scope.search_data[i];
         tmp_data.upvotes = 0;
         tmp_data.downvotes = 0;
         // If duplicates found, just terminate
@@ -60,6 +58,8 @@ voteAngularApp.controller('playlistController', ['$scope', function($scope) {
     var seekTime, seekLocation, seekBar, audios;
     var flag = false;
     initialPlayer();
+
+/*  Deprecated 4-1-20 2:48 PM
 
     $scope.songCall = function(track) {
         if(!$scope.track || $scope.track == ''){
@@ -86,6 +86,8 @@ voteAngularApp.controller('playlistController', ['$scope', function($scope) {
             }
         );
     }
+*/
+
     function trackCompare(a, b) {
         // returns 1 when a is more popular than b
         if (a.upvotes-a.downvotes > b.upvotes-b.downvotes) return -1;
@@ -103,12 +105,12 @@ voteAngularApp.controller('playlistController', ['$scope', function($scope) {
             // We need to use $apply here to force update
             $scope.playlist_data.splice(0, 1);
             $scope.$evalAsync();
-            $(audios).attr("src", selected.preview);
-            selectedTrack = selected.album.cover;
+            $(audios).attr("src", selected.preview_url);
+            selectedTrack = selected.album.images[0].url;
             $("#album-art").append("<img src='" + selectedTrack + "' class='active' alt='Album Art'/>");
-            $("#album-name").text(selected.album.title);
+            $("#album-name").text(selected.album.name);
             console.log(selected.name)
-            $("#track-name").text(selected.title);  
+            $("#track-name").text(selected.name);  
             $("#player-track").addClass("active");
             $("#album-art").addClass("active");
             i.attr("class", "fa fa-pause");
@@ -156,7 +158,7 @@ voteAngularApp.controller('playlistController', ['$scope', function($scope) {
             $("#queue>li:nth-child(1)").remove();
             decisionizer();
         });
-        // Fades in and out search results on focus
+        /* Fades in and out search results on focus
         $("#searchInput").focusin(function() {
             $("#tmp-searchResult").fadeIn(500);
         });
@@ -169,6 +171,7 @@ voteAngularApp.controller('playlistController', ['$scope', function($scope) {
         $("#tmp-searchResult").mouseleave(function() {
             $(this).fadeOut(500);
         });
+        */
     }
 
     // When an audio ends, an event listener automatically calls the next decisionizer.
