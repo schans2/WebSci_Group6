@@ -3,6 +3,7 @@
 
 const express = require('express');
 var bodyParser = require('body-parser');
+var crypto = require('crypto');
 var app = express();
 var port = 3000;
 
@@ -32,10 +33,28 @@ app.get('/user', function(req, res){
     res.sendFile(__dirname + "/userPage.html");
 });
 
+// Temporary space for crypto functions. Will be moved to an external module soon.
+var genRandomString = function(length){
+    return crypto.randomBytes(Math.ceil(length/2))
+            .toString('hex') /** convert to hexadecimal format */
+            .slice(0,length);   /** return required number of characters */
+};
+var sha512 = function(password, salt){
+    var hash = crypto.createHmac('sha512', salt); /** Hashing algorithm sha512 */
+    hash.update(password);
+    var value = hash.digest('hex');
+    return {
+        salt:salt,
+        passwordHash:value
+    };
+};
+
 // API calls to the server
 app.post('/join', function(req, res){
     // verify user login status, join user to a group, and redirect.
-    // TO BE IMPLEMENTED
+    var body = req.body;
+    var uname = body.uname;
+    var token = body.token;
     return
 });
 
@@ -49,6 +68,9 @@ app.post('/register', function(req, res){
     var pass = body.pass;
     console.log(`Register request of ${fname} ${lname}, email ${email}, username ${uname}`);
     
+    var salt = genRandomString(16);
+    var hashed = sha512(pass, salt);
+    console.log(`Hashed password ${hashed.passwordHash} with salt ${hashed.salt}.`);
     // <<VALIDATION AND DATABASE TO BE IMPLEMENTED>>
 
     res.send("Register handling success!");
@@ -71,8 +93,6 @@ app.post('/logout', function(req, res){
     // Validates username and user login token(stored at user's as part of cookie).
     console.log(`User ${uname} logs out.`);
 });
-
-
 
 app.listen(port);
 console.log(`Server running on port ${port}`);
