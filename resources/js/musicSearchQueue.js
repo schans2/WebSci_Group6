@@ -19,19 +19,10 @@ voteAngularApp.controller('playlistController', ['$scope', function($scope) {
 			$.get(("http://localhost:3000/search?amount=" + $scope.amount + "&query=" + $scope.query), 
 			function(result) {
 				console.log(result);
-				// Determine which internal page population function to call based on the desired data type
-				// if($scope.type === "album") {
-                //     //displayAlbums();
-                //     console.log("albums");
-				// }
-				// else if($scope.type === "artist") {
-                //     //displayArtists();
-                //     console.log("artists");
-				// }
-				// else if($scope.type === "track") {
-                //     //displayTracks();
-                //     console.log("tracks");
-				// }
+                result = result.tracks.items;
+                $scope.$apply(function(){
+                    $scope.search_data = result;
+                });
 			});
 		}
 		// Error case
@@ -61,6 +52,8 @@ voteAngularApp.controller('playlistController', ['$scope', function($scope) {
     var flag = false;
     initialPlayer();
 
+/*  Deprecated 4-1-20 2:48 PM
+
     $scope.songCall = function(track) {
         if(!$scope.track || $scope.track == ''){
             alert("invalid track input!");
@@ -86,6 +79,8 @@ voteAngularApp.controller('playlistController', ['$scope', function($scope) {
             }
         );
     }
+*/
+
     function trackCompare(a, b) {
         // returns 1 when a is more popular than b
         if (a.upvotes-a.downvotes > b.upvotes-b.downvotes) return -1;
