@@ -4,12 +4,28 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular.js"></script>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
         <link rel="stylesheet" type="text/css" href="./resources/css/userPage.css">
         <link href="https://fonts.googleapis.com/css?family=Raleway&display=swap" rel="stylesheet">
     </head>
-    <body>
+    <script>
+         angular.module('generateApp', [])
+            .controller('generateController', ['$scope', '$http', function($scope, $http){
+                $scope.generate = function(){
+                    var ans = '';
+                    var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+                    var charactersLength = characters.length;
+                    for(var i = 0; i < 6; i++){
+                        ans += characters.charAt(Math.floor(Math.random()* charactersLength));
+                    }
+                    console.log(ans);
+                    alert("Your playlist code is: " + ans);
+                }
+            }])
+    </script>
+    <body ng-app="generateApp" ng-controller="generateController">
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <a class="navbar-brand" href="/"><img id="piclogo" src="./resources/playtwist_white.png" width="100" height="100" class="d-inline-block align-top"
                 draggable="false" alt="PlayTwist logo" /></a>
@@ -59,7 +75,7 @@
                         </div>
                         <div id="user" class="col">
                             <button onclick="window.location.href = 'homePage.html'" class="create" type="button">+ Create Private Playlist</button><br/>
-                            <button onclick="window.location.href = 'homePage.html'" class="create" type="button">+ Create New Group</button>
+                            <button class="create" type="button" ng-click="generate()">+ Create New Group</button>
                         </div>
                     </div>
                     <div id="edit_bar" class="row">
