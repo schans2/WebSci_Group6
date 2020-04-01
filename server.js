@@ -33,6 +33,7 @@ app.get('/user', function(req, res){
     res.sendFile(__dirname + "/userPage.html");
 });
 
+
 // Temporary space for crypto functions. Will be moved to an external module soon.
 var genRandomString = function(length){
     return crypto.randomBytes(Math.ceil(length/2))
