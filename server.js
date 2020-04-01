@@ -4,10 +4,15 @@
 const express = require('express');
 var bodyParser = require('body-parser');
 var crypto = require('crypto');
+const spotify = require("node-spotify-api");
 var app = express();
 var port = 3000;
+var spot = new spotify({
+    id    :"929154c608594196b47f9ac5b3c7d8eb",
+    secret:"643827e1934f4491b73a1b79ec8c37b3"
+});
 
-app.use(bodyParser.urlencoded());
+app.use(bodyParser.urlencoded({ extended : false }));
 app.use(bodyParser.json());
 // Public static files to serve
 app.use('/resources', express.static('resources'));
@@ -32,6 +37,10 @@ app.get('/login', function(req, res){
 app.get('/user', function(req, res){
     res.sendFile(__dirname + "/userPage.html");
 });
+
+app.get("/search", function(req, res) {
+    console.log("Amount = " + req.query.amount + "\nQuery = " + req.query.query);
+})
 
 // Temporary space for crypto functions. Will be moved to an external module soon.
 var genRandomString = function(length){
@@ -95,4 +104,4 @@ app.post('/logout', function(req, res){
 });
 
 app.listen(port);
-console.log(`Server running on port ${port}`);
+console.log(`\x1b[32mServer running on port ${port}\n\x1b[33mPress CTRL + C to shut down\x1b[0m`);
