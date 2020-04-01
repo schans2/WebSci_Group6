@@ -40,7 +40,7 @@ app.get('/user', function(req, res){
 
 app.get("/search", function(req, res) {
     console.log("Amount = " + req.query.amount + "\nQuery = " + req.query.query);
-})
+});
 
 // Temporary space for crypto functions. Will be moved to an external module soon.
 var genRandomString = function(length){
