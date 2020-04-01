@@ -42,11 +42,11 @@ app.post('/join', function(req, res){
 app.post('/register', function(req, res){
     // get Register info from user, validate user credentials before storing to database and return success
     var body = req.body;
-    console.log("Something" + body);
     var fname = body.fname;
     var lname = body.lname;
     var email = body.email;
     var uname = body.uname;
+    var pass = body.pass;
     console.log(`Register request of ${fname} ${lname}, email ${email}, username ${uname}`);
     
     // <<VALIDATION AND DATABASE TO BE IMPLEMENTED>>
@@ -56,13 +56,21 @@ app.post('/register', function(req, res){
 
 app.post('/login', function(req, res){
     // verify user credentials, and log user in.
-    // TO BE IMPLEMENTED
+    var body = req.body;
+    var uname = body.uname;
+    var pass = body.pass;
+    console.log(`User ${unmae} attempts to login.`);
 });
 
 app.post('/logout', function(req, res){
     // clear user login status
     // TO BE IMPLEMENTED
-})
+    var body = req.body;
+    var uname = body.uname;
+    var token = bdoy.token;
+    // Validates username and user login token(stored at user's as part of cookie).
+    console.log(`User ${uname} logs out.`);
+});
 
 
 
