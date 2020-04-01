@@ -2,9 +2,12 @@
 // You guys can add to the express routing according to your needs
 
 const express = require('express');
+var bodyParser = require('body-parser');
 var app = express();
 var port = 3000;
 
+app.use(bodyParser.urlencoded());
+app.use(bodyParser.json());
 // Public static files to serve
 app.use('/resources', express.static('resources'));
 
@@ -34,6 +37,21 @@ app.post('/join', function(req, res){
     // verify user login status, join user to a group, and redirect.
     // TO BE IMPLEMENTED
     return
+});
+
+app.post('/register', function(req, res){
+    // get Register info from user, validate user credentials before storing to database and return success
+    var body = req.body;
+    console.log("Something" + body);
+    var fname = body.fname;
+    var lname = body.lname;
+    var email = body.email;
+    var uname = body.uname;
+    console.log(`Register request of ${fname} ${lname}, email ${email}, username ${uname}`);
+    
+    // <<VALIDATION AND DATABASE TO BE IMPLEMENTED>>
+
+    res.send("Register handling success!");
 });
 
 app.post('/login', function(req, res){

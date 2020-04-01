@@ -12,11 +12,32 @@ function eventListeners() {
     email = $("#email").val();
     uname = $("#new_username").val();
     pass = $("#new_password").val();
+
+    // <<INPUT VALIDATION NEEDED>>
+
     if(fname && lname && email && uname && pass) {
-      alert("Register successful!");
-      $("#signup>form")[0].reset();
-      $("#username").val(uname);
-      $("#password").val(pass);
+      // Send Register Request to Server
+      $.ajax({
+        method: "POST",
+        url: "/register",
+        data: {
+          "fname": fname,
+          "lname": lname,
+          "email": email,
+          "uname": uname,
+          "pass": pass
+        },
+        success: function(message, status){
+          console.log(`Register request returns success with message ${message} and status ${status}.`);
+          alert("Register successful!");
+          $("#signup>form")[0].reset();
+          $("#username").val(uname);
+          $("#password").val(pass);
+        },
+        error: function(message, status){
+          console.log(`Oops! Register request returns failure with message ${message} and status ${status}.`);
+        }
+      });
     }
     else {
       alert("Error: Please make sure all fields are filled out.");
@@ -25,6 +46,7 @@ function eventListeners() {
   $("#signIn").click(function() {
     uname = $("#username").val();
     pass = $("#password").val();
+    // Send Credentials to Server
     $.getJSON("./resources/json/loginData.json", function(result) {
       // console.log(result);
       for (let i = 0; i < result.info.length; i++) {
@@ -34,7 +56,7 @@ function eventListeners() {
         }
       }
       if(success) {
-        window.location.replace("./homePage.html");
+        window.location.replace("/");
       }
       else {
         alert("Login failed: Please check your credentials and try again");
