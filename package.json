@@ -2,12 +2,12 @@
   "author": "PlayTwist",
   "name": "playtwist-server",
   "description": "Simple Playtwist Server",
-  "version": "0.0.2",
+  "version": "0.1.0",
   "dependencies": {
     "body-parser": "^1.19.0",
-    "crypto": "^1.0.1",
     "express": "^4.16.4",
-    "node-spotify-api": "^1.1.1"
+    "node-spotify-api": "^1.1.1",
+    "mongodb": "~3.5.5"
   },
   "license": "MIT"
 }

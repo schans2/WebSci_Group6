@@ -5,12 +5,18 @@ const express = require('express');
 var bodyParser = require('body-parser');
 var crypto = require('crypto');
 const spotify = require("node-spotify-api");
+var mongo = require("mongodb");
 var app = express();
+// Msg from Xinyan: This is my MongoAtlas account! Switch to yours before testing.
+var db_uri = "mongodb+srv://mongoUser:Macau1stOnlineCasino@veryfastcluster-1ytep.mongodb.net/test?retryWrites=true&w=majority";
 var port = 3000;
+
+// create module instances
 var spot = new spotify({
     id    :"929154c608594196b47f9ac5b3c7d8eb",
     secret:"643827e1934f4491b73a1b79ec8c37b3"
 });
+var mongodbClient = new mongo(db_uri);
 
 app.use(bodyParser.urlencoded({ extended : false }));
 app.use(bodyParser.json());
@@ -64,6 +70,20 @@ var sha512 = function(password, salt){
         passwordHash:value
     };
 };
+
+// Temporary space for mongodb connection. WIll be moved to an external module soon.
+async function listDatabases(client){
+    databasesList = await client.db().admin().listDatabases();
+ 
+    console.log("Databases:");
+    databasesList.databases.forEach(db => console.log(` - ${db.name}`));
+}
+async function dbTest(client){
+    await client.connect();
+    await listDatabases(client);
+    console.log("Finshed");
+}
+dbTest(mongodbClient);
 
 // API calls to the server
 app.post('/join', function(req, res){
