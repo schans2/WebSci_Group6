@@ -11,7 +11,8 @@ voteAngularApp.controller('playlistController', ['$scope', function($scope) {
 	//$scope.numbers = [1, 3, 5, 10, 20];
   
 	$scope.loadItems = function() {
-        $("#searchForm>form>input").css("color", "#1abc9c");
+		$("#searchForm>form>input").css("color", "#1abc9c");
+        $("#searchForm>form>button").fadeOut(500);
         $("#searchForm>h2>span").css("color", "#1abc9c");
 	// Validates all fields are populated
 		// if($scope.type && $scope.type != "______" && $scope.amount && $scope.query) {
@@ -252,3 +253,22 @@ voteAngularApp.controller('playlistController', ['$scope', function($scope) {
     }
 
 }]);
+
+/*
+  This directive allows us to pass a function in on an enter key to do what we want.
+  I literally copy-pasted this clutch piece of code from:
+  https://eric.sau.pe/angularjs-detect-enter-key-ngenter/
+  Hope that's cool since it's cited and non-essential functionality :)
+*/
+voteAngularApp.directive('ngEnter', function () {
+	return function (scope, element, attrs) {
+	  element.bind("keydown keypress", function (event) {
+		if(event.which === 13) {
+		  scope.$apply(function (){
+			scope.$eval(attrs.ngEnter);
+		  });
+		  event.preventDefault();
+		}
+	  });
+	};
+  });
