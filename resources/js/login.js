@@ -1,5 +1,18 @@
 var fname; var lname; var email; var uname; var pass;
 var success = false;
+angular.module('loginApp', [])
+    .controller('loginController', ['$scope', '$http', function($scope, $http){
+        $scope.addUser = function(){
+          var first_name = document.getElementById('fname').value;
+          var last_name = document.getElementById('lname').value;
+          var email = document.getElementById('email').value;
+          var username = document.getElementById('new_username').value;
+          var password = document.getElementById('new_password').value;
+
+        }
+    }]);
+
+
 
 $(document).ready(function() {
   eventListeners();
