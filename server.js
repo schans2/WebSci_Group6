@@ -40,8 +40,8 @@ app.get('/user', function(req, res){
 
 // Spotify search and return
 app.get("/search", function(req, res) {
-	console.log("Amount = " + req.query.amount + "\nQuery = " + req.query.query);
-	spot.search({ type : "track", query : req.query.query, limit : req.query.amount}).then(function(response) {
+	//console.log("Query = " + req.query.query);
+	spot.search({ type : "track", query : req.query.query }).then(function(response) {
 		console.log(response);
 		res.send(response);
 	}).catch(function(err) {

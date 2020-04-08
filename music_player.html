@@ -47,18 +47,18 @@
             </ul>
         </div>
 	    <div>
-            <h2>Showing the top {{amount}} result(s) for: {{query}}</h2>
+            <h2>Showing result(s) for: {{query}}</h2>
             <!-- Dynamically displays and updates Angular scope variables -->
             <form ng-enter="loadItems()">
-            <label for="entries">Search for </label>
-            <select id="entries" ng-model="amount" ng-options="item for item in numbers"></select>
+            <!-- <label for="entries">Search for </label> -->
+            <!-- <select id="entries" ng-model="amount" ng-options="item for item in numbers"></select> -->
             <!-- <input type="radio" name="searchType" id="album" value="Album" ng-click="type='album'"/>
             <label for="album">Albums</label>
             <input type="radio" name="searchType" id="artist" value="Artist" ng-click="type='artist'"/>
             <label for="artist">Artists</label>
             <input type="radio" name="searchType" id="track" value="Track" ng-click="type='track'"/>
             <label for="track">Tracks</label> -->
-            <span> tracks named </span>
+            <span>Search for tracks named </span>
             <input type="text" maxlength="99" placeholder="Song name..." ng-model="query"/>
             <button type="button" ng-click=loadItems()>Go!</button>
             </form>

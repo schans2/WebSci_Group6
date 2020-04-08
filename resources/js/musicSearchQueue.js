@@ -7,20 +7,21 @@ voteAngularApp.controller('playlistController', ['$scope', function($scope) {
 	// Scope variable instantiation
 	// $scope.type = "______";
 	$scope.query;
-	$scope.amount = 5;
-	$scope.numbers = [1, 3, 5, 10, 20];
+	//$scope.amount = 5;
+	//$scope.numbers = [1, 3, 5, 10, 20];
   
 	$scope.loadItems = function() {
 	// Validates all fields are populated
 		// if($scope.type && $scope.type != "______" && $scope.amount && $scope.query) {
-        if($scope.amount && $scope.query) {
+        if($scope.query) {
 			// Sends GET request to Node server with the desired parameters - grabbed from HTML input
 			// $.get(("http://localhost:3000/search?type=" + $scope.type + "&amount=" + $scope.amount + "&query=" + $scope.query), 
-			$.get(("http://localhost:3000/search?amount=" + $scope.amount + "&query=" + $scope.query), 
+			$.get(("http://localhost:3000/search?query=" + $scope.query), 
 			function(result) {
 				console.log(result);
                 result = result.tracks.items;
-				console.log(result);
+                console.log(result);
+                $scope.search_data = [];
                 $scope.$apply(function() {
                     for (let i = 0; i < result.length; i++) {
                         // console.log(result[i]);
