@@ -16,7 +16,7 @@ angular.module('loginApp', [])
             user: username,
             pass: password
           }
-
+          console.log($scope.new_user);
           $http.post('/newUser', $scope.new_user).then(function(response){
             console.log("post successful");
           });
