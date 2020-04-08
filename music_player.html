@@ -46,10 +46,10 @@
                 <li class="list-group-item list-group-item-secondary">friend2</li>
             </ul>
         </div>
-	    <div>
-            <h2>Showing result(s) for: {{query}}</h2>
+	    <div id="searchForm">
+            <h2>Showing result(s) for: <span>{{query}}</span></h2>
             <!-- Dynamically displays and updates Angular scope variables -->
-            <form ng-enter="loadItems()">
+            <form class="form-inline justify-content-center" ng-enter="loadItems()">
             <!-- <label for="entries">Search for </label> -->
             <!-- <select id="entries" ng-model="amount" ng-options="item for item in numbers"></select> -->
             <!-- <input type="radio" name="searchType" id="album" value="Album" ng-click="type='album'"/>
@@ -58,9 +58,9 @@
             <label for="artist">Artists</label>
             <input type="radio" name="searchType" id="track" value="Track" ng-click="type='track'"/>
             <label for="track">Tracks</label> -->
-            <span>Search for tracks named </span>
-            <input type="text" maxlength="99" placeholder="Song name..." ng-model="query"/>
-            <button type="button" ng-click=loadItems()>Go!</button>
+                <span>Search for tracks named </span>
+                <input type="text" maxlength="99" placeholder="Song name..." ng-model="query"/>
+                <button type="button" ng-click=loadItems()>Go!</button>
             </form>
         </div>
         <div class="container-flex">
