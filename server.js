@@ -5,6 +5,23 @@ const express = require('express');
 var bodyParser = require('body-parser');
 var crypto = require('crypto');
 const spotify = require("node-spotify-api");
+var mongo = require('mongodb');
+var MongoClient = require('mongodb').MongoClient;
+var conn = "mongodb://localhost:27017/playtwist";
+
+MongoClient.connect(conn, function(err, db){
+    if(err) throw err;
+    console.log("Database created!");
+    var dbo = db.db("playtwist");
+    dbo.createCollection("users", function(err, res){
+        if (err) throw err;
+        console.log("Collection created!");
+        // console.log(json);
+        db.close();
+    });
+
+});
+
 var app = express();
 var port = 3000;
 var spot = new spotify({
@@ -111,5 +128,25 @@ app.post('/logout', function(req, res){
     console.log(`User ${uname} logs out.`);
 });
 
+//==================================================
+app.post('/newUser', function(req, res){
+    console.log(req.body);
+    var user = req.body;
+    // var user = JSON.stringify(req.body);
+
+    // MongoClient.connect(conn, function(err, db){
+    //     if(err) throw err;
+    //     var dbo = db.db("playtwist");
+    //     dbo.collection("users").insertOne(user, function(err, res){
+    //         if (err) throw err;
+    //         console.log("Data inserted");
+    //         db.close();
+    //     });
+    
+    // });
+
+
+});
+//========================================
 app.listen(port);
 console.log(`\x1b[32mServer running on port ${port}\n\x1b[33mPress CTRL + C to shut down\x1b[0m`);
