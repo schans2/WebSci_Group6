@@ -3,7 +3,7 @@
 
 const express = require('express');
 var bodyParser = require('body-parser');
-var crypto = require('crypto');
+var hashing = require('./server_resources/hashing');
 const spotify = require("node-spotify-api");
 var app = express();
 var port = 3000;
@@ -49,22 +49,6 @@ app.get("/search", function(req, res) {
 		res.send(err);
 	});
 });
-
-// Temporary space for crypto functions. Will be moved to an external module soon.
-var genRandomString = function(length){
-    return crypto.randomBytes(Math.ceil(length/2))
-            .toString('hex') /** convert to hexadecimal format */
-            .slice(0,length);   /** return required number of characters */
-};
-var sha512 = function(password, salt){
-    var hash = crypto.createHmac('sha512', salt); /** Hashing algorithm sha512 */
-    hash.update(password);
-    var value = hash.digest('hex');
-    return {
-        salt:salt,
-        passwordHash:value
-    };
-};
 
 // API calls to the server
 app.post('/join', function(req, res){
