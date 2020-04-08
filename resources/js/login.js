@@ -9,6 +9,17 @@ angular.module('loginApp', [])
           var username = document.getElementById('new_username').value;
           var password = document.getElementById('new_password').value;
 
+          $scope.new_user = {
+            fname: first_name,
+            lname: last_name,
+            e_address: email,
+            user: username,
+            pass: password
+          }
+
+          $http.post('/newUser', $scope.new_user).then(function(response){
+            console.log("post successful");
+          });
         }
     }]);
 
