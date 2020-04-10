@@ -7,20 +7,23 @@ voteAngularApp.controller('playlistController', ['$scope', function($scope) {
 	// Scope variable instantiation
 	// $scope.type = "______";
 	$scope.query;
-	$scope.amount = 5;
-	$scope.numbers = [1, 3, 5, 10, 20];
+	//$scope.amount = 5;
+	//$scope.numbers = [1, 3, 5, 10, 20];
   
 	$scope.loadItems = function() {
+        $("#searchForm>form>input").css("color", "#1abc9c");
+        $("#searchForm>h2>span").css("color", "#1abc9c");
 	// Validates all fields are populated
 		// if($scope.type && $scope.type != "______" && $scope.amount && $scope.query) {
-        if($scope.amount && $scope.query) {
+        if($scope.query) {
 			// Sends GET request to Node server with the desired parameters - grabbed from HTML input
 			// $.get(("http://localhost:3000/search?type=" + $scope.type + "&amount=" + $scope.amount + "&query=" + $scope.query), 
-			$.get(("http://localhost:3000/search?amount=" + $scope.amount + "&query=" + $scope.query), 
+			$.get(("http://localhost:3000/search?query=" + $scope.query), 
 			function(result) {
 				console.log(result);
                 result = result.tracks.items;
-				console.log(result);
+                console.log(result);
+                $scope.search_data = [];
                 $scope.$apply(function() {
                     for (let i = 0; i < result.length; i++) {
                         // console.log(result[i]);
@@ -108,9 +111,9 @@ voteAngularApp.controller('playlistController', ['$scope', function($scope) {
             $(audios).attr("src", selected.preview_url);
             selectedTrack = selected.album.images[0].url;
             $("#album-art").append("<img src='" + selectedTrack + "' class='active' alt='Album Art'/>");
-            $("#album-name").text(selected.album.name);
-            console.log(selected.name)
-            $("#track-name").text(selected.name);  
+            $("#album-name").text(selected.name);
+            // console.log(selected.name)
+            $("#track-name").text(selected.artists[0].name);  
             $("#player-track").addClass("active");
             $("#album-art").addClass("active");
             i.attr("class", "fa fa-pause");
@@ -172,6 +175,16 @@ voteAngularApp.controller('playlistController', ['$scope', function($scope) {
             $(this).fadeOut(500);
         });
         */
+       $("#searchForm>form>input").focusin(function() {
+		   $(this).css("color", "goldenrod");
+		   $("#searchForm>h2>span").css("color", "goldenrod");
+		   $("#searchForm>form>button").fadeIn(500);
+	   });
+	   $("#searchForm>form>input").focusout(function() {
+			$(this).css("color", "#1abc9c");
+			$("#searchForm>h2>span").css("color", "#1abc9c");
+			$("#searchForm>form>button").fadeOut(500);
+		});
     }
 
     // When an audio ends, an event listener automatically calls the next decisionizer.
