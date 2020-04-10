@@ -7,21 +7,18 @@ var hashing = require('./server_resources/hashing');
 const spotify = require("node-spotify-api");
 var mongo = require('mongodb');
 var MongoClient = require('mongodb').MongoClient;
-var conn = "mongodb://localhost:27017/playtwist";
+var conn = "mongodb+srv://dbUser:<password>@cluster0-rebd7.mongodb.net/test?retryWrites=true&w=majority";
 
-//===========================
-// MongoClient.connect(conn, function(err, db){
-//     if(err) throw err;
-//     console.log("Database created!");
-//     var dbo = db.db("playtwist");
-//     dbo.createCollection("users", function(err, res){
-//         if (err) throw err;
-//         console.log("Collection created!");
-//         db.close();
-//     });
-
-// });
-//=================================
+MongoClient.connect(conn, function(err, db){
+    if(err) throw err;
+    console.log("Database created!");
+    var dbo = db.db("playtwist");
+    dbo.createCollection("users", function(err, res){
+        if (err) throw err;
+        console.log("Collection created!");
+        db.close();
+    });
+});
 
 var app = express();
 var port = 3000;
