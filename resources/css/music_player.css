@@ -326,18 +326,25 @@ body{
 }
 
 #searchResult, #tmp-searchResult {
-    height: 180px;
-    overflow-x: hidden;
-    overflow-y: scroll;
+    height: 450px;
+    width: 50%;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 #searchResult>li, #tmp-searchResult>li {
     margin: 0 0 0 0;
     padding: 0 0 0 0;
     height: 30px;
+    background-color: #343a40;
+    color: goldenrod;
+    transition: color 0.5s, background-color 0.5s;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
-#tmp-searchResult:hover {
+#tmp-searchResult>li:hover {
     cursor: pointer;
 }
 

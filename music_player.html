@@ -38,7 +38,8 @@
                     <span class="badge badge-primary badge-pill downvote" ng-click="track.downvotes = track.downvotes+1">{{track.downvotes}} &#128148;</span>
                 </li>
             </ul>
-            <li class="list-group-item list-group-item-action list-group-item-info">Save this Play List</li>
+            <li class="list-group-item list-group-item-action list-group-item-info" id="tempWedge">Your Queue Here</li>
+            <li class="list-group-item list-group-item-action list-group-item-success">Save this Play List</li>
         </div>
         <div id="friend-cotent" class="float-right">
             <ul class="list-group">
@@ -64,8 +65,9 @@
             </form>
         </div>
         <div class="container-flex">
-            <ul id="tmp-searchResult" class="mx-auto list-group" style="width: 45%;">
-                <li class="list-group-item" ng-repeat="track in search_data" ng-click="addToQueue($index)">
+            <ul id="tmp-searchResult" class="list-group">
+                <li class="list-group-item" ng-repeat="track in search_data"
+                onclick="$(this).css('backgroundColor', '#2c3e50'); $(this).css('color', '#1abc9c')" ng-click="addToQueue($index)">
                     {{track.artists[0].name}}, {{track.name}}
                 </li>
             </ul>
