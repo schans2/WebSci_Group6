@@ -11,7 +11,8 @@ voteAngularApp.controller('playlistController', ['$scope', function($scope) {
 	//$scope.numbers = [1, 3, 5, 10, 20];
   
 	$scope.loadItems = function() {
-        $("#searchForm>form>input").css("color", "#1abc9c");
+		$("#searchForm>form>input").css("color", "#1abc9c");
+        $("#searchForm>form>button").fadeOut(500);
         $("#searchForm>h2>span").css("color", "#1abc9c");
 	// Validates all fields are populated
 		// if($scope.type && $scope.type != "______" && $scope.amount && $scope.query) {
@@ -23,7 +24,10 @@ voteAngularApp.controller('playlistController', ['$scope', function($scope) {
 				console.log(result);
                 result = result.tracks.items;
                 console.log(result);
-                $scope.search_data = [];
+				$scope.search_data = [];
+				// $("#tmp-searchResult>li").click(function() {
+				// 	$(this).css("backgroundColor", "red");
+				// });
                 $scope.$apply(function() {
                     for (let i = 0; i < result.length; i++) {
                         // console.log(result[i]);
@@ -45,16 +49,19 @@ voteAngularApp.controller('playlistController', ['$scope', function($scope) {
     // Music data from a collaborative playlist, later to be dynamically fetched from the database
     $scope.playlist_data = [];
     $scope.search_data = [];
-    $scope.addToQueue = function(i){
+    $scope.addToQueue = function(i) {
         let tmp_data = $scope.search_data[i];
         tmp_data.upvotes = 0;
         tmp_data.downvotes = 0;
         // If duplicates found, just terminate
         if($scope.playlist_data.includes(tmp_data)) { return; }
         else { $scope.playlist_data.push(tmp_data); }
-        if($scope.playlist_data.length == 1 && audios.paused){ // Which means we have just pushed a song to the empty queue
+		if($scope.playlist_data.length == 1 && audios.paused){ // Which means we have just pushed a song to the empty queue
             decisionizer();
-        }
+		}
+		if($scope.playlist_data.length === 1) {
+			$("#tempWedge").fadeOut(500);
+		}
     }
 
     var i = $("#play-pause-button").find("i");
@@ -101,6 +108,7 @@ voteAngularApp.controller('playlistController', ['$scope', function($scope) {
     // descisionizer sorts the tracks, picks the best track, then pops the first track
     function decisionizer() {
         if($scope.playlist_data.length) {
+			if($scope.playlist_data.length === 1) { $("#tempWedge").fadeIn(500); }
             console.log("Current Playlist: ", $scope.playlist_data)
             $scope.playlist_data.sort(trackCompare);
             var selected = $scope.playlist_data[0];
@@ -122,11 +130,11 @@ voteAngularApp.controller('playlistController', ['$scope', function($scope) {
             });
         }
         else {
-          $("#player-track").removeClass("active");
-          $("#album-art").removeClass("active");
-          i.attr("class", "fa fa-play");
-          audios.pause();
-          alert("End of queue");
+			$("#player-track").removeClass("active");
+			$("#album-art").removeClass("active");
+			i.attr("class", "fa fa-play");
+			audios.pause();
+			alert("End of queue");
         }
     }
     function initialPlayer(){
@@ -175,16 +183,16 @@ voteAngularApp.controller('playlistController', ['$scope', function($scope) {
             $(this).fadeOut(500);
         });
         */
-       $("#searchForm>form>input").focusin(function() {
-		   $(this).css("color", "goldenrod");
-		   $("#searchForm>h2>span").css("color", "goldenrod");
-		   $("#searchForm>form>button").fadeIn(500);
-	   });
-	   $("#searchForm>form>input").focusout(function() {
+       	$("#searchForm>form>input").focusin(function() {
+		   	$(this).css("color", "goldenrod");
+		   	$("#searchForm>h2>span").css("color", "goldenrod");
+		   	$("#searchForm>form>button").fadeIn(500);
+	   	});
+	   	$("#searchForm>form>input").focusout(function() {
 			$(this).css("color", "#1abc9c");
 			$("#searchForm>h2>span").css("color", "#1abc9c");
 			$("#searchForm>form>button").fadeOut(500);
-		});
+        });
     }
 
     // When an audio ends, an event listener automatically calls the next decisionizer.
@@ -252,3 +260,22 @@ voteAngularApp.controller('playlistController', ['$scope', function($scope) {
     }
 
 }]);
+
+/*
+  This directive allows us to pass a function in on an enter key to do what we want.
+  I literally copy-pasted this clutch piece of code from:
+  https://eric.sau.pe/angularjs-detect-enter-key-ngenter/
+  Hope that's cool since it's cited and non-essential functionality :)
+*/
+voteAngularApp.directive('ngEnter', function () {
+	return function (scope, element, attrs) {
+	  element.bind("keydown keypress", function (event) {
+		if(event.which === 13) {
+		  scope.$apply(function (){
+			scope.$eval(attrs.ngEnter);
+		  });
+		  event.preventDefault();
+		}
+	  });
+	};
+  });
