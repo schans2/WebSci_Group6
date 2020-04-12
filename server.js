@@ -73,11 +73,20 @@ app.post('/register', function(req, res){
     var pass = body.pass;
     console.log(`Register request of ${fname} ${lname}, email ${email}, username ${uname}`);
     
-    var salt = genRandomString(16);
-    var hashed = sha512(pass, salt);
+    var hashed = hashing.hashIt(pass);
     console.log(`Hashed password ${hashed.passwordHash} with salt ${hashed.salt}.`);
-
-    res.send("Register handling success!");
+    
+    var query = {
+        fname: fname,
+        lname: lname,
+        email: email,
+        uname: uname,
+        hash: hashed.passwordHash,
+        salt: salt
+    }
+    db_master.insertDocument("Users", query, function(result){
+        res.send("Register success!");
+    });
 });
 
 app.post('/login', function(req, res){
