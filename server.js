@@ -4,21 +4,10 @@
 const express = require('express');
 var bodyParser = require('body-parser');
 var hashing = require('./server_resources/hashing');
+var DatabaseMaster = require('./server_resources/database_master');
 const spotify = require("node-spotify-api");
-var mongo = require('mongodb');
-var MongoClient = require('mongodb').MongoClient;
-var conn = "mongodb+srv://dbUser:<password>@cluster0-rebd7.mongodb.net/test?retryWrites=true&w=majority";
-
-MongoClient.connect(conn, function(err, db){
-    if(err) throw err;
-    console.log("Database created!");
-    var dbo = db.db("playtwist");
-    dbo.createCollection("users", function(err, res){
-        if (err) throw err;
-        console.log("Collection created!");
-        db.close();
-    });
-});
+var db_uri = "mongodb+srv://dbUser:ehRb3TNnpKYK2a4Y@cluster0-rebd7.mongodb.net/test?retryWrites=true&w=majority";
+var db_master = new DatabaseMaster(db_uri, "Playtwist");
 
 var app = express();
 var port = 3000;
@@ -87,7 +76,6 @@ app.post('/register', function(req, res){
     var salt = genRandomString(16);
     var hashed = sha512(pass, salt);
     console.log(`Hashed password ${hashed.passwordHash} with salt ${hashed.salt}.`);
-    // <<VALIDATION AND DATABASE TO BE IMPLEMENTED>>
 
     res.send("Register handling success!");
 });
