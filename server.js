@@ -82,7 +82,7 @@ app.post('/register', function(req, res){
         email: email,
         uname: uname,
         hash: hashed.passwordHash,
-        salt: salt
+        salt: hashed.salt
     }
     db_master.insertDocument("Users", query, function(result){
         res.send("Register success!");
