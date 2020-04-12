@@ -99,16 +99,28 @@ app.post('/login', function(req, res){
     var query = { uname: { $eq: uname }};
     db_master.findDocument("Users", query, function(result){
         if(result == null){
-            res.send("Username not found");
+            var message = {
+                error: true,
+                message: "Error: Username not found."
+            }
+            res.send(message);
         }
         else{
             if(hashing.validate(pass, result.hash, result.salt)){
-                res.send("Validation success!");
+                var message = {
+                    error: false,
+                    message: "Validation success!"
+                }
+                res.send(message);
                 // Do some success stuff
             }
             else{
                 // We specify what is wrong during development. Later we change this to "username or password incorrect"
-                res.send("Password incorrect");
+                var message = {
+                    error: true,
+                    message: "Error: Password incorrect."
+                }
+                res.send(message);
             }
         }
     });
