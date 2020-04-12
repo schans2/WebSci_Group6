@@ -94,7 +94,24 @@ app.post('/login', function(req, res){
     var body = req.body;
     var uname = body.uname;
     var pass = body.pass;
-    console.log(`User ${unmae} attempts to login.`);
+    console.log(`User ${uname} attempts to login.`);
+    // Fetch user info from database
+    var query = { uname: { $eq: uname }};
+    db_master.findDocument("Users", query, function(result){
+        if(result == null){
+            res.send("Username not found");
+        }
+        else{
+            if(hashing.validate(pass, result.hash, result.salt)){
+                res.send("Validation success!");
+                // Do some success stuff
+            }
+            else{
+                // We specify what is wrong during development. Later we change this to "username or password incorrect"
+                res.send("Password incorrect");
+            }
+        }
+    });
 });
 
 app.post('/logout', function(req, res){
