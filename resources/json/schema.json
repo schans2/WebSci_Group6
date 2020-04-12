@@ -1,0 +1,47 @@
+{
+    "Playlists": [
+        {
+            "id": 114514,
+            "joinCode": "fe5gt1",
+            "owner": "Some Name",
+            "members": [
+                {
+                    "uname": "xinyan",
+                    "authority": "member"
+                },
+                {
+                    "uname": "randomguy",
+                    "authority": "guest"
+                }
+            ],
+            "tracks": [
+                {
+                    "id": 123456,
+                    "name": "Track Name",
+                    "artist": "Artist Name",
+                    "length": 120,
+                    "url": "Linktotrack"
+                }
+            ]
+        }
+    ],
+    "Users": [
+        {
+            "id": 123456,
+            "uname": "User",
+            "email": "sunx15@rpi.edu",
+            "hash": "F8fds)ks....",
+            "salt": "salt",
+            "joinedPlaylist": [
+                {
+                    "id": 114514
+                }
+            ],
+            "ownsPlaylist": [
+                {
+                    "id": 123123
+                }
+            ]
+        }
+    ]
+}
