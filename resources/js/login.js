@@ -21,6 +21,18 @@ angular.module('loginApp', [])
             console.log("post successful");
           });
         }
+        $scope.loginUser = function(){
+          var uname = document.getElementById("username").value;
+          var pass = document.getElementById("password").value;
+
+          $scope.user = {
+            uname: uname,
+            pass: pass
+          }
+          $http.post('/login', $scope.user).then(function(response){
+            console.log("post successful");
+          });
+        }
     }]);
 
 
