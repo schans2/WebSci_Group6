@@ -94,7 +94,8 @@ app.post('/login', function(req, res){
     var body = req.body;
     var uname = body.uname;
     var pass = body.pass;
-    console.log(`User ${unmae} attempts to login.`);
+    console.log(pass);
+    console.log(`User ${uname} attempts to login.`);
 });
 
 app.post('/logout', function(req, res){
