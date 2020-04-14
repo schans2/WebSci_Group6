@@ -156,5 +156,20 @@ app.post('/newUser', function(req, res){
 
 });
 //========================================
+
+app.post('/createGroup', function(req, res){
+    console.log(req.body);
+    var id = req.body.id;
+    var joinCode = req.body.joinCode;
+
+    var query = {
+        id: id,
+        joinCode: joinCode
+    }
+    db_master.insertDocument("Playlists", query, function(result){
+        res.send("Playlist Created!");
+    });
+
+});
 app.listen(port);
 console.log(`\x1b[32mServer running on port ${port}\n\x1b[33mPress CTRL + C to shut down\x1b[0m`);
