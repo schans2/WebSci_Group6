@@ -22,6 +22,15 @@
                     }
                     console.log(ans);
                     alert("Your playlist code is: " + ans);
+                    var id = Math.floor(100000 + Math.random() * 900000);
+                    console.log(id);
+                    $scope.playlist = {
+                        id: id,
+                        joinCode: ans,
+                    }
+                    $http.post('/createGroup', $scope.playlist).then(function(response){
+                        console.log("group created");
+                    });
                 }
             }])
     </script>
