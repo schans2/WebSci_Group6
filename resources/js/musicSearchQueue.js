@@ -2,8 +2,15 @@ var just_data =  {};
 
 var voteAngularApp = angular.module('playlistApp', []);
 
-voteAngularApp.controller('playlistController', ['$scope', function($scope) {
-
+voteAngularApp.controller('playlistController', ['$scope', '$http', function($scope, $http) {
+    $scope.loadPlaylist = function(){
+        
+        $http.get("/getGroup").then(function(response){
+            // gets the json of the playlist data
+            //now put this data onto the page
+            console.log(response.data);
+        });
+    }
 	// Scope variable instantiation
 	// $scope.type = "______";
 	$scope.query;

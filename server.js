@@ -179,6 +179,12 @@ app.post("/joinGroup", function(req, res){
 
 app.get("/getGroup", function(req, res){
     console.log(code);
+    var query = {
+        joinCode: code
+    }
+    db_master.findDocument("Playlists", query, function(result){
+        res.send(result);
+    });
 });
 
 app.listen(port);
