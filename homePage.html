@@ -48,6 +48,14 @@
                     }
                     
                 }
+                $scope.signOut = function(){
+                    alert("Signing user out...");
+                    $http.get("/removeLogin").then(function(response){
+                        console.log("removing logged in user");
+                        console.log(response.data);
+                    });
+                    location.replace("/");
+                }
             }]);
     </script>
     <body ng-app="homeApp" ng-controller="homeController">
@@ -65,7 +73,7 @@
                 <a id="log" class="nav-item nav-link Nav" href="./login" data-ng-init="checkStatus();">Login</a>
                 <a id="sign" class="nav-item nav-link Nav" href="./login">Sign Up</a>
                 <a id="account" class="nav-item nav-link Nav" href="/user">Account</a>
-                <a id="out" class="nav-item nav-link Nav" href="/">Sign Out</a>
+                <a id="out" class="nav-item nav-link Nav" ng-click="signOut();">Sign Out</a>
               </div>
             </div>
           </nav>
