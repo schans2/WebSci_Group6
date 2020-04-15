@@ -20,6 +20,8 @@ var spot = new spotify({
     secret:"643827e1934f4491b73a1b79ec8c37b3"
 });
 
+var localLogin;
+
 app.use(bodyParser.urlencoded({ extended : false }));
 app.use(bodyParser.json());
 app.use(cookieParser());
@@ -57,6 +59,11 @@ app.get("/search", function(req, res) {
 		console.log("\x1b[31m" + err + "\x1b[0m");
 		res.send(err);
 	});
+});
+
+app.get("/infograb", function(req, res) {
+    if(localLogin) { res.send(localLogin); }
+    else { res.send("No login"); }
 });
 
 // API calls to the server
@@ -98,7 +105,7 @@ app.post('/register', function(req, res){
         });
     });
 });
-var localLogin = false;
+
 app.post('/login', function(req, res){
     // verify user credentials. Set user cookie and update database statuss    
     var body = req.body;
@@ -121,7 +128,7 @@ app.post('/login', function(req, res){
                     error: false,
                     message: "Validation success!"
                 }
-                localLogin = true;
+                localLogin = result.uname;
                 var token = jwt.sign({user_id: result._id}, jwt_secret);
                 res.cookie("user_token", token);
                 console.log("Set user token to ", result._id);
@@ -149,7 +156,10 @@ app.post('/logout', function(req, res){
     // Validates username and user login token(stored at user's as part of cookie).
     console.log(`User ${uname} logs out.`);
 });
-
+app.get('/removeLogin', function(req, res){
+    localLogin = null;
+    res.send(localLogin);
+});
 app.get("/checkStatus", function(req, res){
     var status = {
         status: localLogin

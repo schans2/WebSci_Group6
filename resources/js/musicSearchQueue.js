@@ -9,13 +9,33 @@ voteAngularApp.controller('playlistController', ['$scope', '$http', function($sc
             // gets the json of the playlist data
             //now put this data onto the page
             console.log(response.data);
+	    var tracks = response.data["tracks"];
+            console.log(tracks);
+            if(tracks == undefined){
+                console.log("Queue is empty.")
+                $scope.playlist_data = [];
+            }else{
+                //add songs into the queue
+                var i;
+                var play = [];
+                for(i = 0; i< tracks.length; i++){
+                    var temp = {
+                        "index":i+1,
+                        "name":tracks[i]["name"],
+                        "upvotes":0,
+                        "downvotes":0
+                    };
+                    play.push(temp);
+                }
+                $scope.playlist_data = play;
+            }
         });
     }
     $scope.checkStatus = function(){
         $http.get("/checkStatus").then(function(response){
             $scope.status = response.data.status;
             console.log($scope.status);
-            if($scope.status == false){
+            if($scope.status == null){
                 document.getElementById("account").style.display = "none";
                 document.getElementById("out").style.display = "none";
             }
@@ -25,6 +45,14 @@ voteAngularApp.controller('playlistController', ['$scope', '$http', function($sc
             }
 
         });
+    }
+    $scope.signOut = function(){
+        alert("Signing user out...");
+        $http.get("/removeLogin").then(function(response){
+            console.log("removing logged in user");
+            console.log(response.data);
+        });
+        location.replace("/");
     }
 	// Scope variable instantiation
 	// $scope.type = "______";
@@ -69,7 +97,7 @@ voteAngularApp.controller('playlistController', ['$scope', '$http', function($sc
 	}
 
     // Music data from a collaborative playlist, later to be dynamically fetched from the database
-    $scope.playlist_data = [];
+    //$scope.playlist_data = [];
     $scope.search_data = [];
     $scope.addToQueue = function(i) {
         let tmp_data = $scope.search_data[i];

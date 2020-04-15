@@ -83,6 +83,28 @@ function eventListeners() {
     uname = $("#username").val();
     pass = $("#password").val();
     // Send Credentials to Server
+    if(uname && pass) {
+      $.ajax({
+        method    : "POST",
+        url       : "/login",
+        data      : {
+          "uname" : uname,
+          "pass"  : pass
+        },
+        success: function(message, status){
+          console.log(`Register request returns success with message ${message} and status ${status}.`);
+          alert("Login successful!");
+          window.location.href = "/user";
+        },
+        error: function(message, status){
+          console.log(`Oops! Register request returns failure with message ${message} and status ${status}.`);
+        }
+      });
+    }
+    else {
+      alert("Error: Please make sure all fields are filled out.");
+    }
+    /*
     $.getJSON("./resources/json/loginData.json", function(result) {
       if(!result.error) {
         window.location.replace("/");
@@ -91,5 +113,6 @@ function eventListeners() {
         alert("Login failed: Please check your credentials and try again");
       }
     });
+    */
   });
 }
