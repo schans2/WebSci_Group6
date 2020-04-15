@@ -4,13 +4,36 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular.js"></script>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
         <link rel="stylesheet" type="text/css" href="./resources/css/homePage.css">
         <link href="https://fonts.googleapis.com/css?family=Raleway&display=swap" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css?family=Caveat:700&display=swap" rel="stylesheet">
     </head>
-    <body>
+    <script>
+        angular.module('homeApp', [])
+            .controller('homeController', ['$scope', '$http', function($scope, $http){
+                $scope.join = function(){
+                    //alert("hello");
+                    var code = document.getElementById("search").value;
+                    if(code == ""){
+                        alert("Please enter your code to continue...");
+                    }
+                    else{
+                        $scope.code = {
+                            joinCode: code,
+                        }
+                        $http.post("/joinGroup", $scope.code).then(function(response){
+                            console.log("joining playlist...");
+                        });
+                        location.replace('./player');
+                    }
+                    
+                }
+            }]);
+    </script>
+    <body ng-app="homeApp" ng-controller="homeController">
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <a class="navbar-brand" href="/"><img id="piclogo" src="./resources/playtwist_white.png" width="100" height="100" class="d-inline-block align-top"
                 draggable="false" alt="PlayTwist logo" /></a>
@@ -29,9 +52,10 @@
         <div class="container">
             <div id="main" class="row">
                 <div class="col-lg-12">
-                    <form class="join" action="./player">
+                    <!-- <form class="join" action="./player"> -->
+                    <form class="join">
                         <input id="search" type="text" placeholder="Search..." name="search">
-                        <button id="search_button" type="submit">Join a Playlist</button>
+                        <input id="search_button" type="submit" value="Join a Playlist" ng-click="join();">
                     </form>
                     <h1 id="slogan">The most collaborative music application known to man</h1>
                 </div>

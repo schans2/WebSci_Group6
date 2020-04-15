@@ -171,5 +171,15 @@ app.post('/createGroup', function(req, res){
     });
 
 });
+var code = "";
+app.post("/joinGroup", function(req, res){
+    code = req.body.joinCode;
+    // console.log(code);
+});
+
+app.get("/getGroup", function(req, res){
+    console.log(code);
+});
+
 app.listen(port);
 console.log(`\x1b[32mServer running on port ${port}\n\x1b[33mPress CTRL + C to shut down\x1b[0m`);
