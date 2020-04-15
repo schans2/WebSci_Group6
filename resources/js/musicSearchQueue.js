@@ -15,7 +15,7 @@ voteAngularApp.controller('playlistController', ['$scope', '$http', function($sc
         $http.get("/checkStatus").then(function(response){
             $scope.status = response.data.status;
             console.log($scope.status);
-            if($scope.status == false){
+            if($scope.status == null){
                 document.getElementById("account").style.display = "none";
                 document.getElementById("out").style.display = "none";
             }
