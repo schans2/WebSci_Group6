@@ -3,6 +3,9 @@
 
 const express = require('express');
 var bodyParser = require('body-parser');
+var jwt = require('jsonwebtoken');
+var uuidv1 = require('uuid').v1;
+var cookieParser = require('cookie-parser');
 var hashing = require('./server_resources/hashing');
 var DatabaseMaster = require('./server_resources/database_master');
 const spotify = require("node-spotify-api");
@@ -11,6 +14,7 @@ var db_master = new DatabaseMaster(db_uri, "Playtwist");
 
 var app = express();
 var port = 3000;
+var jwt_secret = "VerySecretPassword";
 var spot = new spotify({
     id    :"929154c608594196b47f9ac5b3c7d8eb",
     secret:"643827e1934f4491b73a1b79ec8c37b3"
@@ -18,6 +22,7 @@ var spot = new spotify({
 
 app.use(bodyParser.urlencoded({ extended : false }));
 app.use(bodyParser.json());
+app.use(cookieParser());
 // Public static files to serve
 app.use('/resources', express.static('resources'));
 
@@ -71,12 +76,14 @@ app.post('/register', function(req, res){
     var email = body.email;
     var uname = body.uname;
     var pass = body.pass;
-    console.log(`Register request of ${fname} ${lname}, email ${email}, username ${uname}`);
+    var uuid = uuidv1();
+    // console.log(`Register request of ${fname} ${lname}, email ${email}, username ${uname}`);
     
     var hashed = hashing.hashIt(pass);
-    console.log(`Hashed password ${hashed.passwordHash} with salt ${hashed.salt}.`);
+    // console.log(`Hashed password ${hashed.passwordHash} with salt ${hashed.salt}.`);
     
     var query = {
+        _id: uuid,
         fname: fname,
         lname: lname,
         email: email,
@@ -85,13 +92,15 @@ app.post('/register', function(req, res){
         salt: hashed.salt
     }
     db_master.insertDocument("Users", query, function(result){
-        res.send("Register success!");
+        res.send({
+            error: false,
+            message: "Register Success!"
+        });
     });
 });
 var localLogin = false;
 app.post('/login', function(req, res){
-    // verify user credentials, and log user in.
-    
+    // verify user credentials. Set user cookie and update database statuss    
     var body = req.body;
     var uname = body.uname;
     var pass = body.pass;
@@ -113,6 +122,9 @@ app.post('/login', function(req, res){
                     message: "Validation success!"
                 }
                 localLogin = true;
+                var token = jwt.sign({user_id: result._id}, jwt_secret);
+                res.cookie("user_token", token);
+                console.log("Set user token to ", result._id);
                 res.send(message);
                 // Do some success stuff
             }

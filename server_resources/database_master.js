@@ -43,6 +43,11 @@ var DatabaseMaster = function(uri, db_name){
         });
     };
 
+    // this.updateDocument = function(coll_name, query, new_query, callback){
+    //     // Get the collection with name coll_name
+    //     const collection = db.collection(coll_name);
+    //     // 
+    // }
     // We can add update and delete later.
 
 }

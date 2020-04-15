@@ -84,14 +84,7 @@ function eventListeners() {
     pass = $("#password").val();
     // Send Credentials to Server
     $.getJSON("./resources/json/loginData.json", function(result) {
-      // console.log(result);
-      for (let i = 0; i < result.info.length; i++) {
-        if(result.info[i].uname === uname && result.info[i].pass === pass) {
-          // alert("You're legit");
-          success = true;
-        }
-      }
-      if(success) {
+      if(!result.error) {
         window.location.replace("/");
       }
       else {
