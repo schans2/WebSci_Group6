@@ -11,6 +11,21 @@ voteAngularApp.controller('playlistController', ['$scope', '$http', function($sc
             console.log(response.data);
         });
     }
+    $scope.checkStatus = function(){
+        $http.get("/checkStatus").then(function(response){
+            $scope.status = response.data.status;
+            console.log($scope.status);
+            if($scope.status == false){
+                document.getElementById("account").style.display = "none";
+                document.getElementById("out").style.display = "none";
+            }
+            else{
+                document.getElementById("log").style.display = "none";
+                document.getElementById("sign").style.display = "none";
+            }
+
+        });
+    }
 	// Scope variable instantiation
 	// $scope.type = "______";
 	$scope.query;
