@@ -88,9 +88,10 @@ app.post('/register', function(req, res){
         res.send("Register success!");
     });
 });
-
+var localLogin = false;
 app.post('/login', function(req, res){
     // verify user credentials, and log user in.
+    
     var body = req.body;
     var uname = body.uname;
     var pass = body.pass;
@@ -111,6 +112,7 @@ app.post('/login', function(req, res){
                     error: false,
                     message: "Validation success!"
                 }
+                localLogin = true;
                 res.send(message);
                 // Do some success stuff
             }
@@ -136,6 +138,12 @@ app.post('/logout', function(req, res){
     console.log(`User ${uname} logs out.`);
 });
 
+app.get("/checkStatus", function(req, res){
+    var status = {
+        status: localLogin
+    }
+    res.send(status);
+});
 //==================================================
 app.post('/newUser', function(req, res){
     console.log(req.body);

@@ -20,13 +20,16 @@
                 draggable="false" alt="PlayTwist logo" /></a>
                 <ul class="nav justify-content-end" id="myNavBar">
                     <li class="nav-item">
-                      <a class="nav-link" href="/login">Login</a>
+                      <a class="nav-link" id="log" href="/login" data-ng-init="checkStatus();">Login</a>
                     </li>
                     <li class="nav-item">
-                      <a class="nav-link" href="/login">Sign Up</a>
+                      <a class="nav-link" id="sign" href="/login">Sign Up</a>
                     </li>
                     <li class="nav-item">
-                      <a class="nav-link" href="user">Account</a>
+                      <a class="nav-link" id="account" href="/user">Account</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="out" href="/">Sign Out</a>
                     </li>
                 </ul>
         </nav>
