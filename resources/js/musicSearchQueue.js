@@ -46,6 +46,14 @@ voteAngularApp.controller('playlistController', ['$scope', '$http', function($sc
 
         });
     }
+    $scope.signOut = function(){
+        alert("Signing user out...");
+        $http.get("/removeLogin").then(function(response){
+            console.log("removing logged in user");
+            console.log(response.data);
+        });
+        location.replace("/");
+    }
 	// Scope variable instantiation
 	// $scope.type = "______";
 	$scope.query;
