@@ -143,7 +143,10 @@ app.post('/logout', function(req, res){
     // Validates username and user login token(stored at user's as part of cookie).
     console.log(`User ${uname} logs out.`);
 });
-
+app.get('/removeLogin', function(req, res){
+    localLogin = null;
+    res.send(localLogin);
+});
 app.get("/checkStatus", function(req, res){
     var status = {
         status: localLogin
