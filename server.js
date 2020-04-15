@@ -16,6 +16,8 @@ var spot = new spotify({
     secret:"643827e1934f4491b73a1b79ec8c37b3"
 });
 
+var localLogin;
+
 app.use(bodyParser.urlencoded({ extended : false }));
 app.use(bodyParser.json());
 // Public static files to serve
@@ -54,6 +56,11 @@ app.get("/search", function(req, res) {
 	});
 });
 
+app.get("/infograb", function(req, res) {
+    if(localLogin) { res.send(localLogin); }
+    else { res.send("No login"); }
+});
+
 // API calls to the server
 app.post('/join', function(req, res){
     // verify user login status, join user to a group, and redirect.
@@ -88,10 +95,9 @@ app.post('/register', function(req, res){
         res.send("Register success!");
     });
 });
-var localLogin = false;
+
 app.post('/login', function(req, res){
     // verify user credentials, and log user in.
-    
     var body = req.body;
     var uname = body.uname;
     var pass = body.pass;
@@ -112,7 +118,7 @@ app.post('/login', function(req, res){
                     error: false,
                     message: "Validation success!"
                 }
-                localLogin = true;
+                localLogin = result.uname;
                 res.send(message);
                 // Do some success stuff
             }

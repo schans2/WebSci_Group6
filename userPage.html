@@ -13,6 +13,12 @@
     <script>
          angular.module('generateApp', [])
             .controller('generateController', ['$scope', '$http', function($scope, $http){
+                $.get("/infograb", function(result) {
+                    if(result !== "No login") {
+                        $("#username").html(result + "'s page");
+                    }
+                    else { window.location.href = "/login"; }
+                });
                 $scope.generate = function(){
                     var ans = '';
                     var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -88,7 +94,7 @@
                         </div>
                     </div>
                     <div id="edit_bar" class="row">
-                        <p id="username">Username</p>
+                        <h3 id="username">{{username}}</h3>
                         <button class="edit_button" onclick="window.location.href = 'homePage.html'">Edit Profile</button>
                     </div>
                     <div id="private" class="row">
