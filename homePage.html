@@ -14,6 +14,22 @@
     <script>
         angular.module('homeApp', [])
             .controller('homeController', ['$scope', '$http', function($scope, $http){
+                $scope.checkStatus = function(){
+                    $http.get("/checkStatus").then(function(response){
+                        $scope.status = response.data.status;
+                        console.log($scope.status);
+                        if($scope.status == false){
+                            document.getElementById("account").style.display = "none";
+                            document.getElementById("out").style.display = "none";
+                        }
+                        else{
+                            document.getElementById("log").style.display = "none";
+                            document.getElementById("sign").style.display = "none";
+                        }
+
+                    });
+                }
+                
                 $scope.join = function(){
                     //alert("hello");
                     var code = document.getElementById("search").value;
@@ -37,15 +53,18 @@
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <a class="navbar-brand" href="/"><img id="piclogo" src="./resources/playtwist_white.png" width="100" height="100" class="d-inline-block align-top"
                 draggable="false" alt="PlayTwist logo" /></a>
-            <button id="nav_button" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+            <!-- <button id="nav_button" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
               <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+            </button> -->
+            <!-- <div class="collapse navbar-collapse" id="navbarNavAltMarkup"> -->
+            <div id="navbarNavAltMarkup">
               <div class="navbar-nav">
                 <!-- <a id="link" class="nav-item nav-link active" href="./homePage.html">Home <span class="sr-only">(current)</span></a> -->
                 <!-- <a id="link" class="nav-item nav-link" href="#">Join a Playlist</a> -->
-                <a id="link" class="nav-item nav-link Nav" href="./login">Login</a>
-                <a id="link" class="nav-item nav-link Nav" href="./login">Sign Up</a>
+                <a id="log" class="nav-item nav-link Nav" href="./login" data-ng-init="checkStatus();">Login</a>
+                <a id="sign" class="nav-item nav-link Nav" href="./login">Sign Up</a>
+                <a id="account" class="nav-item nav-link Nav" href="/user">Account</a>
+                <a id="out" class="nav-item nav-link Nav" href="/">Sign Out</a>
               </div>
             </div>
           </nav>
