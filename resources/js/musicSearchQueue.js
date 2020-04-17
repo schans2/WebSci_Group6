@@ -9,7 +9,7 @@ voteAngularApp.controller('playlistController', ['$scope', '$http', function($sc
             // gets the json of the playlist data
             //now put this data onto the page
             console.log(response.data);
-	        var tracks = response.data["tracks"];
+	    var tracks = response.data["tracks"];
             console.log(tracks);
             if(tracks == undefined){
                 console.log("Queue is empty.")
@@ -43,7 +43,9 @@ voteAngularApp.controller('playlistController', ['$scope', '$http', function($sc
         $http.get("/getGroup").then(function(response){
             var joinCode = response.data["joinCode"];
             var owner = response.data["owner"];
+            var id = Math.floor(100000 + Math.random() * 900000);
             var saveContent = {
+		"id":id,
                 "joinCode" : joinCode,
                 "owner" : owner,
                 "private": true,
