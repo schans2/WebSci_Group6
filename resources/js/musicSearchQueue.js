@@ -40,7 +40,7 @@ voteAngularApp.controller('playlistController', ['$scope', '$http', function($sc
             //on click of a album in localhost:3000/user, they should be able to go back to the (will do in another function)
             //original playlist they saved with all songs loaded into queue (will do in another function)
         console.log("Saving playlist....");
-        $http.post('/savePlaylist',saveContent).then(function(response){
+        $http.post('/savePlaylist',$scope.playlist_data).then(function(response){
             console.log("save success");
         });
     }
