@@ -22,6 +22,31 @@ var spot = new spotify({
 
 var localLogin;
 
+// Utility Functions
+/**
+ * Authenticates user before a user action. If user is authenticated, proceed with the request.
+ * If not, the user will be sent to the register and login page
+ * @param {*} req 
+ * @param {*} res 
+ * @param {*} next 
+ */
+var authenticate = function(req, res, next){
+    var cookies = req.cookies;
+    if(cookies == null || cookies.user_token == null){
+        // User first time access, bring user to the setup page
+        res.redirect("/login");
+    }
+    else{
+        // verify user token
+        if(jwt.verify(cookies.user_token, jwt_secret)){
+            next();
+        }
+        else{
+            res.redirect("/login");
+        }
+    }
+}
+
 app.use(bodyParser.urlencoded({ extended : false }));
 app.use(bodyParser.json());
 app.use(cookieParser());
@@ -133,7 +158,6 @@ app.post('/login', function(req, res){
                 res.cookie("user_token", token);
                 console.log("Set user token to ", result._id);
                 res.send(message);
-                // Do some success stuff
             }
             else{
                 // We specify what is wrong during development. Later we change this to "username or password incorrect"
@@ -147,14 +171,9 @@ app.post('/login', function(req, res){
     });
 });
 
-app.post('/logout', function(req, res){
-    // clear user login status
-    // TO BE IMPLEMENTED
-    var body = req.body;
-    var uname = body.uname;
-    var token = bdoy.token;
-    // Validates username and user login token(stored at user's as part of cookie).
-    console.log(`User ${uname} logs out.`);
+app.get('/logout', function(req, res){
+    res.clearCookieres.clearCookie("user_token");
+    res.end();
 });
 app.get('/removeLogin', function(req, res){
     localLogin = null;
