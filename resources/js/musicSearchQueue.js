@@ -3,26 +3,13 @@ var just_data =  {};
 var voteAngularApp = angular.module('playlistApp', []);
 
 voteAngularApp.controller('playlistController', ['$scope', '$http', function($scope, $http) {
-    $scope.savePlaylist = function(){
-        //keep track of what songs are added to the queue
-        //when this function executes add a database entry with:
-            //the user who owns the playlist (user who is logged in basically)
-            //array of all the tracks
-            //on click of a album in localhost:3000/user, they should be able to go back to the 
-            //original playlist they saved with all songs loaded into queue
-        console.log("Saving playlist....");
-    
-    
-    }
-    
-    
     $scope.loadPlaylist = function(){
         
         $http.get("/getGroup").then(function(response){
             // gets the json of the playlist data
             //now put this data onto the page
             console.log(response.data);
-	    var tracks = response.data["tracks"];
+	        var tracks = response.data["tracks"];
             console.log(tracks);
             if(tracks == undefined){
                 console.log("Queue is empty.")
@@ -44,6 +31,31 @@ voteAngularApp.controller('playlistController', ['$scope', '$http', function($sc
             }
         });
     }
+
+    $scope.savePlaylist = function(){
+        //keep track of what songs are added to the queue
+        //when this function executes add a database entry with:
+            //the user who owns the playlist (user who is logged in basically)
+            //array of all the tracks
+            //on click of a album in localhost:3000/user, they should be able to go back to the (will do in another function)
+            //original playlist they saved with all songs loaded into queue (will do in another function)
+        console.log("Saving playlist....");
+        $http.get("/getGroup").then(function(response){
+            var joinCode = response.data["joinCode"];
+            var owner = response.data["owner"];
+            var saveContent = {
+                "joinCode" : joinCode,
+                "owner" : owner,
+                "private": true,
+                "member":[],
+                "tracks":$scope.playlist_data,
+            }
+            $http.post('/savePlaylist',saveContent).then(function(response){
+                console.log("save success");
+            });
+        });
+    }
+	
     $scope.checkStatus = function(){
         $http.get("/checkStatus").then(function(response){
             $scope.status = response.data.status;
