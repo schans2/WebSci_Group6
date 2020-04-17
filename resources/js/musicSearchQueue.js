@@ -3,6 +3,19 @@ var just_data =  {};
 var voteAngularApp = angular.module('playlistApp', []);
 
 voteAngularApp.controller('playlistController', ['$scope', '$http', function($scope, $http) {
+    $scope.savePlaylist = function(){
+        //keep track of what songs are added to the queue
+        //when this function executes add a database entry with:
+            //the user who owns the playlist (user who is logged in basically)
+            //array of all the tracks
+            //on click of a album in localhost:3000/user, they should be able to go back to the 
+            //original playlist they saved with all songs loaded into queue
+        console.log("Saving playlist....");
+    
+    
+    }
+    
+    
     $scope.loadPlaylist = function(){
         
         $http.get("/getGroup").then(function(response){
