@@ -4,6 +4,7 @@
             "id": 114514,
             "joinCode": "fe5gt1",
             "owner": "Some Name",
+            "private": true,
             "members": [
                 {
                     "uname": "xinyan",
