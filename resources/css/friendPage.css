@@ -331,6 +331,22 @@ h2{
     margin-right: 150px;
     font-size: 17px;
 }
+#log{
+    margin-right: 50px;
+    font-size: 17px;
+}
+#sign{
+    margin-right: 50px;
+    font-size: 17px;
+}
+#account{
+    margin-right: 50px;
+    font-size: 17px;
+}
+#out{
+    margin-right: 50px;
+    font-size: 17px;
+}
 #nav_button{
     padding: 20px;
     float: right;

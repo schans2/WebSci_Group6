@@ -3,6 +3,7 @@
     <head>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
@@ -26,19 +27,19 @@
         }
     </script> -->
 
-    <body>
+    <body ng-app="loginApp" ng-controller="loginController">
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <a class="navbar-brand" href="/"><img id="piclogo" src="./resources/playtwist_white.png" width="100" class="d-inline-block align-top"
                 draggable="false" alt="PlayTwist logo" /></a>
-            <button id="nav_button" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-              <span class="navbar-toggler-icon"></span>
-            </button>
+            <!-- <button id="nav_button" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation"> -->
+              <!-- <span class="navbar-toggler-icon"></span> -->
+            <!-- </button> -->
             <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
               <div class="navbar-nav">
                 <!-- <a id="link" class="nav-item nav-link active" href="./homePage.html">Home <span class="sr-only">(current)</span></a> -->
                 <!-- <a id="link" class="nav-item nav-link" href="#">Join a Playlist</a> -->
-                <a id="link" class="nav-item nav-link" href="./login">Login</a>
-                <a id="link" class="nav-item nav-link" href="./login">Sign Up</a>
+                <!-- <a id="link" class="nav-item nav-link" href="./login">Login</a> -->
+                <!-- <a id="link" class="nav-item nav-link" href="./login">Sign Up</a> -->
               </div>
             </div>
           </nav>
@@ -48,10 +49,10 @@
                     <h2>Login</h2>
                     <form>
                         <label for="username">Username:</label>
-                        <input type="text" id="username" name="username" required><br>
+                        <input type="text" id="username" name="username" ng-model="uname" required><br>
                         <label for="password">Password:</label>
-                        <input type="password" id="password" name="password" required><br>
-                        <input id="signIn" type="button" value="Log In"/>
+                        <input type="password" id="password" name="password" ng-model="pass" required><br>
+                        <input id="signIn" type="button" value="Log In" ng-click="loginUser();"/>
                         <a href="#">Forgot Password?</a>
                     </form>
                 </div>
@@ -68,7 +69,7 @@
                         <input type="text" id="new_username" name="username" required><br>
                         <label for="password">Password:</label>
                         <input type="password" id="new_password" name="password" required><br>
-                        <input id="register" type="button" value="Sign Up"/>
+                        <input id="register" type="submit" value="Sign Up" ng-click="addUser();"/>
                     </form>
                 </div>
             </div>

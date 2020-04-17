@@ -2,36 +2,91 @@ var just_data =  {};
 
 var voteAngularApp = angular.module('playlistApp', []);
 
-voteAngularApp.controller('playlistController', ['$scope', function($scope) {
+voteAngularApp.controller('playlistController', ['$scope', '$http', function($scope, $http) {
+    $scope.loadPlaylist = function(){
+        
+        $http.get("/getGroup").then(function(response){
+            // gets the json of the playlist data
+            //now put this data onto the page
+            console.log(response.data);
+	    var tracks = response.data["tracks"];
+            console.log(tracks);
+            if(tracks == undefined){
+                console.log("Queue is empty.")
+                $scope.playlist_data = [];
+            }else{
+                //add songs into the queue
+                var i;
+                var play = [];
+                for(i = 0; i< tracks.length; i++){
+                    var temp = {
+                        "index":i+1,
+                        "name":tracks[i]["name"],
+                        "upvotes":0,
+                        "downvotes":0
+                    };
+                    play.push(temp);
+                }
+                $scope.playlist_data = play;
+            }
+        });
+    }
+    $scope.checkStatus = function(){
+        $http.get("/checkStatus").then(function(response){
+            $scope.status = response.data.status;
+            console.log($scope.status);
+            if($scope.status == null){
+                document.getElementById("account").style.display = "none";
+                document.getElementById("out").style.display = "none";
+            }
+            else{
+                document.getElementById("log").style.display = "none";
+                document.getElementById("sign").style.display = "none";
+            }
 
+        });
+    }
+    $scope.signOut = function(){
+        alert("Signing user out...");
+        $http.get("/removeLogin").then(function(response){
+            console.log("removing logged in user");
+            console.log(response.data);
+        });
+        location.replace("/");
+    }
 	// Scope variable instantiation
 	// $scope.type = "______";
 	$scope.query;
-	$scope.amount = 5;
-	$scope.numbers = [1, 3, 5, 10, 20];
+	//$scope.amount = 5;
+	//$scope.numbers = [1, 3, 5, 10, 20];
   
 	$scope.loadItems = function() {
+		$("#searchForm>form>input").css("color", "#1abc9c");
+        $("#searchForm>form>button").fadeOut(500);
+        $("#searchForm>h2>span").css("color", "#1abc9c");
 	// Validates all fields are populated
 		// if($scope.type && $scope.type != "______" && $scope.amount && $scope.query) {
-        if($scope.amount && $scope.query) {
+        if($scope.query) {
 			// Sends GET request to Node server with the desired parameters - grabbed from HTML input
 			// $.get(("http://localhost:3000/search?type=" + $scope.type + "&amount=" + $scope.amount + "&query=" + $scope.query), 
-			$.get(("http://localhost:3000/search?amount=" + $scope.amount + "&query=" + $scope.query), 
+			$.get(("http://localhost:3000/search?query=" + $scope.query), 
 			function(result) {
 				console.log(result);
-				// Determine which internal page population function to call based on the desired data type
-				// if($scope.type === "album") {
-                //     //displayAlbums();
-                //     console.log("albums");
-				// }
-				// else if($scope.type === "artist") {
-                //     //displayArtists();
-                //     console.log("artists");
-				// }
-				// else if($scope.type === "track") {
-                //     //displayTracks();
-                //     console.log("tracks");
-				// }
+                result = result.tracks.items;
+                console.log(result);
+				$scope.search_data = [];
+				// $("#tmp-searchResult>li").click(function() {
+				// 	$(this).css("backgroundColor", "red");
+				// });
+                $scope.$apply(function() {
+                    for (let i = 0; i < result.length; i++) {
+                        // console.log(result[i]);
+                        if(result[i].preview_url) { 
+                            $scope.search_data.push(result[i]);
+                        }
+                    }
+                    // $scope.search_data = result;
+                });
 			});
 		}
 		// Error case
@@ -42,24 +97,29 @@ voteAngularApp.controller('playlistController', ['$scope', function($scope) {
 	}
 
     // Music data from a collaborative playlist, later to be dynamically fetched from the database
-    $scope.playlist_data = [];
+    //$scope.playlist_data = [];
     $scope.search_data = [];
-    $scope.addToQueue = function(i){
-        let tmp_data = $scope.search_data[i]
+    $scope.addToQueue = function(i) {
+        let tmp_data = $scope.search_data[i];
         tmp_data.upvotes = 0;
         tmp_data.downvotes = 0;
         // If duplicates found, just terminate
         if($scope.playlist_data.includes(tmp_data)) { return; }
         else { $scope.playlist_data.push(tmp_data); }
-        if($scope.playlist_data.length == 1 && audios.paused){ // Which means we have just pushed a song to the empty queue
+		if($scope.playlist_data.length == 1 && audios.paused){ // Which means we have just pushed a song to the empty queue
             decisionizer();
-        }
+		}
+		if($scope.playlist_data.length === 1) {
+			$("#tempWedge").fadeOut(500);
+		}
     }
 
     var i = $("#play-pause-button").find("i");
     var seekTime, seekLocation, seekBar, audios;
     var flag = false;
     initialPlayer();
+
+/*  Deprecated 4-1-20 2:48 PM
 
     $scope.songCall = function(track) {
         if(!$scope.track || $scope.track == ''){
@@ -86,6 +146,8 @@ voteAngularApp.controller('playlistController', ['$scope', function($scope) {
             }
         );
     }
+*/
+
     function trackCompare(a, b) {
         // returns 1 when a is more popular than b
         if (a.upvotes-a.downvotes > b.upvotes-b.downvotes) return -1;
@@ -96,6 +158,7 @@ voteAngularApp.controller('playlistController', ['$scope', function($scope) {
     // descisionizer sorts the tracks, picks the best track, then pops the first track
     function decisionizer() {
         if($scope.playlist_data.length) {
+			if($scope.playlist_data.length === 1) { $("#tempWedge").fadeIn(500); }
             console.log("Current Playlist: ", $scope.playlist_data)
             $scope.playlist_data.sort(trackCompare);
             var selected = $scope.playlist_data[0];
@@ -103,12 +166,12 @@ voteAngularApp.controller('playlistController', ['$scope', function($scope) {
             // We need to use $apply here to force update
             $scope.playlist_data.splice(0, 1);
             $scope.$evalAsync();
-            $(audios).attr("src", selected.preview);
-            selectedTrack = selected.album.cover;
+            $(audios).attr("src", selected.preview_url);
+            selectedTrack = selected.album.images[0].url;
             $("#album-art").append("<img src='" + selectedTrack + "' class='active' alt='Album Art'/>");
-            $("#album-name").text(selected.album.title);
-            console.log(selected.name)
-            $("#track-name").text(selected.title);  
+            $("#album-name").text(selected.name);
+            // console.log(selected.name)
+            $("#track-name").text(selected.artists[0].name);  
             $("#player-track").addClass("active");
             $("#album-art").addClass("active");
             i.attr("class", "fa fa-pause");
@@ -117,11 +180,11 @@ voteAngularApp.controller('playlistController', ['$scope', function($scope) {
             });
         }
         else {
-          $("#player-track").removeClass("active");
-          $("#album-art").removeClass("active");
-          i.attr("class", "fa fa-play");
-          audios.pause();
-          alert("End of queue");
+			$("#player-track").removeClass("active");
+			$("#album-art").removeClass("active");
+			i.attr("class", "fa fa-play");
+			audios.pause();
+			alert("End of queue");
         }
     }
     function initialPlayer(){
@@ -156,7 +219,7 @@ voteAngularApp.controller('playlistController', ['$scope', function($scope) {
             $("#queue>li:nth-child(1)").remove();
             decisionizer();
         });
-        // Fades in and out search results on focus
+        /* Fades in and out search results on focus
         $("#searchInput").focusin(function() {
             $("#tmp-searchResult").fadeIn(500);
         });
@@ -168,6 +231,17 @@ voteAngularApp.controller('playlistController', ['$scope', function($scope) {
         });
         $("#tmp-searchResult").mouseleave(function() {
             $(this).fadeOut(500);
+        });
+        */
+       	$("#searchForm>form>input").focusin(function() {
+		   	$(this).css("color", "goldenrod");
+		   	$("#searchForm>h2>span").css("color", "goldenrod");
+		   	$("#searchForm>form>button").fadeIn(500);
+	   	});
+	   	$("#searchForm>form>input").focusout(function() {
+			$(this).css("color", "#1abc9c");
+			$("#searchForm>h2>span").css("color", "#1abc9c");
+			$("#searchForm>form>button").fadeOut(500);
         });
     }
 
@@ -236,3 +310,22 @@ voteAngularApp.controller('playlistController', ['$scope', function($scope) {
     }
 
 }]);
+
+/*
+  This directive allows us to pass a function in on an enter key to do what we want.
+  I literally copy-pasted this clutch piece of code from:
+  https://eric.sau.pe/angularjs-detect-enter-key-ngenter/
+  Hope that's cool since it's cited and non-essential functionality :)
+*/
+voteAngularApp.directive('ngEnter', function () {
+	return function (scope, element, attrs) {
+	  element.bind("keydown keypress", function (event) {
+		if(event.which === 13) {
+		  scope.$apply(function (){
+			scope.$eval(attrs.ngEnter);
+		  });
+		  event.preventDefault();
+		}
+	  });
+	};
+  });

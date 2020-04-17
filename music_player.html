@@ -20,25 +20,29 @@
                 draggable="false" alt="PlayTwist logo" /></a>
                 <ul class="nav justify-content-end" id="myNavBar">
                     <li class="nav-item">
-                      <a class="nav-link" href="/login">Login</a>
+                      <a class="nav-link" id="log" href="/login" data-ng-init="checkStatus();">Login</a>
                     </li>
                     <li class="nav-item">
-                      <a class="nav-link" href="/login">Sign Up</a>
+                      <a class="nav-link" id="sign" href="/login">Sign Up</a>
                     </li>
                     <li class="nav-item">
-                      <a class="nav-link" href="user">Account</a>
+                      <a class="nav-link" id="account" href="/user">Account</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="out" ng-click="signOut();" href="/">Sign Out</a>
                     </li>
                 </ul>
         </nav>
-        <div id="playlist-content" class="float-left">
+        <div id="playlist-content" class="float-left" data-ng-init="loadPlaylist();">
             <ul class="list-group">
                 <li class="list-group-item d-flex justify-content-between align-items-center" ng-repeat="track in playlist_data | orderBy: 'downvotes-upvotes'">
-                    <div ng-click="">{{$index+1}}. {{track.title}}</div>
+                    <div ng-click="">{{$index+1}}. {{track.name}}</div>
                     <span class="badge badge-primary badge-pill upvote" ng-click="track.upvotes = track.upvotes+1">{{track.upvotes}} &#128150;</span>
                     <span class="badge badge-primary badge-pill downvote" ng-click="track.downvotes = track.downvotes+1">{{track.downvotes}} &#128148;</span>
                 </li>
             </ul>
-            <li class="list-group-item list-group-item-action list-group-item-info">Save this Play List</li>
+            <li class="list-group-item list-group-item-action list-group-item-info" id="tempWedge">Your Queue Here</li>
+            <li class="list-group-item list-group-item-action list-group-item-success">Save this Play List</li>
         </div>
         <div id="friend-cotent" class="float-right">
             <ul class="list-group">
@@ -46,27 +50,28 @@
                 <li class="list-group-item list-group-item-secondary">friend2</li>
             </ul>
         </div>
-	    <div>
-            <h2>Showing the top {{amount}} result(s) for: {{query}}</h2>
+	    <div id="searchForm">
+            <h2>Showing result(s) for: <span>{{query}}</span></h2>
             <!-- Dynamically displays and updates Angular scope variables -->
-            <form ng-enter="loadItems()">
-            <label for="entries">Search for </label>
-            <select id="entries" ng-model="amount" ng-options="item for item in numbers"></select>
+            <form class="form-inline justify-content-center" ng-enter="loadItems()">
+            <!-- <label for="entries">Search for </label> -->
+            <!-- <select id="entries" ng-model="amount" ng-options="item for item in numbers"></select> -->
             <!-- <input type="radio" name="searchType" id="album" value="Album" ng-click="type='album'"/>
             <label for="album">Albums</label>
             <input type="radio" name="searchType" id="artist" value="Artist" ng-click="type='artist'"/>
             <label for="artist">Artists</label>
             <input type="radio" name="searchType" id="track" value="Track" ng-click="type='track'"/>
             <label for="track">Tracks</label> -->
-            <span> tracks named </span>
-            <input type="text" maxlength="99" placeholder="Song name..." ng-model="query"/>
-            <button type="button" ng-click=loadItems()>Go!</button>
+                <span>Search for tracks named </span>
+                <input type="text" maxlength="99" placeholder="Song name..." ng-model="query"/>
+                <button type="button" ng-click=loadItems()>Go!</button>
             </form>
         </div>
         <div class="container-flex">
-            <ul id="tmp-searchResult" class="mx-auto list-group" style="width: 45%;">
-                <li class="list-group-item" ng-repeat="track in search_data" ng-click="addToQueue($index)">
-                    {{track.artist.name}}, {{track.title}}
+            <ul id="tmp-searchResult" class="list-group">
+                <li class="list-group-item" ng-repeat="track in search_data"
+                onclick="$(this).css('backgroundColor', '#2c3e50'); $(this).css('color', '#1abc9c')" ng-click="addToQueue($index)">
+                    {{track.artists[0].name}}, {{track.name}}
                 </li>
             </ul>
         </div>

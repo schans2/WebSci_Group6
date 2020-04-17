@@ -4,23 +4,81 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular.js"></script>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
         <link rel="stylesheet" type="text/css" href="./resources/css/userPage.css">
         <link href="https://fonts.googleapis.com/css?family=Raleway&display=swap" rel="stylesheet">
     </head>
-    <body>
+    <script>
+         angular.module('generateApp', [])
+            .controller('generateController', ['$scope', '$http', function($scope, $http){
+                $.get("/infograb", function(result) {
+                    if(result !== "No login") {
+                        $("#username").html(result + "'s page");
+                    }
+                    else { window.location.href = "/login"; }
+                });
+                $scope.checkStatus = function(){
+                    $http.get("/checkStatus").then(function(response){
+                        $scope.status = response.data.status;
+                        console.log($scope.status);
+                        if($scope.status == null){
+                            document.getElementById("account").style.display = "none";
+                            document.getElementById("out").style.display = "none";
+                        }
+                        else{
+                            document.getElementById("log").style.display = "none";
+                            document.getElementById("sign").style.display = "none";
+                        }
+
+                    });
+                }
+                $scope.generate = function(){
+                    var ans = '';
+                    var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+                    var charactersLength = characters.length;
+                    for(var i = 0; i < 6; i++){
+                        ans += characters.charAt(Math.floor(Math.random()* charactersLength));
+                    }
+                    console.log(ans);
+                    alert("Your playlist code is: " + ans);
+                    var id = Math.floor(100000 + Math.random() * 900000);
+                    console.log(id);
+                    $scope.playlist = {
+                        id: id,
+                        joinCode: ans,
+                    }
+                    $http.post('/createGroup', $scope.playlist).then(function(response){
+                        console.log("group created");
+                    });
+                }
+                $scope.signOut = function(){
+                    alert("Signing user out...");
+                    $http.get("/removeLogin").then(function(response){
+                        console.log("removing logged in user");
+                        console.log(response.data);
+                    });
+                    location.replace("/");
+                }
+            }])
+    </script>
+    <body ng-app="generateApp" ng-controller="generateController">
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <a class="navbar-brand" href="/"><img id="piclogo" src="./resources/playtwist_white.png" width="100" height="100" class="d-inline-block align-top"
                 draggable="false" alt="PlayTwist logo" /></a>
-            <button id="nav_button" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+            <!-- <button id="nav_button" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
               <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+            </button> -->
+            <!-- <div class="collapse navbar-collapse" id="navbarNavAltMarkup"> -->
+            <div id="navbarNavAltMarkup">
               <div class="navbar-nav">
                 <!-- <a id="link" class="nav-item nav-link active" href="./homePage.html">Home <span class="sr-only">(current)</span></a> -->
                 <!-- <a id="link" class="nav-item nav-link" href="#">Join a Playlist</a> -->
-                <a id="link" class="nav-item nav-link Nav" href="/">Sign Out</a>
+                <a id="log" class="nav-item nav-link Nav" href="./login" data-ng-init="checkStatus();">Login</a>
+                <a id="sign" class="nav-item nav-link Nav" href="./login">Sign Up</a>
+                <a id="account" class="nav-item nav-link Nav" href="/user">Account</a>
+                <a id="out" class="nav-item nav-link Nav" ng-click="signOut();">Sign Out</a>
               </div>
             </div>
           </nav>
@@ -31,25 +89,25 @@
                     <div class="row">
                         <img id="active" src="resources/active.png">
                         <img id="user_image" src="resources/profileImage.png" alt="Profile Image">
-                        <p class="friend_name" onclick="window.location.href='./friendPage.html'">Username</p>
+                        <p class="friend_name" onclick="window.location.href='/friends'">Username</p>
                     </div>
                     <div class="row">
                         <img id="active" src="resources/active.png">
 
                         <img id="user_image" src="resources/profileImage.png" alt="Profile Image">
-                        <p class="friend_name" onclick="window.location.href='./friendPage.html'">Username</p>
+                        <p class="friend_name" onclick="window.location.href='/friends'">Username</p>
                     </div>
                     <div class="row">
                         <img id="active" src="resources/notactive.png">
 
                         <img id="user_image" src="resources/profileImage.png" alt="Profile Image">
-                        <p class="friend_name" onclick="window.location.href='./friendPage.html'">Username</p>
+                        <p class="friend_name" onclick="window.location.href='/friends'">Username</p>
                     </div>
                     <div class="row">
                         <img id="active" src="resources/active.png">
 
                         <img id="user_image" src="resources/profileImage.png" alt="Profile Image">
-                        <p class="friend_name" onclick="window.location.href='./friendPage.html'">Username</p>
+                        <p class="friend_name" onclick="window.location.href='/friends'">Username</p>
                     </div>
                 </div>
                 <div id="first" class="col-lg-8">
@@ -58,13 +116,13 @@
                             <img id="prof_image" src="resources/profileImage.png" alt="Profile Image">
                         </div>
                         <div id="user" class="col">
-                            <button onclick="window.location.href = 'homePage.html'" class="create" type="button">+ Create Private Playlist</button><br/>
-                            <button onclick="window.location.href = 'homePage.html'" class="create" type="button">+ Create New Group</button>
+                            <button onclick="window.location.href = '/player'" class="create" type="button">+ Create Private Playlist</button><br/>
+                            <button class="create" type="button" ng-click="generate()">+ Create New Group</button>
                         </div>
                     </div>
                     <div id="edit_bar" class="row">
-                        <p id="username">Username</p>
-                        <button class="edit_button" onclick="window.location.href = 'homePage.html'">Edit Profile</button>
+                        <h3 id="username">{{username}}</h3>
+                        <!-- <button class="edit_button" onclick="window.location.href = 'homePage.html'">Edit Profile</button> -->
                     </div>
                     <div id="private" class="row">
                         <h1 id="play_header">Private Playlists</h1>

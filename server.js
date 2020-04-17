@@ -3,23 +3,56 @@
 
 const express = require('express');
 var bodyParser = require('body-parser');
-var crypto = require('crypto');
+var jwt = require('jsonwebtoken');
+var uuidv1 = require('uuid').v1;
+var cookieParser = require('cookie-parser');
+var hashing = require('./server_resources/hashing');
+var DatabaseMaster = require('./server_resources/database_master');
 const spotify = require("node-spotify-api");
-var mongo = require("mongodb");
+var db_uri = "mongodb+srv://dbUser:ehRb3TNnpKYK2a4Y@cluster0-rebd7.mongodb.net/test?retryWrites=true&w=majority";
+var db_master = new DatabaseMaster(db_uri, "Playtwist");
+
 var app = express();
 // Msg from Xinyan: This is my MongoAtlas account! Switch to yours before testing.
 var db_uri = "mongodb+srv://mongoUser:Macau1stOnlineCasino@veryfastcluster-1ytep.mongodb.net/test?retryWrites=true&w=majority";
 var port = 3000;
-
-// create module instances
+var jwt_secret = "VerySecretPassword";
 var spot = new spotify({
     id    :"929154c608594196b47f9ac5b3c7d8eb",
     secret:"643827e1934f4491b73a1b79ec8c37b3"
 });
 var mongodbClient = new mongo(db_uri);
 
+var localLogin;
+
+// Utility Functions
+/**
+ * Authenticates user before a user action. If user is authenticated, proceed with the request.
+ * If not, the user will be sent to the register and login page
+ * @param {*} req 
+ * @param {*} res 
+ * @param {*} next 
+ */
+var authenticate = function(req, res, next){
+    var cookies = req.cookies;
+    if(cookies == null || cookies.user_token == null){
+        // User first time access, bring user to the setup page
+        res.redirect("/login");
+    }
+    else{
+        // verify user token
+        if(jwt.verify(cookies.user_token, jwt_secret)){
+            next();
+        }
+        else{
+            res.redirect("/login");
+        }
+    }
+}
+
 app.use(bodyParser.urlencoded({ extended : false }));
 app.use(bodyParser.json());
+app.use(cookieParser());
 // Public static files to serve
 app.use('/resources', express.static('resources'));
 
@@ -46,30 +79,20 @@ app.get('/user', function(req, res){
 
 // Spotify search and return
 app.get("/search", function(req, res) {
-	console.log("Amount = " + req.query.amount + "\nQuery = " + req.query.query);
-	spot.search({ type : "track", query : req.query.query, limit : req.query.amount}).then(function(response) {
+	//console.log("Query = " + req.query.query);
+	spot.search({ type : "track", query : req.query.query, limit : 15 }).then(function(response) {
 		console.log(response);
 		res.send(response);
 	}).catch(function(err) {
 		console.log("\x1b[31m" + err + "\x1b[0m");
+		res.send(err);
 	});
 });
 
-// Temporary space for crypto functions. Will be moved to an external module soon.
-var genRandomString = function(length){
-    return crypto.randomBytes(Math.ceil(length/2))
-            .toString('hex') /** convert to hexadecimal format */
-            .slice(0,length);   /** return required number of characters */
-};
-var sha512 = function(password, salt){
-    var hash = crypto.createHmac('sha512', salt); /** Hashing algorithm sha512 */
-    hash.update(password);
-    var value = hash.digest('hex');
-    return {
-        salt:salt,
-        passwordHash:value
-    };
-};
+app.get("/infograb", function(req, res) {
+    if(localLogin) { res.send(localLogin); }
+    else { res.send("No login"); }
+});
 
 // Temporary space for mongodb connection. WIll be moved to an external module soon.
 async function listDatabases(client){
@@ -102,32 +125,132 @@ app.post('/register', function(req, res){
     var email = body.email;
     var uname = body.uname;
     var pass = body.pass;
-    console.log(`Register request of ${fname} ${lname}, email ${email}, username ${uname}`);
+    var uuid = uuidv1();
+    // console.log(`Register request of ${fname} ${lname}, email ${email}, username ${uname}`);
     
-    var salt = genRandomString(16);
-    var hashed = sha512(pass, salt);
-    console.log(`Hashed password ${hashed.passwordHash} with salt ${hashed.salt}.`);
-    // <<VALIDATION AND DATABASE TO BE IMPLEMENTED>>
-
-    res.send("Register handling success!");
+    var hashed = hashing.hashIt(pass);
+    // console.log(`Hashed password ${hashed.passwordHash} with salt ${hashed.salt}.`);
+    
+    var query = {
+        _id: uuid,
+        fname: fname,
+        lname: lname,
+        email: email,
+        uname: uname,
+        hash: hashed.passwordHash,
+        salt: hashed.salt
+    }
+    db_master.insertDocument("Users", query, function(result){
+        res.send({
+            error: false,
+            message: "Register Success!"
+        });
+    });
 });
 
 app.post('/login', function(req, res){
-    // verify user credentials, and log user in.
+    // verify user credentials. Set user cookie and update database statuss    
     var body = req.body;
     var uname = body.uname;
     var pass = body.pass;
-    console.log(`User ${unmae} attempts to login.`);
+    console.log(`User ${uname} attempts to login.`);
+    // Fetch user info from database
+    var query = { uname: { $eq: uname }};
+    db_master.findDocument("Users", query, function(result){
+        if(result == null){
+            var message = {
+                error: true,
+                message: "Error: Username not found."
+            }
+            res.send(message);
+        }
+        else{
+            if(hashing.validate(pass, result.hash, result.salt)){
+                var message = {
+                    error: false,
+                    message: "Validation success!"
+                }
+                localLogin = result.uname;
+                var token = jwt.sign({user_id: result._id}, jwt_secret);
+                res.cookie("user_token", token);
+                console.log("Set user token to ", result._id);
+                res.send(message);
+            }
+            else{
+                // We specify what is wrong during development. Later we change this to "username or password incorrect"
+                var message = {
+                    error: true,
+                    message: "Error: Password incorrect."
+                }
+                res.send(message);
+            }
+        }
+    });
 });
 
-app.post('/logout', function(req, res){
-    // clear user login status
-    // TO BE IMPLEMENTED
-    var body = req.body;
-    var uname = body.uname;
-    var token = bdoy.token;
-    // Validates username and user login token(stored at user's as part of cookie).
-    console.log(`User ${uname} logs out.`);
+app.get('/logout', function(req, res){
+    res.clearCookieres.clearCookie("user_token");
+    res.end();
+});
+app.get('/removeLogin', function(req, res){
+    localLogin = null;
+    res.send(localLogin);
+});
+app.get("/checkStatus", function(req, res){
+    var status = {
+        status: localLogin
+    }
+    res.send(status);
+});
+//==================================================
+app.post('/newUser', function(req, res){
+    console.log(req.body);
+    var user = req.body;
+    // var user = JSON.stringify(req.body);
+
+    // MongoClient.connect(conn, function(err, db){
+    //     if(err) throw err;
+    //     var dbo = db.db("playtwist");
+    //     dbo.collection("users").insertOne(user, function(err, res){
+    //         if (err) throw err;
+    //         console.log("Data inserted");
+    //         db.close();
+    //     });
+    
+    // });
+
+
+});
+//========================================
+
+app.post('/createGroup', function(req, res){
+    console.log(req.body);
+    var id = req.body.id;
+    var joinCode = req.body.joinCode;
+
+    var query = {
+        id: id,
+        joinCode: joinCode
+    }
+    db_master.insertDocument("Playlists", query, function(result){
+        res.send("Playlist Created!");
+    });
+
+});
+var code = "";
+app.post("/joinGroup", function(req, res){
+    code = req.body.joinCode;
+    // console.log(code);
+});
+
+app.get("/getGroup", function(req, res){
+    console.log(code);
+    var query = {
+        joinCode: code
+    }
+    db_master.findDocument("Playlists", query, function(result){
+        res.send(result);
+    });
 });
 
 app.listen(port);
