@@ -325,14 +325,14 @@ body{
     background-color: #2c3e50;
 }
 
-#spotify-searchResult {
+#spotify-searchResult, #deezer-searchResult {
     height: 450px;
     width: 50%;
     margin-left: auto;
     margin-right: auto;
 }
 
-#spotify-searchResult>li {
+#spotify-searchResult>li, #deezer-searchResult>li {
     margin: 0 0 0 0;
     padding: 0 0 0 0;
     height: 30px;
@@ -344,7 +344,7 @@ body{
     text-overflow: ellipsis;
 }
 
-#spotify-searchResult>li:hover {
+#spotify-searchResult>li:hover, #deezer-searchResult>li:hover {
     cursor: pointer;
 }
 

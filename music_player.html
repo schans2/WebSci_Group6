@@ -34,7 +34,7 @@
         <div id="playlist-content" class="float-left" data-ng-init="loadPlaylist();">
             <ul class="list-group">
                 <li class="list-group-item d-flex justify-content-between align-items-center" ng-repeat="track in playlist_data | orderBy: 'downvotes-upvotes'">
-                    <div ng-click="">{{$index+1}}. {{track.name}}</div>
+                    <div ng-click="">{{$index+1}}. {{track.name}}{{track.title}}</div>
                     <span class="badge badge-primary badge-pill upvote" ng-click="track.upvotes = track.upvotes+1">{{track.upvotes}} &#128150;</span>
                     <span class="badge badge-primary badge-pill downvote" ng-click="track.downvotes = track.downvotes+1">{{track.downvotes}} &#128148;</span>
                 </li>
@@ -68,8 +68,16 @@
         <div class="container-flex">
             <ul id="spotify-searchResult" class="list-group">
                 <li class="list-group-item" ng-repeat="track in spotify_search_data"
-                onclick="$(this).css('backgroundColor', '#2c3e50'); $(this).css('color', '#1abc9c')" ng-click="addToQueue($index)">
+                onclick="$(this).css('backgroundColor', '#2c3e50'); $(this).css('color', '#1abc9c')" ng-click="addToQueue($index, 'spotify')">
                     {{track.artists[0].name}}, {{track.name}}
+                </li>
+            </ul>
+        </div>
+        <div class="container-flex">
+            <ul id="deezer-searchResult" class="list-group">
+                <li class="list-group-item" ng-repeat="track in deezer_search_data"
+                onclick="$(this).css('backgroundColor', '#2c3e50'); $(this).css('color', '#1abc9c')" ng-click="addToQueue($index, 'deezer')">
+                    {{track.artist.name}}, {{track.title}}
                 </li>
             </ul>
         </div>

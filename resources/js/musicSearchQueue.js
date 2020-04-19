@@ -107,9 +107,14 @@ voteAngularApp.controller('playlistController', ['$scope', '$http', function($sc
 							response.json().then(function(data) {
 								console.log(data);
 								data = data.data;
-								// $scope.$apply(function(){
-								// 	$scope.search_data = data;
-								// });
+								$scope.deezer_search_data = [];
+								$scope.$apply(function(){
+									for (let j = 0; j < data.length; j++) {
+										if(data[j].preview) {
+											$scope.deezer_search_data.push(data[j]);
+										}
+									}
+								});
 							});
 						}
 						else {
@@ -129,9 +134,13 @@ voteAngularApp.controller('playlistController', ['$scope', '$http', function($sc
 
     // Music data from a collaborative playlist, later to be dynamically fetched from the database
     $scope.playlist_data = [];
-    $scope.spotify_search_data = [];
-    $scope.addToQueue = function(i) {
-        let tmp_data = $scope.spotify_search_data[i];
+	$scope.spotify_search_data = [];
+	$scope.deezer_search_data = [];
+    $scope.addToQueue = function(i, type) {
+		// console.log(type);
+		var tmp_data;
+		if(type === "deezer") { tmp_data = $scope.deezer_search_data[i]; }
+        else { tmp_data = $scope.spotify_search_data[i]; }
         tmp_data.upvotes = 0;
         tmp_data.downvotes = 0;
         // If duplicates found, just terminate
@@ -190,19 +199,29 @@ voteAngularApp.controller('playlistController', ['$scope', '$http', function($sc
     function decisionizer() {
         if($scope.playlist_data.length) {
 			if($scope.playlist_data.length === 1) { $("#tempWedge").fadeIn(500); }
-            console.log("Current Playlist: ", $scope.playlist_data)
+            console.log("Current Playlist: ", $scope.playlist_data);
             $scope.playlist_data.sort(trackCompare);
             var selected = $scope.playlist_data[0];
             // Remove the song selected
             // We need to use $apply here to force update
             $scope.playlist_data.splice(0, 1);
-            $scope.$evalAsync();
-            $(audios).attr("src", selected.preview_url);
-            selectedTrack = selected.album.images[0].url;
-            $("#album-art").append("<img src='" + selectedTrack + "' class='active' alt='Album Art'/>");
-            $("#album-name").text(selected.name);
-            // console.log(selected.name)
-            $("#track-name").text(selected.artists[0].name);  
+			$scope.$evalAsync();
+			if(selected.name) { 
+				$(audios).attr("src", selected.preview_url);
+				selectedTrack = selected.album.images[0].url;
+				$("#album-art").append("<img src='" + selectedTrack + "' class='active' alt='Album Art'/>");
+				$("#album-name").text(selected.name);
+				// console.log(selected.name)
+				$("#track-name").text(selected.artists[0].name);
+			}
+			else { 
+				$(audios).attr("src", selected.preview);
+				selectedTrack = selected.album.cover_medium;
+				$("#album-art").append("<img src='" + selectedTrack + "' class='active' alt='Album Art'/>");
+				$("#album-name").text(selected.title);
+				// console.log(selected.name)
+				$("#track-name").text(selected.artist.name);
+			}  
             $("#player-track").addClass("active");
             $("#album-art").addClass("active");
             i.attr("class", "fa fa-pause");
