@@ -88,7 +88,7 @@ voteAngularApp.controller('playlistController', ['$scope', '$http', function($sc
 				console.log(result);
                 result = result.tracks.items;
                 console.log(result);
-				$scope.search_data = [];
+				$scope.spotify_search_data = [];
 				// $("#tmp-searchResult>li").click(function() {
 				// 	$(this).css("backgroundColor", "red");
 				// });
@@ -96,11 +96,28 @@ voteAngularApp.controller('playlistController', ['$scope', '$http', function($sc
                     for (let i = 0; i < result.length; i++) {
                         // console.log(result[i]);
                         if(result[i].preview_url) { 
-                            $scope.search_data.push(result[i]);
+                            $scope.spotify_search_data.push(result[i]);
                         }
                     }
                     // $scope.search_data = result;
-                });
+				});
+				fetch("https://cors-anywhere.herokuapp.com/https://api.deezer.com/search?q=" + $scope.query).then(
+					function(response) {
+						if(response.status === 200) {
+							response.json().then(function(data) {
+								console.log(data);
+								data = data.data;
+								// $scope.$apply(function(){
+								// 	$scope.search_data = data;
+								// });
+							});
+						}
+						else {
+							alert("Error calling Deezer API. Status code: " + response.status);
+							return;
+						}
+					}
+				);
 			});
 		}
 		// Error case
@@ -112,9 +129,9 @@ voteAngularApp.controller('playlistController', ['$scope', '$http', function($sc
 
     // Music data from a collaborative playlist, later to be dynamically fetched from the database
     $scope.playlist_data = [];
-    $scope.search_data = [];
+    $scope.spotify_search_data = [];
     $scope.addToQueue = function(i) {
-        let tmp_data = $scope.search_data[i];
+        let tmp_data = $scope.spotify_search_data[i];
         tmp_data.upvotes = 0;
         tmp_data.downvotes = 0;
         // If duplicates found, just terminate

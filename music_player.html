@@ -66,8 +66,8 @@
             </form>
         </div>
         <div class="container-flex">
-            <ul id="tmp-searchResult" class="list-group">
-                <li class="list-group-item" ng-repeat="track in search_data"
+            <ul id="spotify-searchResult" class="list-group">
+                <li class="list-group-item" ng-repeat="track in spotify_search_data"
                 onclick="$(this).css('backgroundColor', '#2c3e50'); $(this).css('color', '#1abc9c')" ng-click="addToQueue($index)">
                     {{track.artists[0].name}}, {{track.name}}
                 </li>
