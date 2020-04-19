@@ -201,6 +201,26 @@ app.post('/createGroup', function(req, res){
 
 });
 
+//save playlist
+app.post('/savePlaylist',authenticate, function(req,res){
+    var id = Math.floor(100000 + Math.random() * 900000);
+    jwt.verify(token, jwt_secret, function(err, decoded) {
+        if(err) return;
+        var user_id = decoded.user_id;
+    });
+    var track = req.body;
+    var query = {
+        id:id,
+        owner:user_id,
+        private:true,
+        tracks:track,
+    }
+    db_master.insertDocument("Playlists", query, function(result){
+        res.send("Playlist Saved!");
+    });
+});
+
+var code = "";
 app.post("/joinGroup", function(req, res){
     code = req.body.joinCode;
     // console.log(code);
