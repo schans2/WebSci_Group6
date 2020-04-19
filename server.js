@@ -250,6 +250,8 @@ app.post("/joinGroup", function(req, res){
 });
 
 app.get("/getGroup", function(req, res){
+    var body = req.body;
+    var code = body.code;
     console.log(code);
     var query = {
         joinCode: code
