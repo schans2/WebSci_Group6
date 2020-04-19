@@ -173,38 +173,18 @@ app.post('/login', function(req, res){
 
 app.get('/logout', function(req, res){
     res.clearCookieres.clearCookie("user_token");
-    res.end();
+    res.send({
+        error: false,
+        message: "Logout Success!"
+    });
 });
-app.get('/removeLogin', function(req, res){
-    localLogin = null;
-    res.send(localLogin);
-});
+
 app.get("/checkStatus", function(req, res){
     var status = {
         status: localLogin
     }
     res.send(status);
 });
-//==================================================
-app.post('/newUser', function(req, res){
-    console.log(req.body);
-    var user = req.body;
-    // var user = JSON.stringify(req.body);
-
-    // MongoClient.connect(conn, function(err, db){
-    //     if(err) throw err;
-    //     var dbo = db.db("playtwist");
-    //     dbo.collection("users").insertOne(user, function(err, res){
-    //         if (err) throw err;
-    //         console.log("Data inserted");
-    //         db.close();
-    //     });
-    
-    // });
-
-
-});
-//========================================
 
 app.post('/createGroup', function(req, res){
     console.log(req.body);
@@ -220,7 +200,7 @@ app.post('/createGroup', function(req, res){
     });
 
 });
-var code = "";
+
 app.post("/joinGroup", function(req, res){
     code = req.body.joinCode;
     // console.log(code);
