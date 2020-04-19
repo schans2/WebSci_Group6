@@ -54,7 +54,7 @@ app.use(cookieParser());
 app.use('/resources', express.static('resources'));
 
 // Routing to serve pages
-app.get('/player', function(req, res){
+app.get('/player/:code', function(req, res){
     res.sendFile(__dirname + "/music_player.html");
 });
 
@@ -186,7 +186,7 @@ app.get("/checkStatus", function(req, res){
     res.send(status);
 });
 
-app.post('/createGroup', function(req, res){
+app.post('/createPlaylist', function(req, res){
     console.log(req.body);
     var id = req.body.id;
     var joinCode = req.body.joinCode;
@@ -202,28 +202,51 @@ app.post('/createGroup', function(req, res){
 });
 
 //save playlist
-app.post('/savePlaylist',authenticate, function(req,res){
+app.post('/savePlaylist', authenticate, function(req,res){
     var id = Math.floor(100000 + Math.random() * 900000);
     jwt.verify(token, jwt_secret, function(err, decoded) {
         if(err) return;
         var user_id = decoded.user_id;
+        var body = req.body;
+        var tracks = body.tracks;
+        var is_private = body.isPrivate;
+        var query = {
+            id: id,
+            owner: user_id,
+            private: is_private,
+            tracks: tracks,
+            members: [
+                user_id
+            ]
+        }
+        db_master.insertDocument("Playlists", query, function(result){
+            res.send("Playlist Saved!");
+        });
     });
-    var track = req.body;
-    var query = {
-        id:id,
-        owner:user_id,
-        private:true,
-        tracks:track,
-    }
-    db_master.insertDocument("Playlists", query, function(result){
-        res.send("Playlist Saved!");
-    });
+    
 });
 
-var code = "";
 app.post("/joinGroup", function(req, res){
-    code = req.body.joinCode;
-    // console.log(code);
+    var code = req.body.joinCode;
+    var query = { joinCode: { $eq: code } };
+    db_master.findDocument("Playlists", query, function(result){
+        if(!result){
+            // Playlist Not found
+            var message = {
+                error: true,
+                message: "Cannot find playlist."
+            }
+            res.send(message);
+        }
+        else{
+            // Playlist Found
+            var message = {
+                error: true,
+                message: "Cannot find playlist."
+            }
+            res.send(message);
+        }
+    });
 });
 
 app.get("/getGroup", function(req, res){

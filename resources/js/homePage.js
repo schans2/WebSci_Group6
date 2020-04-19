@@ -27,8 +27,8 @@ angular.module('homeApp', []).controller('homeController', ['$scope', '$http', f
             }
             $http.post("/joinGroup", $scope.code).then(function(response){
                 console.log("joining playlist...");
+                location.replace(`./player/${code}`);
             });
-            location.replace('./player');
         }           
     }
                 
