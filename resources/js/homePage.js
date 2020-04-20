@@ -34,7 +34,7 @@ angular.module('homeApp', []).controller('homeController', ['$scope', '$http', f
                 
     $scope.signOut = function(){
         alert("Signing user out...");
-        $http.get("/removeLogin").then(function(response){
+        $http.get("/logout").then(function(response){
             console.log("removing logged in user");
             console.log(response.data);
         });
