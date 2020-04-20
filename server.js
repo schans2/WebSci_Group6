@@ -173,8 +173,10 @@ app.post('/login', function(req, res){
 
 app.get('/logout', function(req, res){
     res.clearCookieres.clearCookie("user_token");
+    localLogin = null;
     res.send({
         error: false,
+        status: localLogin,
         message: "Logout Success!"
     });
 });
