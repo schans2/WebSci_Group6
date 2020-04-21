@@ -40,6 +40,7 @@ angular.module('generateApp', []).controller('generateController', ['$scope', '$
         }
         $http.post('/createGroup', $scope.playlist).then(function(response){
             console.log("group created");
+            location.replace(`./player/${id}`);
         });
     }
 
@@ -50,6 +51,10 @@ angular.module('generateApp', []).controller('generateController', ['$scope', '$
             console.log(response.data);
         });
         location.replace("/");
+    }
+
+    $scope.loadPlaylist = function(input){
+        location.replace(`./player/${input}`);
     }
 
 }])
