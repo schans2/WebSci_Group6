@@ -6,6 +6,7 @@ var bodyParser = require('body-parser');
 var jwt = require('jsonwebtoken');
 var uuidv1 = require('uuid').v1;
 var cookieParser = require('cookie-parser');
+var cookie = require('cookie');
 var hashing = require('./server_resources/hashing');
 var DatabaseMaster = require('./server_resources/database_master');
 const spotify = require("node-spotify-api");
@@ -13,6 +14,8 @@ var db_uri = "mongodb+srv://dbUser:ehRb3TNnpKYK2a4Y@cluster0-rebd7.mongodb.net/t
 var db_master = new DatabaseMaster(db_uri, "Playtwist");
 
 var app = express();
+var http_server = require('http').Server(app);
+var io = require('socket.io')(http_server);
 var port = 3000;
 var jwt_secret = "VerySecretPassword";
 var spot = new spotify({
@@ -263,5 +266,25 @@ app.get("/getGroup", function(req, res){
     });
 });
 
-app.listen(port);
+// Socket.io Connections
+io.on('connection', function(socket){
+    var cookief =socket.handshake.headers.cookie;
+    var cookies = cookie.parse(cookief);
+    if(cookies.cook){
+        console.log("User has cookie: ", cookies.cook);
+    }
+    else{
+        console.log("User does not have a cookie.");
+    }
+    socket.on("message", function(message){
+        console.log("Received message: ", message);
+    });
+
+    socket.on('disconnect', function(){
+        console.log("A user disconnected.");
+    });
+    
+});
+
+http_server.listen(port);
 console.log(`\x1b[32mServer running on port ${port}\n\x1b[33mPress CTRL + C to shut down\x1b[0m`);

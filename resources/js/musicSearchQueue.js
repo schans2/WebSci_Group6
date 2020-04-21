@@ -3,6 +3,8 @@ var just_data =  {};
 var voteAngularApp = angular.module('playlistApp', []);
 
 voteAngularApp.controller('playlistController', ['$scope', '$http', function($scope, $http) {
+    var socket = io();
+
     $scope.loadPlaylist = function(){
         
         $http.get("/getGroup").then(function(response){
@@ -130,7 +132,28 @@ voteAngularApp.controller('playlistController', ['$scope', '$http', function($sc
 			alert("Invalid query: Please make sure all fields are filled out");
 			return;
 		}
-	}
+    }
+    
+    /**
+     * When the upvote button is clicked, this function is called.
+     * It increments the upvote of a track and emits a socket.io message notifying others in the chat room
+     */
+    $scope.upvoteTrack = function(track){
+        track.upvotes += 1;
+        console.log("Should have sent some socket.");
+        console.log(track);
+        socket.emit('message', { type: "upvote", track: track });
+    }
+
+    /**
+     * When the downvote button is clicked, this function is called.
+     * It increments the downvote of a track and emits a socket.io message.
+     */
+    $scope.downvoteTrack = function(track){
+        track.downvotes += 1;
+        console.log("Should have sent some socket downvote message.");
+        socket.emit('message', { type: "downvote", track: track });
+    }
 
     // Music data from a collaborative playlist, later to be dynamically fetched from the database
     $scope.playlist_data = [];
@@ -358,6 +381,9 @@ voteAngularApp.controller('playlistController', ['$scope', '$http', function($sc
         else{$("#ins-time").text(min+":"+sec);}
 		$("#ins-time").css({'left':seekTime,'margin-left':'-21px'}).fadeIn(0);
     }
+
+    // Socket.io Stuff
+
 
 }]);
 
