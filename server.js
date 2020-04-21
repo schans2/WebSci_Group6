@@ -320,12 +320,13 @@ app.post("/joinGroup", function(req, res){
     });
 });
 
-app.get("/getGroup", function(req, res){
+app.post("/getGroup", function(req, res){
     var body = req.body;
     var code = body.code;
+    code = parseInt(code, 10);
     console.log(code);
     var query = {
-        joinCode: code
+        id: code
     }
     db_master.findDocument("Playlists", query, function(result){
         res.send(result);

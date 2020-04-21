@@ -4,15 +4,16 @@ var voteAngularApp = angular.module('playlistApp', []);
 
 voteAngularApp.controller('playlistController', ['$scope', '$http', function($scope, $http) {
     var playlist_id = window.location.pathname.split('/').slice(-1)[0];
+    //console.log("plalist id: "+playlist_id);
     var socket = io('', { query: { playlistId : playlist_id} });
 
     $scope.loadPlaylist = function(){
-        
-        $http.get("/getGroup").then(function(response){
+        var list = {code: playlist_id};
+        $http.post("/getGroup",list).then(function(response){
             // gets the json of the playlist data
             //now put this data onto the page
             console.log(response.data);
-	    var tracks = response.data["tracks"];
+	        var tracks = response.data["tracks"];
             console.log(tracks);
             if(tracks == undefined){
                 console.log("Queue is empty.")
