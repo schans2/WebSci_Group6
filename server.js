@@ -23,7 +23,6 @@ var spot = new spotify({
     secret:"643827e1934f4491b73a1b79ec8c37b3"
 });
 
-var localLogin;
 
 // Utility Functions
 /**
@@ -89,11 +88,6 @@ app.get("/search", function(req, res) {
 	});
 });
 
-app.get("/infograb", function(req, res) {
-    if(localLogin) { res.send(localLogin); }
-    else { res.send("No login"); }
-});
-
 // API calls to the server
 app.post('/join', function(req, res){
     // verify user login status, join user to a group, and redirect.
@@ -156,7 +150,6 @@ app.post('/login', function(req, res){
                     error: false,
                     message: "Validation success!"
                 }
-                localLogin = result.uname;
                 var token = jwt.sign({user_id: result._id}, jwt_secret);
                 res.cookie("user_token", token);
                 console.log("Set user token to ", result._id);
@@ -179,19 +172,57 @@ app.get('/logout', function(req, res){
         return null;
     }
     res.clearCookies.clearCookie("user_token");
-    localLogin = null;
     res.send({
         error: false,
-        status: localLogin,
         message: "Logout Success!"
     });
 });
 
+/**
+ * This endpoint verifies user login status and returns username if logged in. Else return null.
+ */
 app.get("/checkStatus", function(req, res){
-    var status = {
-        status: localLogin
+    var cookies = req.cookies;
+    if(cookies == null || cookies.user_token == null){
+        var message = {
+            error: false,
+            loginStatus: null
+        }
+        res.send(message);
     }
-    res.send(status);
+    else{
+        var token = cookies.user_token;
+        jwt.verify(token, jwt_secret, function(err, decoded) {
+            if(err){
+                var message = {
+                    error: false,
+                    loginStatus: null
+                }
+                res.send(message);
+            }
+            else{
+                var user_id = decoded.user_id;
+                console.log(decoded, user_id)
+                var query = { _id: { $eq: user_id } };
+                db_master.findDocument("Users", query, function(result){
+                    if(!result){
+                        var message = {
+                            error: false,
+                            loginStatus: null
+                        };
+                        res.send(message);
+                    }
+                    else{
+                        var message = {
+                            error: false,
+                            loginStatus: result.uname
+                        };
+                        res.send(message);
+                    }
+                });
+            }
+        });
+    }
 });
 
 app.post('/createPlaylist', function(req, res){

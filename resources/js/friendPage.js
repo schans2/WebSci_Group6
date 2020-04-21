@@ -1,7 +1,7 @@
 angular.module('friendApp', []).controller('friendController', ['$scope', '$http', function($scope, $http){
     $scope.checkStatus = function(){
         $http.get("/checkStatus").then(function(response){
-            $scope.status = response.data.status;
+            $scope.status = response.loginStatus;
             console.log($scope.status);
             if($scope.status == null){
                 document.getElementById("account").style.display = "none";

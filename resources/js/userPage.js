@@ -1,5 +1,6 @@
 angular.module('generateApp', []).controller('generateController', ['$scope', '$http', function($scope, $http){
     $.get("/infograb", function(result) {
+        alert("Do not do infograb! Use checkStatus instead.")
         if(result !== "No login") {
             $("#username").html(result + "'s page");
         }
@@ -8,7 +9,7 @@ angular.module('generateApp', []).controller('generateController', ['$scope', '$
 
     $scope.checkStatus = function(){
         $http.get("/checkStatus").then(function(response){
-            $scope.status = response.data.status;
+            $scope.status = response.loginStatus;
             console.log($scope.status);
             if($scope.status == null){
                 document.getElementById("account").style.display = "none";
