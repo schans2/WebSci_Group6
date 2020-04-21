@@ -175,6 +175,9 @@ app.post('/login', function(req, res){
 });
 
 app.get('/logout', function(req, res){
+    if(cookies == null || cookies.user_token == null){
+        return null;
+    }
     res.clearCookies.clearCookie("user_token");
     localLogin = null;
     res.send({
