@@ -9,7 +9,7 @@ angular.module('generateApp', []).controller('generateController', ['$scope', '$
 
     $scope.checkStatus = function(){
         $http.get("/checkStatus").then(function(response){
-            $scope.status = response.loginStatus;
+            $scope.status = response.data.loginStatus;
             console.log($scope.status);
             if($scope.status == null){
                 document.getElementById("account").style.display = "none";
