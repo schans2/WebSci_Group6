@@ -305,8 +305,11 @@ app.get("/getGroup", function(req, res){
 io.on('connection', function(socket){
     var cookief =socket.handshake.headers.cookie;
     var cookies = cookie.parse(cookief);
-    if(cookies.cook){
-        console.log("User has cookie: ", cookies.cook);
+    var socket_query = socket.handshake.query;
+    var playlist_id = socket_query.playlistId;
+    console.log("Got playlist id: ", playlist_id);
+    if(cookies.user_token){
+        console.log("User has cookie: ", cookies.user_token);
     }
     else{
         console.log("User does not have a cookie.");

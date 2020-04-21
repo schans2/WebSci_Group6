@@ -3,7 +3,8 @@ var just_data =  {};
 var voteAngularApp = angular.module('playlistApp', []);
 
 voteAngularApp.controller('playlistController', ['$scope', '$http', function($scope, $http) {
-    var socket = io();
+    var playlist_id = window.location.pathname.split('/').slice(-1)[0];
+    var socket = io('', { query: { playlistId : playlist_id} });
 
     $scope.loadPlaylist = function(){
         
