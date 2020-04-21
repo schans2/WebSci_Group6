@@ -226,23 +226,46 @@ app.get("/checkStatus", function(req, res){
     }
 });
 
-app.post('/createPlaylist', function(req, res){
-    console.log(req.body);
-    var id = req.body.id;
-    var joinCode = req.body.joinCode;
-
-    var query = {
-        id: id,
-        joinCode: joinCode
+app.get('/createPlaylist', function(req, res){
+    var cookies = req.cookies;
+    var token = cookies.user_token;
+    var id = Math.floor(100000 + Math.random() * 900000);
+    var ans = '';
+    var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    var charactersLength = characters.length;
+    for(var i = 0; i < 6; i++){
+        ans += characters.charAt(Math.floor(Math.random()* charactersLength));
     }
-    db_master.insertDocument("Playlists", query, function(result){
-        res.send("Playlist Created!");
+    jwt.verify(token, jwt_secret, function(err, decoded) {
+        if(err) return;
+        var user_id = decoded.user_id;
+        var query = {
+            id: id,
+            owner: user_id,
+            joinCode:ans,
+            private: true,
+            tracks: [],
+            members: [
+                user_id
+            ]
+        }
+        db_master.insertDocument("Playlists", query, function(result){
+            var message = {
+                error: false,
+                message: "craete playlist.",
+                playlist_id:id,
+                joinCode:ans
+            }
+            res.send(message);
+        });
     });
 
 });
 
 //save playlist
 app.post('/savePlaylist', authenticate, function(req,res){
+    var cookies = req.cookies;
+    var token = cookies.user_token;
     var id = Math.floor(100000 + Math.random() * 900000);
     var ans = '';
     var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';

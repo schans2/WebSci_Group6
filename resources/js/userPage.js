@@ -24,22 +24,11 @@ angular.module('generateApp', []).controller('generateController', ['$scope', '$
     }
 
     $scope.generate = function(){
-        var ans = '';
-        var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-        var charactersLength = characters.length;
-        for(var i = 0; i < 6; i++){
-            ans += characters.charAt(Math.floor(Math.random()* charactersLength));
-        }
-        console.log(ans);
-        alert("Your playlist code is: " + ans);
-        var id = Math.floor(100000 + Math.random() * 900000);
-        console.log(id);
-        $scope.playlist = {
-            id: id,
-            joinCode: ans,
-        }
-        $http.post('/createGroup', $scope.playlist).then(function(response){
+        $http.get('/createPlaylist').then(function(response){
             console.log("group created");
+            var content = response.data;
+            alert("Your Join Code is "+content["joinCode"]);
+            var id = content["playlist_id"];
             location.replace(`./player/${id}`);
         });
     }
