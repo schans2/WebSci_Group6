@@ -244,16 +244,22 @@ app.post('/createPlaylist', function(req, res){
 //save playlist
 app.post('/savePlaylist', authenticate, function(req,res){
     var id = Math.floor(100000 + Math.random() * 900000);
+    var ans = '';
+    var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    var charactersLength = characters.length;
+    for(var i = 0; i < 6; i++){
+        ans += characters.charAt(Math.floor(Math.random()* charactersLength));
+    }
     jwt.verify(token, jwt_secret, function(err, decoded) {
         if(err) return;
         var user_id = decoded.user_id;
         var body = req.body;
-        var tracks = body.tracks;
-        var is_private = body.isPrivate;
+        var tracks = body;
         var query = {
             id: id,
             owner: user_id,
-            private: is_private,
+            joinCode:ans,
+            private: true,
             tracks: tracks,
             members: [
                 user_id
@@ -274,7 +280,8 @@ app.post("/joinGroup", function(req, res){
             // Playlist Not found
             var message = {
                 error: true,
-                message: "Cannot find playlist."
+                message: "Cannot find playlist.",
+                playlist_id:undefined
             }
             res.send(message);
         }
@@ -282,7 +289,8 @@ app.post("/joinGroup", function(req, res){
             // Playlist Found
             var message = {
                 error: false,
-                message: "Can find playlist."
+                message: "Can find playlist.",
+                playlist_id:result["id"]
             }
             res.send(message);
         }
