@@ -29,8 +29,9 @@ angular.module('homeApp', []).controller('homeController', ['$scope', '$http', f
                 console.log("joining playlist...");
                 $scope.error = response.data.error;
                 console.log($scope.error);
+                var id = response.data.playlist_id;
                 if($scope.error != true){
-                    location.replace(`./player/${code}`);
+                    location.replace(`./player/${id}`);
                 }
                 else{
                     alert("Code invalid");
