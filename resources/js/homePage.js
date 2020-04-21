@@ -27,7 +27,14 @@ angular.module('homeApp', []).controller('homeController', ['$scope', '$http', f
             }
             $http.post("/joinGroup", $scope.code).then(function(response){
                 console.log("joining playlist...");
-                location.replace(`./player/${code}`);
+                $scope.error = response.data.error;
+                console.log($scope.error);
+                if($scope.error != true){
+                    location.replace(`./player/${code}`);
+                }
+                else{
+                    alert("Code invalid");
+                }
             });
         }           
     }
