@@ -168,10 +168,11 @@ app.post('/login', function(req, res){
 });
 
 app.get('/logout', function(req, res){
+    var cookies = req.cookies;
     if(cookies == null || cookies.user_token == null){
-        return null;
+        res.end();
     }
-    res.clearCookies.clearCookie("user_token");
+    res.clearCookie("user_token");
     res.send({
         error: false,
         message: "Logout Success!"
