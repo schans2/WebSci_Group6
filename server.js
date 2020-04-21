@@ -281,8 +281,8 @@ app.post("/joinGroup", function(req, res){
         else{
             // Playlist Found
             var message = {
-                error: true,
-                message: "Cannot find playlist."
+                error: false,
+                message: "Can find playlist."
             }
             res.send(message);
         }
