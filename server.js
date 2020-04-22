@@ -70,7 +70,7 @@ var assignGuestCookie = function(req, res, next){
         expiresAt: expiresAt
     }
     if(cookies == null || cookies.user_token == null){
-        console.log("No cookie. Assigning new cookie.");
+        //console.log("No cookie. Assigning new cookie.");
         res.cookie("user_token", new_token);
         db_master.insertDocument("Users", new_query);
         next();
@@ -79,13 +79,13 @@ var assignGuestCookie = function(req, res, next){
         // verify user token
         jwt.verify(cookies.user_token, jwt_secret, function(err, decoded){
             if(err){
-                console.log("Invalid cookie. Assigning new cookie.");
+                //console.log("Invalid cookie. Assigning new cookie.");
                 res.cookie("user_token", new_token);
                 db_master.insertDocument("Users", new_query);
                 next();
             }
             else if(decoded.expiresAt < new Date().getTime()){
-                console.log("Temporary cookie expired. Assigning new cookie.");
+                //console.log("Temporary cookie expired. Assigning new cookie.");
                 res.cookie("user_token", new_token);
                 db_master.insertDocument("Users", new_query);
                 next();
@@ -346,14 +346,16 @@ app.post('/savePlaylist', authenticate, function(req,res){
     
 });
 
-app.post("/joinPlaylist", authenticate, function(req, res){
+app.post("/joinPlaylist", function(req, res){
     var cookies = req.cookies;
     var token = cookies.user_token;
     var code = req.body.joinCode;
+    console.log("Join code: ", code);
     var query = { joinCode: { $eq: code } };
     db_master.findDocument("Playlists", query, function(result){
         if(!result){
             // Playlist Not found
+            console.log("Not found")
             var message = {
                 error: true,
                 message: "Cannot find playlist.",
