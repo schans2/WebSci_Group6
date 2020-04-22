@@ -103,7 +103,8 @@ voteAngularApp.controller('playlistController', ['$scope', '$http', function($sc
 									for (let j = 0; j < data.length; j++) {
 										if(data[j].preview) {
 											$scope.deezer_search_data.push(data[j]);
-										}
+                                        }
+                                        if(j === 14) { break; }
 									}
 								});
 							});

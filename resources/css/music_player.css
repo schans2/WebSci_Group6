@@ -325,11 +325,34 @@ body{
     background-color: #2c3e50;
 }
 
-#spotify-searchResult, #deezer-searchResult {
+#resultContainer {
     height: 450px;
     width: 50%;
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
     margin-left: auto;
     margin-right: auto;
+}
+
+#spotify-searchResult .apiLogo, #deezer-searchResult .apiLogo {
+    background-color: transparent;
+    /* display: inline-block; */
+    height: 65px;
+    margin: 0 0 0 0;
+    padding: 0 0 0 0;
+}
+
+#spotify-searchResult .apiLogo>img, #deezer-searchResult .apiLogo>img {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 200px;
+}
+
+#spotify-searchResult, #deezer-searchResult {
+    display: inline-block;
+    width: 48%;
 }
 
 #spotify-searchResult>li, #deezer-searchResult>li {
@@ -361,7 +384,6 @@ body{
 }
 
 .nav-link:hover{
-    /* color:#1abc9c; */
     text-decoration: underline;
 }
 
@@ -372,10 +394,6 @@ body{
 #searchForm>form>input, #searchForm>form>button {
     margin-left: 5px;
     background-color: #343a40;
-    /* border-left: solid 2px #343a40;
-    border-right: solid 2px #343a40;
-    border-top: solid 2px #343a40;
-    border-bottom: solid 2px #343a40; */
 }
 
 #searchForm>form>input, #searchForm>h2>span {
