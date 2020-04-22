@@ -66,16 +66,20 @@
                 <button type="button" ng-click=loadItems()>Go!</button>
             </form>
         </div>
-        <div class="container-flex">
+        <div class="container-flex" id="resultContainer">
             <ul id="spotify-searchResult" class="list-group">
+                <li class="apiLogo">
+                    <img src="/resources/Spotify_Logo.png" alt="Spotify"/>
+                </li>
                 <li class="list-group-item" ng-repeat="track in spotify_search_data"
                 onclick="$(this).css('backgroundColor', '#2c3e50'); $(this).css('color', '#1abc9c')" ng-click="addToQueue($index, 'spotify')">
                     {{track.artists[0].name}}, {{track.name}}
                 </li>
             </ul>
-        </div>
-        <div class="container-flex">
             <ul id="deezer-searchResult" class="list-group">
+                <li class="apiLogo">
+                    <img src="/resources/Deezer_Logo.png" alt="Deezer"/>
+                </li>
                 <li class="list-group-item" ng-repeat="track in deezer_search_data"
                 onclick="$(this).css('backgroundColor', '#2c3e50'); $(this).css('color', '#1abc9c')" ng-click="addToQueue($index, 'deezer')">
                     {{track.artist.name}}, {{track.title}}
