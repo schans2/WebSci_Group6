@@ -148,7 +148,8 @@ voteAngularApp.controller('playlistController', ['$scope', '$http', function($sc
     // Music data from a collaborative playlist, later to be dynamically fetched from the database
     $scope.playlist_data = [];
 	$scope.spotify_search_data = [];
-	$scope.deezer_search_data = [];
+    $scope.deezer_search_data = [];
+    console.log($scope.playlist_data);
     $scope.addToQueue = function(i, type) {
 		// console.log(type);
 		var tmp_data;
@@ -156,6 +157,10 @@ voteAngularApp.controller('playlistController', ['$scope', '$http', function($sc
         else { tmp_data = $scope.spotify_search_data[i]; }
         tmp_data.upvotes = 0;
         tmp_data.downvotes = 0;
+        console.log($scope.playlist_data);
+        if($scope.playlist_data == undefined){
+            $scope.playlist_data = [];
+        }
         // If duplicates found, just terminate
         if($scope.playlist_data.includes(tmp_data)) { return; }
         else { $scope.playlist_data.push(tmp_data); }
