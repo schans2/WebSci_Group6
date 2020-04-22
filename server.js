@@ -335,23 +335,45 @@ app.post("/getGroup", function(req, res){
 
 // Socket.io Connections
 io.on('connection', function(socket){
-    var cookief =socket.handshake.headers.cookie;
-    var cookies = cookie.parse(cookief);
+    // var cookief =socket.handshake.headers.cookie;
+    // var cookies = cookie.parse(cookief);
     var socket_query = socket.handshake.query;
     var playlist_id = socket_query.playlistId;
-    console.log("Got playlist id: ", playlist_id);
-    if(cookies.user_token){
-        console.log("User has cookie: ", cookies.user_token);
-    }
-    else{
-        console.log("User does not have a cookie.");
-    }
+    socket.join(playlist_id);
+    // if(cookies.user_token){
+    //     console.log("User has cookie: ", cookies.user_token);
+    // }
+    // else{
+    //     console.log("User does not have a cookie.");
+    // }
+    
+    // Send user the playlist on connection as init
+    var query = { id: parseInt(playlist_id) };
+    console.log(query);
+    db_master.findDocument("Playlists", query, function(result){
+        if(!result) return;
+        console.log("Initial data empty: ", !result.tracks)
+        socket.emit("initialData", result.tracks);
+    });
+    
     socket.on("message", function(message){
         console.log("Received message: ", message);
     });
 
+    socket.on("upvote", function(message){
+        var track_id = message;
+        socket.broadcast.to(playlist_id).emit("upvote", track_id);
+    });
+
+    socket.on("downvote", function(message){
+        var track_id = message;
+        socket.broadcast.to(playlist_id).emit("downvote", track_id);
+    });
+
     socket.on('disconnect', function(){
         console.log("A user disconnected.");
+        // Save current version to database
+
     });
     
 });

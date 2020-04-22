@@ -20,6 +20,10 @@ var DatabaseMaster = function(uri, db_name){
 
     // Member functions
     this.insertDocument = function(coll_name, query, callback){
+        if(!db){
+            callback(undefined);
+            return;
+        }
         // Get the collection with name coll_name
         const collection = db.collection(coll_name);
         // Insert data with query
@@ -32,6 +36,10 @@ var DatabaseMaster = function(uri, db_name){
     };
 
     this.findDocument = function(coll_name, query, callback){
+        if(!db){
+            callback(undefined);
+            return;
+        }
         // Get the collection with name coll_name
         const collection = db.collection(coll_name);
         // find data with query, find ONE
@@ -43,7 +51,11 @@ var DatabaseMaster = function(uri, db_name){
         });
     };
 
-    this.updateDocument = function(db, coll_name, match_query, update_query, callback){
+    this.updateDocument = function(coll_name, match_query, update_query, callback){
+        if(!db){
+            callback(undefined);
+            return;
+        }
         // Get the collection with name coll_name
         const collection = db.collection(coll_name);
         // Do the update

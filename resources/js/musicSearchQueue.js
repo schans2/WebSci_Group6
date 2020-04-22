@@ -7,34 +7,21 @@ voteAngularApp.controller('playlistController', ['$scope', '$http', function($sc
     //console.log("plalist id: "+playlist_id);
     var socket = io('', { query: { playlistId : playlist_id} });
 
-    $scope.loadPlaylist = function(){
-        var list = {code: playlist_id};
-        $http.post("/getGroup",list).then(function(response){
-            // gets the json of the playlist data
-            //now put this data onto the page
-            console.log(response.data);
-	        var tracks = response.data["tracks"];
-            console.log(tracks);
-            if(tracks == undefined){
-                console.log("Queue is empty.")
-                $scope.playlist_data = [];
-            }else{
-                //add songs into the queue
-                var i;
-                var play = [];
-                for(i = 0; i< tracks.length; i++){
-                    var temp = {
-                        "index":i+1,
-                        "name":tracks[i]["name"],
-                        "upvotes":0,
-                        "downvotes":0
-                    };
-                    play.push(temp);
-                }
-                $scope.playlist_data = play;
-            }
-        });
-    }
+    // Not in use. Use Socket.io instead
+    // $scope.loadPlaylist = function(){
+    //     var list = {code: playlist_id};
+    //     $http.post("/getGroup",list).then(function(response){
+    //         // gets the json of the playlist data
+    //         //now put this data onto the page
+    //         console.log(response.data);
+	//         var tracks = response.data.tracks;
+    //         console.log(tracks);
+    //         $scope.playlist_data = [];
+    //         if(tracks){
+    //             $scope.playlist_data = tracks;
+    //         }
+    //     });
+    // }
 
     $scope.savePlaylist = function(){
         //keep track of what songs are added to the queue
@@ -144,7 +131,7 @@ voteAngularApp.controller('playlistController', ['$scope', '$http', function($sc
         track.upvotes += 1;
         console.log("Should have sent some socket.");
         console.log(track);
-        socket.emit('message', { type: "upvote", track: track });
+        socket.emit('upvote', track.id);
     }
 
     /**
@@ -154,7 +141,7 @@ voteAngularApp.controller('playlistController', ['$scope', '$http', function($sc
     $scope.downvoteTrack = function(track){
         track.downvotes += 1;
         console.log("Should have sent some socket downvote message.");
-        socket.emit('message', { type: "downvote", track: track });
+        socket.emit('downvote', track.id);
     }
 
     // Music data from a collaborative playlist, later to be dynamically fetched from the database
@@ -385,6 +372,29 @@ voteAngularApp.controller('playlistController', ['$scope', '$http', function($sc
     }
 
     // Socket.io Stuff
+    socket.on('initialData', function(message){
+        console.log("Receives initial data. ", message);
+        $scope.playlist_data = message;
+        $scope.$apply();
+    });
+
+    socket.on('upvote', function(message){
+        var track_id = message;
+        if(!$scope.playlist_data) return;
+        var target_track = $scope.playlist_data.find(element => element.id == track_id);
+        if(!target_track) return;
+        target_track.upvotes += 1;
+        $scope.$apply();
+    });
+
+    socket.on('downvote', function(message){
+        var track_id = message;
+        if(!$scope.playlist_data) return;
+        var target_track = $scope.playlist_data.find(element => element.id == track_id);
+        if(!target_track) return;
+        target_track.downvotes += 1;
+        $scope.$apply();
+    });
 
 
 }]);
