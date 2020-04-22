@@ -79,7 +79,6 @@ var DatabaseMaster = function(uri, db_name, callback){
             if(callback != undefined){
                 callback(result);
             }
-            console.log("Delete Result: ", result);
         });
     }
 

@@ -13,7 +13,7 @@ const spotify = require("node-spotify-api");
 var db_uri = "mongodb+srv://dbUser:ehRb3TNnpKYK2a4Y@cluster0-rebd7.mongodb.net/test?retryWrites=true&w=majority";
 var db_master = new DatabaseMaster(db_uri, "Playtwist", function(){
     // Delete Expired Unregistered Users
-    var current_time = new Date().getTime();
+    var current_time = new Date().getTime()/1000;  // In seconds
     db_master.deleteDocuments("Users", { expiresAt: { $lt: current_time } });
 });
 
@@ -44,12 +44,56 @@ var authenticate = function(req, res, next){
     }
     else{
         // verify user token
-        if(jwt.verify(cookies.user_token, jwt_secret)){
-            next();
-        }
-        else{
-            res.redirect("/login");
-        }
+        jwt.verify(cookies.user_token, jwt_secret, function(err, decoded){
+            if(err) res.redirect("/login");
+            else if(decoded.registered) next();
+            else res.redirect("/login");
+        });
+    }
+}
+
+/**
+ * If the user comes without a cookie and (obviously) not logged in, give him a temp cookie that lasts 30 minutes.
+ * Info is saved to db 
+ * @param {*} req 
+ * @param {*} res 
+ * @param {*} next 
+ */
+var assignGuestCookie = function(req, res, next){
+    var cookies = req.cookies;
+    var token = cookies.user_token;
+    var new_user_id = uuidv1();
+    var expiresAt = new Date().getTime()/1000 + 18; // In seconds
+    var new_token = jwt.sign({user_id: new_user_id, registered: false, expiresAt: expiresAt}, jwt_secret);
+    var new_query = {
+        _id: new_user_id,
+        expiresAt: expiresAt
+    }
+    if(cookies == null || cookies.user_token == null){
+        console.log("No cookie. Assigning new cookie.");
+        res.cookie("user_token", new_token);
+        db_master.insertDocument("Users", new_query);
+        next();
+    }
+    else{
+        // verify user token
+        jwt.verify(cookies.user_token, jwt_secret, function(err, decoded){
+            if(err){
+                console.log("Invalid cookie. Assigning new cookie.");
+                res.cookie("user_token", new_token);
+                db_master.insertDocument("Users", new_query);
+                next();
+            }
+            else if(decoded.expiresAt < new Date().getTime()){
+                console.log("Temporary cookie expired. Assigning new cookie.");
+                res.cookie("user_token", new_token);
+                db_master.insertDocument("Users", new_query);
+                next();
+            }
+            else{
+                next();
+            }
+        });
     }
 }
 
@@ -60,11 +104,11 @@ app.use(cookieParser());
 app.use('/resources', express.static('resources'));
 
 // Routing to serve pages
-app.get('/player/:code', function(req, res){
+app.get('/player/:code', assignGuestCookie, function(req, res){
     res.sendFile(__dirname + "/music_player.html");
 });
 
-app.get('/', function(req, res){
+app.get('/', assignGuestCookie, function(req, res){
     res.sendFile(__dirname + "/homePage.html");
 });
 
@@ -76,28 +120,15 @@ app.get('/login', function(req, res){
     res.sendFile(__dirname + "/login.html");
 });
 
-app.get('/user', function(req, res){
-    // If user is not logged-in, return user to login page.
-    var cookies = req.cookies;
-    if(cookies == null || cookies.user_token == null){
-        res.redirect("/login");
-    }
-    else{
-        // verify user token
-        jwt.verify(token, jwt_secret, function(err, decoded) {
-            if(err) res.redirect("/login");
-            // If user is registered send homepage, else redirect
-            if(decoded.registered) res.sendFile(__dirname + "/userPage.html");
-            else res.redirect("/login");
-        });
-    } 
+app.get('/user', authenticate, function(req, res){
+    res.sendFile(__dirname + "/userPage.html");
 });
 
 // Spotify search and return
 app.get("/search", function(req, res) {
 	//console.log("Query = " + req.query.query);
 	spot.search({ type : "track", query : req.query.query, limit : 15 }).then(function(response) {
-		console.log(response);
+		//console.log(response);
 		res.send(response);
 	}).catch(function(err) {
 		console.log("\x1b[31m" + err + "\x1b[0m");
@@ -169,9 +200,8 @@ app.post('/login', function(req, res){
                     error: false,
                     message: "Validation success!"
                 }
-                var token = jwt.sign({user_id: result._id}, jwt_secret);
+                var token = jwt.sign({user_id: result._id, registered: true}, jwt_secret);
                 res.cookie("user_token", token);
-                res.cookie("registered", true);
                 console.log("Set user token to ", result._id);
                 res.send(message);
             }
