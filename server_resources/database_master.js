@@ -1,7 +1,7 @@
 var MongoClient = require('mongodb').MongoClient;
 
 // Database manipulation module
-var DatabaseMaster = function(uri, db_name){
+var DatabaseMaster = function(uri, db_name, callback){
     console.log("Constructed!");
     this.name = "Database Master";
     var db_uri = uri;
@@ -15,6 +15,7 @@ var DatabaseMaster = function(uri, db_name){
             return;
         }
         db = mongo_client.db(db_name);
+        callback();
         console.log(`\x1b[32mConnected to database.\x1b[0m`);
     });
 
@@ -64,6 +65,22 @@ var DatabaseMaster = function(uri, db_name){
                 callback(result);
             }
         })
+    }
+
+    this.deleteDocuments = function(coll_name, query, callback){
+        if(!db){
+            callback(undefined);
+            return;
+        }
+        // Get the collection with name coll_name
+        const collection = db.collection(coll_name);
+        // Do the deletion on match
+        collection.deleteMany(query, function(err, result){
+            if(callback != undefined){
+                callback(result);
+            }
+            console.log("Delete Result: ", result);
+        });
     }
 
 }

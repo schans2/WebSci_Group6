@@ -25,7 +25,7 @@ angular.module('homeApp', []).controller('homeController', ['$scope', '$http', f
             $scope.code = {
                 joinCode: code,
             }
-            $http.post("/joinGroup", $scope.code).then(function(response){
+            $http.post("/joinPlaylist", $scope.code).then(function(response){
                 console.log("joining playlist...");
                 $scope.error = response.data.error;
                 console.log($scope.error);

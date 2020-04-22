@@ -11,7 +11,11 @@ var hashing = require('./server_resources/hashing');
 var DatabaseMaster = require('./server_resources/database_master');
 const spotify = require("node-spotify-api");
 var db_uri = "mongodb+srv://dbUser:ehRb3TNnpKYK2a4Y@cluster0-rebd7.mongodb.net/test?retryWrites=true&w=majority";
-var db_master = new DatabaseMaster(db_uri, "Playtwist");
+var db_master = new DatabaseMaster(db_uri, "Playtwist", function(){
+    // Delete Expired Unregistered Users
+    var current_time = new Date().getTime();
+    db_master.deleteDocuments("Users", { expiresAt: { $lt: current_time } });
+});
 
 var app = express();
 var http_server = require('http').Server(app);
@@ -73,7 +77,20 @@ app.get('/login', function(req, res){
 });
 
 app.get('/user', function(req, res){
-    res.sendFile(__dirname + "/userPage.html");
+    // If user is not logged-in, return user to login page.
+    var cookies = req.cookies;
+    if(cookies == null || cookies.user_token == null){
+        res.redirect("/login");
+    }
+    else{
+        // verify user token
+        jwt.verify(token, jwt_secret, function(err, decoded) {
+            if(err) res.redirect("/login");
+            // If user is registered send homepage, else redirect
+            if(decoded.registered) res.sendFile(__dirname + "/userPage.html");
+            else res.redirect("/login");
+        });
+    } 
 });
 
 // Spotify search and return
@@ -118,7 +135,9 @@ app.post('/register', function(req, res){
         email: email,
         uname: uname,
         hash: hashed.passwordHash,
-        salt: hashed.salt
+        salt: hashed.salt,
+        ownsPlaylist: [],
+        joinedPlaylist: []
     }
     db_master.insertDocument("Users", query, function(result){
         res.send({
@@ -152,6 +171,7 @@ app.post('/login', function(req, res){
                 }
                 var token = jwt.sign({user_id: result._id}, jwt_secret);
                 res.cookie("user_token", token);
+                res.cookie("registered", true);
                 console.log("Set user token to ", result._id);
                 res.send(message);
             }
@@ -173,6 +193,7 @@ app.get('/logout', function(req, res){
         res.end();
     }
     res.clearCookie("user_token");
+    res.clearCookie("registered");
     res.send({
         error: false,
         message: "Logout Success!"
@@ -295,7 +316,9 @@ app.post('/savePlaylist', authenticate, function(req,res){
     
 });
 
-app.post("/joinGroup", function(req, res){
+app.post("/joinPlaylist", authenticate, function(req, res){
+    var cookies = req.cookies;
+    var token = cookies.user_token;
     var code = req.body.joinCode;
     var query = { joinCode: { $eq: code } };
     db_master.findDocument("Playlists", query, function(result){
@@ -304,18 +327,31 @@ app.post("/joinGroup", function(req, res){
             var message = {
                 error: true,
                 message: "Cannot find playlist.",
-                playlist_id:undefined
+                playlist_id: undefined
             }
             res.send(message);
         }
         else{
             // Playlist Found
+            var playlist_id = result.id;
             var message = {
                 error: false,
                 message: "Can find playlist.",
-                playlist_id:result["id"]
+                playlist_id: playlist_id
             }
             res.send(message);
+            // Update user's profile and Playlist's members
+            jwt.verify(token, jwt_secret, function(err, decoded){
+                if(err) return;
+                var user_id = decoded.user_id;
+                var match_query = { _id: user_id };
+                var update_query = { $addToSet: { joinedPlaylist: playlist_id }};
+                db_master.updateDocument("Users", match_query, update_query);
+                
+                match_query = { id: playlist_id };
+                update_query = { $addToSet: { members: user_id }};
+                db_master.updateDocument("Playlists", match_query, update_query);
+            });
         }
     });
 });
