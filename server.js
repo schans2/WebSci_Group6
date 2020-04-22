@@ -375,6 +375,7 @@ app.post("/joinPlaylist", function(req, res){
             // Update user's profile and Playlist's members
             jwt.verify(token, jwt_secret, function(err, decoded){
                 if(err) return;
+                if(!decoded.registered) return;
                 var user_id = decoded.user_id;
                 var match_query = { _id: user_id };
                 var update_query = { $addToSet: { joinedPlaylist: playlist_id }};
