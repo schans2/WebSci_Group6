@@ -1,25 +1,37 @@
 var fname; var lname; var email; var uname; var pass;
 var success = false;
+var invalid = false;
 angular.module('loginApp', [])
     .controller('loginController', ['$scope', '$http', function($scope, $http){
+        
         $scope.addUser = function(){
+          invalid = false;
           var first_name = document.getElementById('fname').value;
           var last_name = document.getElementById('lname').value;
           var email = document.getElementById('email').value;
-          var username = document.getElementById('new_username').value;
-          var password = document.getElementById('new_password').value;
 
-          $scope.new_user = {
-            fname: first_name,
-            lname: last_name,
-            e_address: email,
-            user: username,
-            pass: password
+          if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)){
+            console.log("email validated");
+            var username = document.getElementById('new_username').value;
+            var password = document.getElementById('new_password').value;
+
+            $scope.new_user = {
+              fname: first_name,
+              lname: last_name,
+              e_address: email,
+              user: username,
+              pass: password
+            }
+            console.log($scope.new_user);
+            $http.post('/newUser', $scope.new_user).then(function(response){
+              console.log("post successful");
+            });
           }
-          console.log($scope.new_user);
-          $http.post('/newUser', $scope.new_user).then(function(response){
-            console.log("post successful");
-          });
+          else{
+            alert("You have entered an invalid email address!");
+            invalid = true;
+          }
+          
         }
         $scope.loginUser = function(){
           $scope.user = {
@@ -54,7 +66,7 @@ function eventListeners() {
     pass = $("#new_password").val();
 
     // <<INPUT VALIDATION NEEDED>>
-
+  if(invalid == false){
     if(fname && lname && email && uname && pass) {
       // Send Register Request to Server
       $.ajax({
@@ -71,8 +83,9 @@ function eventListeners() {
           console.log(`Register request returns success with message ${message} and status ${status}.`);
           alert("Register successful!");
           $("#signup>form")[0].reset();
-          $("#username").val(uname);
-          $("#password").val(pass);
+          //THIS CRASHES SERVER DUE TO HASH AND SALT SO COMMENTED IT OUT
+          // $("#username").val(uname);
+          // $("#password").val(pass);
         },
         error: function(message, status){
           console.log(`Oops! Register request returns failure with message ${message} and status ${status}.`);
@@ -82,6 +95,10 @@ function eventListeners() {
     else {
       alert("Error: Please make sure all fields are filled out.");
     }
+  }
+  else{
+    console.log("Invalid");
+  }
   });
   // Old login
   // $("#signIn").click(function() {
