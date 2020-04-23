@@ -132,8 +132,6 @@ voteAngularApp.controller('playlistController', ['$scope', '$http', function($sc
      */
     $scope.upvoteTrack = function(track){
         track.upvotes += 1;
-        console.log("Should have sent some socket.");
-        console.log(track);
         socket.emit('upvote', track.id);
     }
 
@@ -143,8 +141,11 @@ voteAngularApp.controller('playlistController', ['$scope', '$http', function($sc
      */
     $scope.downvoteTrack = function(track){
         track.downvotes += 1;
-        console.log("Should have sent some socket downvote message.");
         socket.emit('downvote', track.id);
+    }
+
+    $scope.broadcastAddTrack = function(track_info){
+        socket.emit('addTrack', track_info);
     }
 
     // Music data from a collaborative playlist, later to be dynamically fetched from the database
@@ -177,7 +178,7 @@ voteAngularApp.controller('playlistController', ['$scope', '$http', function($sc
         }
         // If duplicates found, just terminate
         if($scope.playlist_data.includes(tmp_data)) { return; }
-        else { $scope.playlist_data.push(tmp_data); }
+        else { $scope.playlist_data.push(tmp_data); $scope.broadcastAddTrack(tmp_data); }
 		if($scope.playlist_data.length == 1 && audios.paused){ // Which means we have just pushed a song to the empty queue
             decisionizer();
 		}
@@ -413,6 +414,13 @@ voteAngularApp.controller('playlistController', ['$scope', '$http', function($sc
         var target_track = $scope.playlist_data.find(element => element.id == track_id);
         if(!target_track) return;
         target_track.downvotes += 1;
+        $scope.$apply();
+    });
+
+    socket.on('addTrack', function(message){
+        var track_info = message;
+        if(!$scope.playlist_data) return;
+        $scope.playlist_data.push(track_info);
         $scope.$apply();
     });
 

@@ -427,7 +427,7 @@ io.on('connection', function(socket){
     // var cookief =socket.handshake.headers.cookie;
     // var cookies = cookie.parse(cookief);
     var socket_query = socket.handshake.query;
-    var playlist_id = socket_query.playlistId;
+    var playlist_id = parseInt(socket_query.playlistId);
     socket.join(playlist_id);
     // if(cookies.user_token){
     //     console.log("User has cookie: ", cookies.user_token);
@@ -437,26 +437,73 @@ io.on('connection', function(socket){
     // }
     
     // Send user the playlist on connection as init
-    var query = { id: parseInt(playlist_id) };
+    var query = { id: playlist_id };
     console.log(query);
     db_master.findDocument("Playlists", query, function(result){
         if(!result) return;
         console.log("Initial data empty: ", !result.tracks)
         socket.emit("initialData", result.tracks);
     });
-    
-    socket.on("message", function(message){
-        console.log("Received message: ", message);
-    });
 
     socket.on("upvote", function(message){
         var track_id = message;
         socket.broadcast.to(playlist_id).emit("upvote", track_id);
+        var match_query = {
+            id: playlist_id,
+            "tracks.id": track_id
+        };
+        var update_query = {
+            $inc: {
+                "tracks.$.upvotes": 1
+            }
+        };
+        db_master.updateDocument("Playlists", match_query, update_query);        
     });
 
     socket.on("downvote", function(message){
         var track_id = message;
         socket.broadcast.to(playlist_id).emit("downvote", track_id);
+        var match_query = {
+            id: playlist_id,
+            "tracks.id": track_id
+        };
+        var update_query = {
+            $inc: {
+                "tracks.$.downvotes": 1
+            }
+        };
+        db_master.updateDocument("Playlists", match_query, update_query, function(result){
+            console.log("Update result: ", result);
+        });    
+    });
+
+    // Everyone can add a track
+    socket.on("addTrack", function(message){
+        var track_info = message;
+        // Remove the "$$hash_key" from track_info since it will mess mongodb up
+        delete track_info.$$hashKey;
+        socket.broadcast.to(playlist_id).emit("addTrack", track_info);
+        var match_query = { id: playlist_id };
+        var update_query = { $addToSet: { tracks: track_info }};
+        console.log("Update Query: ", update_query);
+        db_master.updateDocument("Playlists", match_query, update_query, function(result){
+            console.log("Update result: ", result);
+        });
+    });
+
+    // But only host can delete a track
+    socket.on("deleteTrack", function(message){
+        return
+    });
+
+    // Track finishes playing, update queue on every device. Simply put: remove queue's first element
+    socket.on("finishTrack", function(message){
+        return
+    });
+
+    // Host rewinds playlist, update queue on every device. Simply put: restore previous element on queue
+    socket.on("rewindTrack", function(message){
+        return
     });
 
     socket.on('disconnect', function(){
