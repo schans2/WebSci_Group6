@@ -117,8 +117,7 @@
                             <img id="prof_image" src="resources/profileImage.png" alt="Profile Image">
                         </div>
                         <div id="user" class="col">
-                            <button onclick="window.location.href = '/player'" class="create" type="button">+ Create Private Playlist</button><br/>
-                            <button class="create" type="button" ng-click="generate()">+ Create New Group</button>
+                            <button class="create" type="button" ng-click="generate()">+ Create New Playlist</button>
                         </div>
                     </div>
                     <div id="edit_bar" class="row">
@@ -146,7 +145,11 @@
                     </div>
                     <div id="collaborative" class="row">
                         <h1 id="play_header">Collaborative Playlists</h1>
-                        <div class="col-sm">
+                        <div class="col-sm" ng-repeat="x in joinedPlaylist">
+                            <img id="playlist_image"  src="resources/defaultPlaylistImage.jpg">
+                            <figcaption ng-click="loadPlaylist(x)">Playlist</figcaption>
+                        </div>
+                        <!--<div class="col-sm">
                             <img id="playlist_image" onclick="window.location.href = 'music_player.html'" src="resources/defaultPlaylistImage.jpg">
                             <figcaption>Playlist 1</figcaption>
                         </div>
@@ -157,7 +160,7 @@
                         <div class="col-sm">
                             <img id="playlist_image" onclick="window.location.href = 'music_player.html'" src="resources/defaultPlaylistImage.jpg">
                             <figcaption>Playlist 3</figcaption>
-                        </div>
+                        </div>-->
                     </div>
                 </div>
                 

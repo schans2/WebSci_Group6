@@ -4,6 +4,7 @@ angular.module('generateApp', []).controller('generateController', ['$scope', '$
         $http.get("/getUserownsPlaylist").then(function(response){
             console.log(response.data.ownsPlaylist);
             $scope.ownPlaylist = response.data.ownsPlaylist;
+            $scope.joinedPlaylist = response.data.joinedPlaylist;
         })
     }
     
