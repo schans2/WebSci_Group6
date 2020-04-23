@@ -34,6 +34,7 @@ voteAngularApp.controller('playlistController', ['$scope', '$http', function($sc
         console.log(just_data);
         $http.post('/savePlaylist', just_data).then(function(response){
             console.log("save success");
+            alert("Save Playlist Success!");
         });
     }
 	
