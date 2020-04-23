@@ -1,14 +1,8 @@
 angular.module('generateApp', []).controller('generateController', ['$scope', '$http', function($scope, $http){
-    $.get("/infograb", function(result) {
-        alert("Do not do infograb! Use checkStatus instead.")
-        if(result !== "No login") {
-            $("#username").html(result + "'s page");
-        }
-        else { window.location.href = "/login"; }
-    });
 
     $scope.init = function(){
         $http.get("/getUserownsPlaylist").then(function(response){
+            console.log(response.data.ownsPlaylist);
             $scope.ownPlaylist = response.data.ownsPlaylist;
         })
     }
