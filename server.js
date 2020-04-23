@@ -329,6 +329,46 @@ app.get('/getUserownsPlaylist',authenticate,function(req,res){
     })
 });
 
+//get the first song's album
+app.post('/getAlbum',function(req,res){
+    var playlistID = req.body.id;
+    //console.log("input id:"+playlistID);
+    var query = {
+        id: playlistID
+    }
+    db_master.findDocument("Playlists",query,function(result){
+        if(!result){
+            console.log("Cannot find playlist");
+            return;
+        }
+        else if (result.tracks == undefined || result.tracks.length < 1){
+            console.log("Empty playlist");
+            var message = {
+                error: true,
+                playlistId: result.id,
+                album: undefined,
+                message:"Empty playlist or Cannot find playlist"
+            }
+            res.send(message);
+        }else{
+            var firstSong = result.tracks[0];
+            if(firstSong["service"] == "spotify"){
+                var albumLink = firstSong["album"]["images"][0]["url"];
+            }
+            else if(firstSong["service"] == "deezer"){
+                var albumLink = firstSong["album"]["cover"];
+            }
+            var message = {
+                error: false,
+                album: albumLink,
+                playlistId: result.id,
+                messgae:"Find the Album"
+            }
+            res.send(message);
+        }
+    })
+})
+
 //save playlist
 app.post('/savePlaylist', authenticate, function(req,res){
     var cookies = req.cookies;

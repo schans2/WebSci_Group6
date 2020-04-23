@@ -126,9 +126,9 @@
                     </div>
                     <div id="private" class="row">
                         <h1 id="play_header">Private Playlists</h1>
-                        <div class="col-sm" ng-repeat="x in ownPlaylist">
-                            <img id="playlist_image"  src="resources/defaultPlaylistImage.jpg">
-                            <figcaption ng-click="loadPlaylist(x)">Playlist</figcaption>
+                        <div class="col-sm" ng-repeat="x in own">
+                            <img id="playlist_image"  src={{x.album}}>
+                            <figcaption  ng-click="loadPlaylist(x.playlistid)">Playlist</figcaption>
                         </div>
                         <!--<div class="col-sm">
                             <img id="playlist_image" onclick="window.location.href = 'music_player.html'" src="resources/defaultPlaylistImage.jpg">
@@ -145,9 +145,9 @@
                     </div>
                     <div id="collaborative" class="row">
                         <h1 id="play_header">Collaborative Playlists</h1>
-                        <div class="col-sm" ng-repeat="x in joinedPlaylist">
-                            <img id="playlist_image"  src="resources/defaultPlaylistImage.jpg">
-                            <figcaption ng-click="loadPlaylist(x)">Playlist</figcaption>
+                        <div class="col-sm" ng-repeat="x in joined">
+                            <img id="playlist_image"  src={{x.album}}>
+                            <figcaption ng-click="loadPlaylist(x.playlistid)">Playlist</figcaption>
                         </div>
                         <!--<div class="col-sm">
                             <img id="playlist_image" onclick="window.location.href = 'music_player.html'" src="resources/defaultPlaylistImage.jpg">
