@@ -1,4 +1,4 @@
-var just_data =  {};
+var just_data =  [];
 
 var voteAngularApp = angular.module('playlistApp', []);
 
@@ -31,7 +31,8 @@ voteAngularApp.controller('playlistController', ['$scope', '$http', function($sc
             //on click of a album in localhost:3000/user, they should be able to go back to the (will do in another function)
             //original playlist they saved with all songs loaded into queue (will do in another function)
         console.log("Saving playlist....");
-        $http.post('/savePlaylist',$scope.playlist_data).then(function(response){
+        console.log(just_data);
+        $http.post('/savePlaylist', just_data).then(function(response){
             console.log("save success");
         });
     }
@@ -153,8 +154,20 @@ voteAngularApp.controller('playlistController', ['$scope', '$http', function($sc
     $scope.addToQueue = function(i, type) {
 		// console.log(type);
 		var tmp_data;
-		if(type === "deezer") { tmp_data = $scope.deezer_search_data[i]; }
-        else { tmp_data = $scope.spotify_search_data[i]; }
+		if(type === "deezer") {
+            tmp_data = $scope.deezer_search_data[i];
+            tmp_data.service = "deezer";
+            if(!(just_data.includes(tmp_data))) {
+                just_data.push(tmp_data);
+            }
+        }
+        else {
+            tmp_data = $scope.spotify_search_data[i];
+            tmp_data.service = "spotify";
+            if(!(just_data.includes(tmp_data))) {
+                just_data.push(tmp_data);
+            }
+        }
         tmp_data.upvotes = 0;
         tmp_data.downvotes = 0;
         console.log($scope.playlist_data);
