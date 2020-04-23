@@ -333,7 +333,7 @@ app.get('/getUserownsPlaylist',authenticate,function(req,res){
 app.post('/savePlaylist', authenticate, function(req,res){
     var cookies = req.cookies;
     var token = cookies.user_token;
-    var id = Math.floor(100000 + Math.random() * 900000);
+    var playlist_id = Math.floor(100000 + Math.random() * 900000);
     var ans = '';
     var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     var charactersLength = characters.length;
@@ -346,7 +346,7 @@ app.post('/savePlaylist', authenticate, function(req,res){
         var body = req.body;
         var tracks = body;
         var query = {
-            id: id,
+            id: playlist_id,
             owner: user_id,
             joinCode:ans,
             private: true,
@@ -355,6 +355,10 @@ app.post('/savePlaylist', authenticate, function(req,res){
                 user_id
             ]
         }
+        var user_id = decoded.user_id;
+        var match_query = { _id: user_id };
+        var update_query = { $addToSet: { ownsPlaylist: playlist_id }};
+        db_master.updateDocument("Users", match_query, update_query);
         db_master.insertDocument("Playlists", query, function(result){
             res.send("Playlist Saved!");
         });
