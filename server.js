@@ -313,6 +313,22 @@ app.get('/createPlaylist', function(req, res){
 
 });
 
+//get current user information
+app.get('/getUserownsPlaylist',authenticate,function(req,res){
+    var cookies = req.cookies;
+    var token = cookies.user_token;
+    jwt.verify(token,jwt_secret,function(err,decoded){
+        if(err) return;
+        var user_id = decoded.user_id;
+        var query = {
+            _id: user_id,
+        }
+        db_master.findDocument("Users", query, function(result){
+            res.send(result);
+        });
+    })
+});
+
 //save playlist
 app.post('/savePlaylist', authenticate, function(req,res){
     var cookies = req.cookies;

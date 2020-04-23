@@ -7,6 +7,13 @@ angular.module('generateApp', []).controller('generateController', ['$scope', '$
         else { window.location.href = "/login"; }
     });
 
+    $scope.init = function(){
+        $http.get("/getUserownsPlaylist").then(function(response){
+            $scope.ownPlaylist = response.data.ownsPlaylist;
+        })
+    }
+    
+
     $scope.checkStatus = function(){
         $http.get("/checkStatus").then(function(response){
             $scope.status = response.data.loginStatus;
@@ -43,6 +50,8 @@ angular.module('generateApp', []).controller('generateController', ['$scope', '$
     }
 
     $scope.loadPlaylist = function(input){
+        alert(input);
+        input = parseInt(input, 10);
         location.replace(`./player/${input}`);
     }
 
