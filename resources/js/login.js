@@ -9,12 +9,32 @@ angular.module('loginApp', [])
           var first_name = document.getElementById('fname').value;
           var last_name = document.getElementById('lname').value;
           var email = document.getElementById('email').value;
-
-          if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)){
+          var username = document.getElementById('new_username').value;
+          var password = document.getElementById('new_password').value;
+          if(first_name.length >  16){
+            alert("Sorry, first name too long. Please enter something less than 16 characters.");
+            invalid = true;
+          }
+          else if(last_name.length > 16){
+            alert("Sorry, last name too long. Please enter something less than 16 characters");
+            invalid = true;
+          }
+          else if(email.length > 30){
+            alert("Sorry, email too long. Please enter something less than 30 characters");
+            invalid = true;
+          }
+          else if(username.length > 16){
+            alert("Sorry, username too long. Please enter something less than 16 characters");
+            invalid = true;
+          }
+          else if(password.length > 16){
+            alert("Sorry, password name too long. Please enter something less than 16 characters");
+            invalid = true;
+          }
+          //source for regular expression: https://www.w3resource.com/javascript/form/email-validation.php
+          else if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)){
             console.log("email validated");
-            var username = document.getElementById('new_username').value;
-            var password = document.getElementById('new_password').value;
-
+            
             $scope.new_user = {
               fname: first_name,
               lname: last_name,
