@@ -397,6 +397,30 @@ voteAngularApp.controller('playlistController', ['$scope', '$http', function($sc
         console.log("Receives initial data. ", message);
         $scope.playlist_data = message;
         $scope.$apply();
+        if($scope.playlist_data.length) {
+            if(confirm("Ready to play?")) { decisionizer(); }
+            else {
+                var selected = $scope.playlist_data[0];
+                $scope.playlist_data.splice(0, 1);
+                $scope.$evalAsync();
+                if(selected.name) { 
+                    $(audios).attr("src", selected.preview_url);
+                    selectedTrack = selected.album.images[0].url;
+                    $("#album-art").append("<img src='" + selectedTrack + "' class='active' alt='Album Art'/>");
+                    $("#album-name").text(selected.name);
+                    // console.log(selected.name)
+                    $("#track-name").text(selected.artists[0].name);
+                }
+                else { 
+                    $(audios).attr("src", selected.preview);
+                    selectedTrack = selected.album.cover_medium;
+                    $("#album-art").append("<img src='" + selectedTrack + "' class='active' alt='Album Art'/>");
+                    $("#album-name").text(selected.title);
+                    // console.log(selected.name)
+                    $("#track-name").text(selected.artist.name);
+                } 
+            }
+        }
     });
 
     socket.on('upvote', function(message){
