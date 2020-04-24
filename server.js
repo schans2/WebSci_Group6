@@ -63,7 +63,7 @@ var assignGuestCookie = function(req, res, next){
     var cookies = req.cookies;
     var token = cookies.user_token;
     var new_user_id = uuidv1();
-    var expiresAt = new Date().getTime()/1000 + 18; // In seconds
+    var expiresAt = new Date().getTime()/1000 + 180; // In seconds
     var new_token = jwt.sign({user_id: new_user_id, registered: false, expiresAt: expiresAt}, jwt_secret);
     var new_query = {
         _id: new_user_id,
