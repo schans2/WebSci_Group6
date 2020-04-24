@@ -403,6 +403,9 @@ voteAngularApp.controller('playlistController', ['$scope', '$http', function($sc
         $scope.join_code = join_code;
         $scope.$apply();
         if($scope.playlist_data.length) {
+            if($scope.playlist_data.length > 1) {
+                $("#tempWedge").fadeOut(500);
+            }
             if(confirm("Ready to play?")) { decisionizer(); }
             else {
                 var selected = $scope.playlist_data[0];
