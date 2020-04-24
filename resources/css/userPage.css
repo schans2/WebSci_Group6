@@ -4,6 +4,9 @@
     background-color: black;
     height: 110px;
 }
+.pointer {
+    cursor: pointer;
+}
 body{
     /* background-color: #333333; */
     background-color: black;
