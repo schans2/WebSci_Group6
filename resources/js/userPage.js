@@ -103,4 +103,8 @@ angular.module('generateApp', []).controller('generateController', ['$scope', '$
         location.replace(`./player/${input}`);
     }
 
+    $scope.toHomepage = function(){
+        window.location.href = '/';
+    }
+
 }])
