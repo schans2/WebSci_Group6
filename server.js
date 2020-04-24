@@ -381,7 +381,23 @@ app.post('/savePlaylist', authenticate, function(req,res){
         ans += characters.charAt(Math.floor(Math.random()* charactersLength));
     }
     jwt.verify(token, jwt_secret, function(err, decoded) {
-        if(err) return;
+        console.log(decoded);
+        if(err){
+            message = {
+                error: true,
+                message: "Cannot save playlist: login first."
+            }
+            res.send(message);
+            return;
+        }
+        else if(decoded.registered == false){
+            message = {
+                error: true,
+                message: "Cannot save playlist: login first."
+            }
+            res.send(message);
+            return;
+        }
         var user_id = decoded.user_id;
         var body = req.body;
         var tracks = body;
@@ -400,7 +416,7 @@ app.post('/savePlaylist', authenticate, function(req,res){
         var update_query = { $addToSet: { ownsPlaylist: playlist_id }};
         db_master.updateDocument("Users", match_query, update_query);
         db_master.insertDocument("Playlists", query, function(result){
-            res.send("Playlist Saved!");
+            res.send({error: false});
         });
     });
     
@@ -481,8 +497,8 @@ io.on('connection', function(socket){
     console.log(query);
     db_master.findDocument("Playlists", query, function(result){
         if(!result) return;
-        console.log("Initial data empty: ", !result.tracks)
-        socket.emit("initialData", result.tracks);
+        // console.log("Initial data empty: ", !result.tracks)
+        socket.emit("initialData", result.tracks, result.joinCode);
     });
 
     socket.on("upvote", function(message){
@@ -512,9 +528,7 @@ io.on('connection', function(socket){
                 "tracks.$.downvotes": 1
             }
         };
-        db_master.updateDocument("Playlists", match_query, update_query, function(result){
-            console.log("Update result: ", result);
-        });    
+        db_master.updateDocument("Playlists", match_query, update_query);    
     });
 
     // Everyone can add a track

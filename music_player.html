@@ -33,6 +33,7 @@
                 </ul>
         </nav>
         <div id="playlist-content" class="float-left">
+            <li class="list-group-item list-group-item-action list-group-item-info">Join Code: {{ join_code }}</li>
             <ul class="list-group">
                 <li class="list-group-item d-flex justify-content-between align-items-center" ng-repeat="track in playlist_data | orderBy: 'downvotes-upvotes'">
                     <div ng-click="">{{$index+1}}. {{track.name}}{{track.title}}</div>

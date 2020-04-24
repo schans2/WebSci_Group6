@@ -33,8 +33,12 @@ voteAngularApp.controller('playlistController', ['$scope', '$http', function($sc
         console.log("Saving playlist....");
         console.log(just_data);
         $http.post('/savePlaylist', just_data).then(function(response){
-            console.log("save success");
-            alert("Save Playlist Success!");
+            if(response.data && response.data.hasOwnProperty("error")){
+                alert("Save Playlist Success!");
+            }
+            else{
+                alert("Playlist not saved. Login first.");
+            }
         });
     }
 	
@@ -393,9 +397,10 @@ voteAngularApp.controller('playlistController', ['$scope', '$http', function($sc
     }
 
     // Socket.io Stuff
-    socket.on('initialData', function(message){
+    socket.on('initialData', function(message, join_code){
         console.log("Receives initial data. ", message);
         $scope.playlist_data = message;
+        $scope.join_code = join_code;
         $scope.$apply();
     });
 
