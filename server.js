@@ -155,27 +155,34 @@ app.post('/register', function(req, res){
     var pass = body.pass;
     var uuid = uuidv1();
     // console.log(`Register request of ${fname} ${lname}, email ${email}, username ${uname}`);
-    
-    var hashed = hashing.hashIt(pass);
-    // console.log(`Hashed password ${hashed.passwordHash} with salt ${hashed.salt}.`);
-    
-    var query = {
-        _id: uuid,
-        fname: fname,
-        lname: lname,
-        email: email,
-        uname: uname,
-        hash: hashed.passwordHash,
-        salt: hashed.salt,
-        ownsPlaylist: [],
-        joinedPlaylist: []
+    if(fname.length > 16 || lname.length > 16 || uname.length > 16 || pass.length > 16 || (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email) == false)){
+        console.log("Credentials not valid");
+        return false;
     }
-    db_master.insertDocument("Users", query, function(result){
-        res.send({
-            error: false,
-            message: "Register Success!"
+    else{
+        console.log("Credientials valid");
+        var hashed = hashing.hashIt(pass);
+        // console.log(`Hashed password ${hashed.passwordHash} with salt ${hashed.salt}.`);
+        
+        var query = {
+            _id: uuid,
+            fname: fname,
+            lname: lname,
+            email: email,
+            uname: uname,
+            hash: hashed.passwordHash,
+            salt: hashed.salt,
+            ownsPlaylist: [],
+            joinedPlaylist: []
+        }
+        db_master.insertDocument("Users", query, function(result){
+            res.send({
+                error: false,
+                message: "Register Success!"
+            });
         });
-    });
+    }
+    
 });
 
 app.post('/login', function(req, res){
